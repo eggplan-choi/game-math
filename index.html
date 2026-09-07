@@ -1,0 +1,3250 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>수학탐구학교: 2D 물리 게임 제작 웹북 (Python & Pygame)</title>
+  
+  <!-- Fonts & Math/Syntax Highlighting -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Pretendard:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csv.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+
+  <style>
+    :root {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-card: #1e293b;
+      --bg-card-hover: #273549;
+      --bg-sidebar: #0b1120;
+      --border-color: #334155;
+      --border-focus: #38bdf8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-sub: #cbd5e1;
+      --accent-blue: #38bdf8;
+      --accent-green: #4ade80;
+      --accent-orange: #fb923c;
+      --accent-purple: #c084fc;
+      --accent-red: #f87171;
+      --accent-yellow: #facc15;
+      --code-bg: #090d16;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+      --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      --font-mono: 'Fira Code', Consolas, monospace;
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+      --bg-sidebar: #f1f5f9;
+      --border-color: #e2e8f0;
+      --border-focus: #0284c7;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-sub: #334155;
+      --accent-blue: #0284c7;
+      --accent-green: #16a34a;
+      --accent-orange: #ea580c;
+      --accent-purple: #9333ea;
+      --accent-red: #dc2626;
+      --accent-yellow: #ca8a04;
+      --code-bg: #1e293b;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      line-height: 1.7;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+    ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+
+    #sidebar {
+      width: 320px;
+      min-width: 320px;
+      background-color: var(--bg-sidebar);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border-color); }
+    .brand-title { font-size: 1.15rem; font-weight: 800; color: var(--accent-blue); display: flex; align-items: center; gap: 8px; }
+    .brand-subtitle { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; }
+    .search-box { margin-top: 14px; position: relative; }
+    .search-box input {
+      width: 100%; padding: 9px 12px 9px 36px; background: var(--bg-secondary);
+      border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);
+      font-size: 0.85rem; outline: none; transition: all 0.2s;
+    }
+    .search-box input:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2); }
+    .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 0.85rem; color: var(--text-muted); }
+
+    .nav-sections { flex: 1; overflow-y: auto; padding: 12px; }
+    .nav-group-title { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); padding: 12px 10px 6px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-sm);
+      color: var(--text-sub); text-decoration: none; font-size: 0.88rem; font-weight: 500; transition: all 0.15s;
+      margin-bottom: 2px; cursor: pointer;
+    }
+    .nav-item:hover { background: var(--bg-card-hover); color: var(--text-main); }
+    .nav-item.active { background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); font-weight: 700; border-left: 3px solid var(--accent-blue); }
+    .nav-badge { font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; background: var(--bg-secondary); border: 1px solid var(--border-color); margin-left: auto; font-family: var(--font-mono); }
+
+    #main-container { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+    .topbar {
+      height: 60px; border-bottom: 1px solid var(--border-color); background: var(--bg-secondary);
+      display: flex; align-items: center; justify-content: space-between; padding: 0 24px; z-index: 10; position: relative;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 14px; }
+    .menu-toggle { display: none; background: none; border: none; color: var(--text-main); font-size: 1.2rem; cursor: pointer; }
+    .breadcrumb { font-size: 0.88rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+    .breadcrumb span.current { color: var(--text-main); font-weight: 600; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .top-btn {
+      padding: 6px 12px; background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm); color: var(--text-main); font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+    }
+    .top-btn:hover { background: var(--bg-card-hover); border-color: var(--accent-blue); }
+
+    .progress-bar-container { width: 100%; height: 3px; background: transparent; position: absolute; bottom: 0; left: 0; }
+    .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple)); transition: width 0.1s ease; }
+
+    #content { flex: 1; overflow-y: auto; padding: 36px 48px 80px; scroll-behavior: smooth; }
+    .chapter-container { max-width: 960px; margin: 0 auto; display: none; animation: fadeIn 0.25s ease forwards; }
+    .chapter-container.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .chapter-header { margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+    .chapter-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .badge-tag { font-size: 0.75rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .chapter-title { font-size: 1.85rem; font-weight: 800; color: var(--text-main); line-height: 1.35; margin-bottom: 12px; }
+
+    .objectives-card {
+      background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.3);
+      border-left: 4px solid var(--accent-blue); border-radius: var(--radius-md); padding: 16px 20px; margin: 20px 0;
+    }
+    .objectives-card h4 { color: var(--accent-blue); font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+    .objectives-card ol, .objectives-card ul { padding-left: 20px; font-size: 0.92rem; color: var(--text-sub); }
+    .objectives-card li { margin-bottom: 6px; }
+
+    h2 { font-size: 1.45rem; font-weight: 700; color: var(--text-main); margin: 36px 0 16px; padding-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.07); display: flex; align-items: center; gap: 8px; }
+    h3 { font-size: 1.18rem; font-weight: 600; color: var(--accent-blue); margin: 24px 0 12px; }
+    p { margin-bottom: 16px; color: var(--text-sub); font-size: 0.96rem; }
+    ul, ol { padding-left: 22px; margin-bottom: 16px; color: var(--text-sub); font-size: 0.95rem; }
+    li { margin-bottom: 6px; }
+    strong { color: var(--text-main); font-weight: 600; }
+
+    .alert-box { padding: 14px 18px; border-radius: var(--radius-md); margin: 20px 0; font-size: 0.92rem; border-left: 4px solid; }
+    .alert-tip { background: rgba(74, 222, 128, 0.1); border-color: var(--accent-green); color: var(--text-main); }
+    .alert-important { background: rgba(251, 146, 60, 0.1); border-color: var(--accent-orange); color: var(--text-main); }
+    .alert-info { background: rgba(56, 189, 248, 0.1); border-color: var(--accent-blue); color: var(--text-main); }
+    .alert-box h5 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+
+    .math-block { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 20px; margin: 16px 0; text-align: center; font-size: 1.05rem; overflow-x: auto; }
+
+    .code-container { background: var(--code-bg); border: 1px solid var(--border-color); border-radius: var(--radius-md); margin: 20px 0 26px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .code-header {
+      background: var(--bg-secondary); padding: 8px 16px; display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border-color); font-size: 0.82rem; font-family: var(--font-mono); color: var(--text-muted);
+    }
+    .code-title { display: flex; align-items: center; gap: 8px; color: var(--text-sub); font-weight: 600; }
+    .copy-btn {
+      background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main);
+      padding: 4px 10px; border-radius: 4px; font-size: 0.76rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: all 0.2s;
+    }
+    .copy-btn:hover { background: var(--accent-blue); color: #000; border-color: var(--accent-blue); }
+    .copy-btn.copied { background: var(--accent-green) !important; color: #000 !important; border-color: var(--accent-green) !important; }
+    .code-container pre { margin: 0; padding: 16px 18px; overflow-x: auto; font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.6; }
+    .code-container pre code { background: transparent !important; padding: 0 !important; font-family: inherit; }
+
+    .table-container { overflow-x: auto; margin: 20px 0; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-card); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; }
+    th { background: var(--bg-secondary); padding: 12px 16px; font-weight: 700; color: var(--text-main); border-bottom: 1px solid var(--border-color); }
+    td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); color: var(--text-sub); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-card-hover); }
+
+    .mission-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); margin: 16px 0; overflow: hidden; transition: border-color 0.2s; }
+    .mission-card:hover { border-color: rgba(56, 189, 248, 0.4); }
+    .mission-header { padding: 14px 18px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+    .mission-title { font-size: 0.95rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+    .mission-checkbox { width: 18px; height: 18px; accent-color: var(--accent-green); cursor: pointer; }
+    .mission-body { padding: 16px 20px; font-size: 0.92rem; color: var(--text-sub); }
+
+    .simulator-box { background: var(--bg-card); border: 2px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; margin: 24px 0; box-shadow: var(--shadow-md); }
+    .sim-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+    .sim-title { font-size: 1rem; font-weight: 700; color: var(--accent-yellow); display: flex; align-items: center; gap: 8px; }
+    .sim-canvas { width: 100%; background: #121622; border-radius: var(--radius-md); border: 1px solid var(--border-color); display: block; }
+    .sim-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 14px; background: var(--bg-secondary); padding: 14px 16px; border-radius: var(--radius-md); }
+    .control-group { display: flex; flex-direction: column; gap: 4px; }
+    .control-label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: flex; justify-content: space-between; }
+    .control-slider { width: 100%; accent-color: var(--accent-blue); cursor: pointer; }
+    .sim-btn-group { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .sim-btn { padding: 6px 14px; background: var(--accent-blue); color: #000; border: none; border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .sim-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    .chapter-nav-footer { display: flex; justify-content: space-between; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border-color); gap: 16px; }
+    .nav-footer-btn { flex: 1; padding: 14px 20px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-main); text-decoration: none; display: flex; flex-direction: column; gap: 4px; cursor: pointer; transition: all 0.2s; }
+    .nav-footer-btn:hover { background: var(--bg-card-hover); border-color: var(--accent-blue); transform: translateY(-2px); }
+    .nav-footer-btn.next { text-align: right; }
+    .nav-footer-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+    .nav-footer-title { font-size: 0.95rem; font-weight: 700; color: var(--accent-blue); }
+
+    #toast { position: fixed; bottom: 24px; right: 24px; background: var(--accent-green); color: #000; padding: 10px 18px; border-radius: var(--radius-md); font-size: 0.88rem; font-weight: 700; box-shadow: var(--shadow-md); z-index: 1000; opacity: 0; transform: translateY(20px); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; }
+    #toast.show { opacity: 1; transform: translateY(0); }
+
+    .env-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 20px 0; }
+    .env-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
+    .env-card h4 { font-size: 1.05rem; color: var(--accent-blue); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .env-download-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 16px; background: var(--accent-blue); color: #000; font-weight: 700; font-size: 0.88rem; border-radius: var(--radius-sm); text-decoration: none; margin-top: 14px; transition: all 0.2s; }
+    .env-download-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    @media (max-width: 900px) {
+      #sidebar { position: fixed; left: -320px; top: 0; bottom: 0; }
+      #sidebar.open { transform: translateX(320px); }
+      .menu-toggle { display: block; }
+      #content { padding: 24px 20px 60px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="toast">✅ 클립보드에 복사되었습니다!</div>
+
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-title"><span>🎮</span> 수학탐구학교 웹북</div>
+      <div class="brand-subtitle">Python 2D 물리 게임 제작 교재</div>
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="키워드/코드 검색..." onkeyup="filterNav()">
+      </div>
+    </div>
+
+    <nav class="nav-sections" id="navSections">
+      <div class="nav-group-title">실습 준비 & 데이터</div>
+      <a class="nav-item active" onclick="switchChapter('chapter-env')">
+        <span>⚙️</span> 실습 환경 구축 가이드
+        <span class="nav-badge">SETUP</span>
+      </a>
+      <a class="nav-item" onclick="switchChapter('chapter-csv-center')">
+        <span>📄</span> 스테이지 CSV 다운로드
+        <span class="nav-badge">DATA</span>
+      </a>
+
+      <div class="nav-group-title">정규 활동지 (1차시 ~ 6차시)</div>
+      <a class="nav-item" onclick="switchChapter('chapter-01')">
+        <span>01</span> 화면과 중력, 점프
+        <span class="nav-badge">물리 기초</span>
+      </a>
+      <a class="nav-item" onclick="switchChapter('chapter-02')">
+        <span>02</span> 사각 충돌과 너그러운 판정
+        <span class="nav-badge">AABB</span>
+      </a>
+      <a class="nav-item" onclick="switchChapter('chapter-03')">
+        <span>03</span> 타일맵과 횡스크롤 카메라
+        <span class="nav-badge">CSV 맵</span>
+      </a>
+      <a class="nav-item" onclick="switchChapter('chapter-04')">
+        <span>04</span> 움직이는 발판과 조작감
+        <span class="nav-badge">코요테</span>
+      </a>
+      <a class="nav-item" onclick="switchChapter('chapter-05')">
+        <span>05</span> 시각 연출과 오디오 피드백
+        <span class="nav-badge">파티클</span>
+      </a>
+      <a class="nav-item" onclick="switchChapter('chapter-06')">
+        <span>06</span> 다중 스테이지와 상태 머신
+        <span class="nav-badge">FSM 엔딩</span>
+      </a>
+
+      <div class="nav-group-title">종합 평가</div>
+      <a class="nav-item" onclick="switchChapter('chapter-final')">
+        <span>🏆</span> 완주 체크리스트 & 챌린지
+      </a>
+    </nav>
+  </aside>
+
+  <div id="main-container">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        <div class="breadcrumb">
+          <span>수학탐구학교</span> &gt;
+          <span class="current" id="currentBreadcrumb">실습 환경 구축 가이드</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="top-btn" onclick="toggleTheme()">
+          <span id="themeIcon">☀️</span> <span id="themeText">라이트 모드</span>
+        </button>
+        <button class="top-btn" onclick="window.print()">
+          <span>🖨️</span> 인쇄/PDF
+        </button>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="readingProgress"></div>
+      </div>
+    </header>
+
+    <main id="content">
+
+      <!-- ========================================== -->
+      <!-- SECTION: ENV SETUP -->
+      <!-- ========================================== -->
+      <section id="chapter-env" class="chapter-container active">
+        <div class="chapter-header">
+          <div class="chapter-meta">
+            <span class="badge-tag">실습 준비</span>
+            <span class="badge-tag">Windows 10/11</span>
+          </div>
+          <h1 class="chapter-title">💻 윈도우 실습 환경 구축 가이드</h1>
+          <p>모든 실습은 <strong>Windows 노트북</strong>을 기준으로 작성되었습니다. 수업 시작 전 아래 3단계를 차례대로 완료해 주세요.</p>
+        </div>
+
+        <div class="env-grid">
+          <div class="env-card">
+            <div>
+              <h4><span>🐍</span> 1. Python 3.10+ 설치</h4>
+              <p>파이썬 공식 웹사이트에서 윈도우용 최신 안정 버전을 다운로드합니다.</p>
+              <div class="alert-box alert-important" style="margin: 10px 0; padding: 10px;">
+                <strong>⚠️ 필수 체크:</strong> 설치 창 맨 아래의 <code>Add python.exe to PATH</code> 에 <strong>반드시 체크</strong>해야 합니다!
+              </div>
+            </div>
+            <a href="https://www.python.org/downloads/windows/" target="_blank" class="env-download-btn">
+              <span>⬇️</span> Python 다운로드 페이지
+            </a>
+          </div>
+
+          <div class="env-card">
+            <div>
+              <h4><span>📝</span> 2. VS Code 에디터 설치</h4>
+              <p>마이크로소프트의 코드 에디터인 Visual Studio Code를 설치합니다.</p>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">
+                추천 확장팩: <code>Python</code>, <code>Korean Language Pack</code>
+              </p>
+            </div>
+            <a href="https://code.visualstudio.com/Download" target="_blank" class="env-download-btn">
+              <span>⬇️</span> VS Code Windows 다운로드
+            </a>
+          </div>
+
+          <div class="env-card">
+            <div>
+              <h4><span>🎮</span> 3. Pygame 라이브러리 설치</h4>
+              <p>2D 게임 제작에 필요한 파이게임 라이브러리를 터미널에서 설치합니다.</p>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">
+                터미널(PowerShell 또는 CMD)을 열고 아래 명령어를 실행하세요.
+              </p>
+            </div>
+            <button onclick="copyToClipboard('pip install pygame')" class="env-download-btn" style="border:none; cursor:pointer; background:var(--accent-green); color:#000;">
+              <span>📋</span> pip install pygame 복사
+            </button>
+          </div>
+        </div>
+
+        <h2>🛠️ Pygame 설치 명령어 및 트러블슈팅</h2>
+        <p>VS Code 상단 메뉴 <strong>터미널(Terminal) &gt; 새 터미널(New Terminal)</strong>을 열고 아래 명령어를 입력하세요.</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title"><span>💻</span> 터미널 (PowerShell / CMD)</span>
+            <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button>
+          </div>
+          <pre><code class="language-bash">pip install pygame</code></pre>
+        </div>
+
+        <div class="alert-box alert-tip">
+          <h5>💡 'pip' 명령어가 인식되지 않는 경우</h5>
+          <p>파이썬 설치 시 PATH 체크를 놓친 경우 아래 명령어로 시도해 보세요.</p>
+          <code>python -m pip install --upgrade pip</code><br>
+          <code>python -m pip install pygame</code>
+        </div>
+
+        <h2>📁 실습 프로젝트 폴더 구조</h2>
+        <p>바탕화면에 <code>game_project</code> 폴더를 하나 만들고, 파이썬 소스 코드(<code>main.py</code>)와 맵 파일(<code>stage1.csv</code>, <code>stage2.csv</code>)을 <strong>모두 같은 폴더 안</strong>에 저장해야 합니다.</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title"><span>📂</span> 권장 폴더 구조</span>
+            <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button>
+          </div>
+          <pre><code class="language-text">📁 바탕화면/game_project/
+ ├── 🐍 main.py         (우리가 작성할 파이썬 소스 파일)
+ ├── 📄 stage1.csv       (1단계 튜토리얼 맵)
+ ├── 📄 stage2.csv       (2단계 공중 점프 맵)
+ └── 📄 stage3.csv       (3단계 마스터 챌린지 맵 - 선택)</code></pre>
+        </div>
+
+        <div class="chapter-nav-footer">
+          <div></div>
+          <button class="nav-footer-btn next" onclick="switchChapter('chapter-csv-center')">
+            <span class="nav-footer-label">다음 단계</span>
+            <span class="nav-footer-title">스테이지 CSV 다운로드 센터 👉</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION: CSV DOWNLOAD CENTER -->
+      <!-- ========================================== -->
+      <section id="chapter-csv-center" class="chapter-container">
+        <div class="chapter-header">
+          <div class="chapter-meta">
+            <span class="badge-tag">데이터 센터</span>
+            <span class="badge-tag">원클릭 다운로드</span>
+          </div>
+          <h1 class="chapter-title">📄 스테이지 CSV 데이터 다운로드 센터</h1>
+          <p>활동지 3차시 및 6차시에서 필요한 스테이지 맵 파일입니다. <strong>[CSV 파일 다운로드]</strong> 버튼을 누르면 브라우저에서 바로 파일로 저장됩니다.</p>
+        </div>
+
+        <!-- Stage 1 -->
+        <h2>1️⃣ 스테이지 1: 튜토리얼 맵 (stage1.csv)</h2>
+        <p>기본 평지와 간단한 점프 구간으로 구성된 입문용 맵입니다.</p>
+
+        <div class="sim-btn-group" style="margin-bottom: 12px;">
+          <button class="sim-btn" onclick="downloadCSV('stage1.csv', stage1Data)">
+            <span>⬇️</span> stage1.csv 파일 다운로드
+          </button>
+          <button class="copy-btn" onclick="copyToClipboard(stage1Data)">
+            <span>📋</span> 텍스트 복사
+          </button>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title"><span>📄</span> stage1.csv 미리보기</span>
+            <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button>
+          </div>
+          <pre><code class="language-csv" id="stage1Preview">0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,1,1,2,0,0,0,0,0,0,0,0,0,0,0,G
+0,P,0,0,0,0,1,1,1,0,0,0,1,1,1,1,1,1,1,0,0,2,0,0,2,2,0,0,2,1
+1,1,1,1,0,0,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,1,1,1,0,0,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1</code></pre>
+        </div>
+
+        <!-- Stage 2 -->
+        <h2>2️⃣ 스테이지 2: 공중 점프 심화 맵 (stage2.csv)</h2>
+        <p>넓은 가시밭과 높은 공중 발판으로 정밀한 점프가 요구되는 맵입니다.</p>
+
+        <div class="sim-btn-group" style="margin-bottom: 12px;">
+          <button class="sim-btn" onclick="downloadCSV('stage2.csv', stage2Data)">
+            <span>⬇️</span> stage2.csv 파일 다운로드
+          </button>
+          <button class="copy-btn" onclick="copyToClipboard(stage2Data)">
+            <span>📋</span> 텍스트 복사
+          </button>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title"><span>📄</span> stage2.csv 미리보기</span>
+            <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button>
+          </div>
+          <pre><code class="language-csv" id="stage2Preview">0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,1,1,1,0,0,0,0,0,0,0,0,G
+0,P,0,0,0,0,0,2,2,2,0,0,0,0,1,1,1,1,1,1,1,0,0,2,2,2,2,0,0,1
+1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1</code></pre>
+        </div>
+
+        <!-- Stage 3 -->
+        <h2>3️⃣ 스테이지 3: 마스터 챌린지 맵 (stage3.csv)</h2>
+        <p>낙사 구간과 계단식 점프가 결합된 최고 난이도 보너스 맵입니다.</p>
+
+        <div class="sim-btn-group" style="margin-bottom: 12px;">
+          <button class="sim-btn" onclick="downloadCSV('stage3.csv', stage3Data)">
+            <span>⬇️</span> stage3.csv 파일 다운로드
+          </button>
+          <button class="copy-btn" onclick="copyToClipboard(stage3Data)">
+            <span>📋</span> 텍스트 복사
+          </button>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title"><span>📄</span> stage3.csv 미리보기</span>
+            <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button>
+          </div>
+          <pre><code class="language-csv" id="stage3Preview">0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,2,1,1,1,2,0,0,0,1,1,1,0,0,0,0,0,G
+0,P,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,2,0,0,0,0,0,2,1
+1,1,1,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,0,0,1,1,1,1
+1,1,1,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,0,0,1,1,1,1</code></pre>
+        </div>
+
+        <!-- Tilemap Interactive Viewer -->
+        <h2>🗺️ 인터랙티브 타일맵 뷰어</h2>
+        <p>각 스테이지가 게임 안에서 어떻게 렌더링되는지 실시간으로 확인해 보세요.</p>
+        
+        <div class="simulator-box">
+          <div class="sim-header">
+            <span class="sim-title"><span>🎮</span> 타일맵 시각화 미리보기</span>
+            <div>
+              <button class="sim-btn" onclick="renderMapPreview(1)">Stage 1</button>
+              <button class="sim-btn" onclick="renderMapPreview(2)">Stage 2</button>
+              <button class="sim-btn" onclick="renderMapPreview(3)">Stage 3</button>
+            </div>
+          </div>
+          <canvas id="tilemapCanvas" class="sim-canvas" width="800" height="240"></canvas>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; display: flex; gap: 14px; flex-wrap: wrap;">
+            <span>🟦 파란색 = 일반 발판 (1)</span>
+            <span>🟥 빨간색 = 위험 가시 (2)</span>
+            <span>🟨 노란색 = 플레이어 스폰 (P)</span>
+            <span>🟩 초록색 = 골 포탈 (G)</span>
+          </div>
+        </div>
+
+        <div class="chapter-nav-footer">
+          <button class="nav-footer-btn" onclick="switchChapter('chapter-env')">
+            <span class="nav-footer-label">이전 단계</span>
+            <span class="nav-footer-title">👈 실습 환경 구축 가이드</span>
+          </button>
+          <button class="nav-footer-btn next" onclick="switchChapter('chapter-01')">
+            <span class="nav-footer-label">다음 단계</span>
+            <span class="nav-footer-title">[활동지 01] 화면과 중력, 점프 👉</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION: CHAPTER 01 -->
+      <!-- ========================================== -->
+      <section id="chapter-01" class="chapter-container">
+        <div class="chapter-header">
+          <div class="chapter-meta">
+            <span class="badge-tag">활동지 01</span>
+            <span class="badge-tag">물리 엔진 기초</span>
+          </div>
+          <h1 class="chapter-title">[활동지 01] 2D 물리 엔진의 기초: 화면과 중력, 그리고 점프</h1>
+        </div>
+
+        <div class="objectives-card">
+          <h4><span>🎯</span> 학습 목표</h4>
+          <ol>
+            <li>컴퓨터 화면의 좌표계와 게임 루프(Game Loop)의 동작 원리를 이해한다.</li>
+            <li>중력 가속도 수식을 코드로 모델링하여 캐릭터가 포물선 운동을 하도록 만든다.</li>
+            <li>바닥 착지 조건을 제어하여 무한 점프 버그를 방지한다.</li>
+          </ol>
+        </div>
+
+        <h2>1. 게임 루프와 화면 좌표계</h2>
+        <p>컴퓨터 모니터는 수학 시간에 배우는 데카르트 좌표계와 달리 <strong>화면의 왼쪽 위가 원점 $(0, 0)$</strong> 입니다.</p>
+
+        <ul>
+          <li><strong>$x$ 축:</strong> 오른쪽으로 갈수록 값이 커집니다 ($+$).</li>
+          <li><strong>$y$ 축:</strong> 아래로 내려갈수록 값이 커집니다 ($+$).</li>
+        </ul>
+
+        <p>게임은 멈춰 있는 그림이 아닙니다. <strong>"입력 받기 $\rightarrow$ 위치 계산하기 $\rightarrow$ 화면 새로 그리기"</strong> 과정을 1초에 60번씩 반복하는 <strong>게임 루프(Game Loop)</strong> 위에서 돌아갑니다.</p>
+
+        <h3>📌 Step 1: 기본 창 띄우고 좌우로 움직이기</h3>
+        <p>아래 코드를 복사하여 실행해 보세요. 방향키(<code>←</code>, <code>→</code>)를 눌러 사각형을 움직여 봅니다.</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title"><span>🐍</span> step1_basic_loop.py</span>
+            <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button>
+          </div>
+          <pre><code class="language-python">import pygame
+import sys
+
+# 1. 초기화 및 기본 설정
+pygame.init()
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 450
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("1차시: 플레이어 이동과 기본 루프")
+clock = pygame.time.Clock()
+
+# 2. 플레이어 기본 속성 (40x40 정사각형)
+player_x = 100
+player_y = 200
+player_size = 40
+speed = 5
+
+# --- 게임 루프 ---
+running = True
+while running:
+    # (1) 이벤트 감지 (창 닫기 등)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # (2) 키보드 입력 처리
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        player_x -= speed
+    if keys[pygame.K_RIGHT]:
+        player_x += speed
+
+    # (3) 화면 경계 이탈 방지
+    player_x = max(0, min(player_x, SCREEN_WIDTH - player_size))
+
+    # (4) 렌더링 (화면 지우고 새로 그리기)
+    screen.fill((30, 30, 30))  # 어두운 회색 배경
+    pygame.draw.rect(screen, (0, 200, 255), (player_x, player_y, player_size, player_size))  # 하늘색 네모
+    pygame.display.flip()
+
+    clock.tick(60)  # 60 FPS 고정
+
+pygame.quit()
+sys.exit()</code></pre>
+        </div>
+
+        <h2>2. 중력 가속도와 점프 (물리 법칙 도입)</h2>
+        <p>우주 공간처럼 둥둥 떠다니는 사각형에 현실 세계의 <strong>중력</strong>을 부여해 봅시다.</p>
+
+        <h3>왜 속도($v_y$)에 가속도($g$)를 계속 더할까?</h3>
+        <ul>
+          <li>물체가 떨어질 때 속도는 일정하지 않고 점점 빨라집니다.</li>
+          <li>매 프레임마다 세로 속도($v_y$)에 중력값($g$)을 누적해서 더해주면 자연스러운 자유낙하가 일어납니다.</li>
+        </ul>
+
+        <div class="math-block">
+          $$v_y \leftarrow v_y + g$$
+        </div>
+        <div class="math-block">
+          $$y \leftarrow y + v_y$$
+        </div>
+
+        <ul>
+          <li><strong>점프:</strong> 바닥에 닿아 있을 때 위쪽 방향으로 강한 초기 속도($-v_{\text{jump}}$)를 한 번 줍니다. (위쪽이 음수 방향이므로 마이너스 부호를 붙입니다.)</li>
+        </ul>
+
+        <!-- Gravity/Jump Simulator Widget -->
+        <div class="simulator-box">
+          <div class="sim-header">
+            <span class="sim-title"><span>🧪</span> 중력 & 점프 포물선 실시간 시뮬레이터</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">스페이스바 / 클릭으로 점프</span>
+          </div>
+          <canvas id="physicsCanvas1" class="sim-canvas" width="800" height="280"></canvas>
+          
+          <div class="sim-controls">
+            <div class="control-group">
+              <div class="control-label">
+                <span>중력 가속도 (gravity)</span>
+                <span id="val_g" style="color:var(--accent-blue);">0.8</span>
+              </div>
+              <input type="range" id="slider_g" min="0.1" max="2.5" step="0.1" value="0.8" class="control-slider" oninput="updatePhysicsParams()">
+            </div>
+            <div class="control-group">
+              <div class="control-label">
+                <span>점프 초기 속도 (jump_power)</span>
+                <span id="val_jump" style="color:var(--accent-blue);">-14.0</span>
+              </div>
+              <input type="range" id="slider_jump" min="-24.0" max="-5.0" step="0.5" value="-14.0" class="control-slider" oninput="updatePhysicsParams()">
+            </div>
+            <div class="control-group">
+              <div class="control-label">
+                <span>수평 이동 속도 (speed)</span>
+                <span id="val_speed" style="color:var(--accent-blue);">5.0</span>
+              </div>
+              <input type="range" id="slider_speed" min="1.0" max="12.0" step="0.5" value="5.0" class="control-slider" oninput="updatePhysicsParams()">
+            </div>
+          </div>
+
+          <div class="sim-btn-group">
+            <button class="sim-btn" onclick="triggerJumpSim1()">🚀 점프 (Jump)</button>
+            <button class="sim-btn" style="background:var(--bg-secondary); color:var(--text-main);" onclick="resetSim1()">🔄 궤적 리셋</button>
+            <div style="font-size:0.85rem; color:var(--text-sub); display:flex; align-items:center; gap:10px; margin-left:auto;">
+              <span>체공 시간: <strong id="sim1_airtime">35.0 frame</strong></span>
+              <span>수평 도달 거리: <strong id="sim1_dist">175 px</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <h3>📌 Step 2: 중력과 점프 구현하기 (바닥 착지 제어)</h3>
+        <p>아래 코드를 복사하여 <code>Space</code> 키로 점프를 테스트해 보세요.</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title"><span>🐍</span> step2_gravity_jump.py</span>
+            <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button>
+          </div>
+          <pre><code class="language-python">import pygame
+import sys
+
+pygame.init()
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 450
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("1차시: 중력과 점프 물리 엔진")
+clock = pygame.time.Clock()
+
+# 플레이어 속성
+player_x = 100
+player_y = 100
+player_size = 40
+speed = 5
+
+# 물리 파라미터
+velocity_y = 0.0      # 세로 방향 현재 속도
+gravity = 0.8         # 중력 가속도 (클수록 빨리 떨어짐)
+jump_power = -14.0    # 점프 초기 속도 (음수: 위쪽)
+is_grounded = False   # 바닥에 닿아있는지 여부
+
+# 바닥 위치 (Y좌표)
+FLOOR_Y = 380
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        
+        # 키를 한 번 눌렀을 때만 점프 (누르고 있는 동안 계속 점프하는 것 방지)
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and is_grounded:
+                velocity_y = jump_power
+                is_grounded = False
+
+    # 1. 좌우 이동 처리
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        player_x -= speed
+    if keys[pygame.K_RIGHT]:
+        player_x += speed
+    player_x = max(0, min(player_x, SCREEN_WIDTH - player_size))
+
+    # 2. 물리 연산 (중력 적용)
+    velocity_y += gravity
+    player_y += velocity_y
+
+    # 3. 바닥 착지 판정 (Y 좌표 보정)
+    if player_y + player_size >= FLOOR_Y:
+        player_y = FLOOR_Y - player_size  # 발이 바닥 밑으로 파고들지 않게 고정
+        velocity_y = 0.0                  # 떨어지던 속도를 0으로 리셋
+        is_grounded = True                # 다시 점프할 수 있는 상태로 변경
+
+    # 4. 화면 그리기
+    screen.fill((25, 25, 35))
+    
+    # 바닥 그리기 (초록색)
+    pygame.draw.rect(screen, (46, 204, 113), (0, FLOOR_Y, SCREEN_WIDTH, SCREEN_HEIGHT - FLOOR_Y))
+    
+    # 플레이어 그리기 (주황색 네모)
+    pygame.draw.rect(screen, (230, 126, 34), (player_x, int(player_y), player_size, player_size))
+    
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
+sys.exit()</code></pre>
+        </div>
+
+        <h2>3. 스스로 탐구하고 수정해보기 (Mission)</h2>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 1] 중력과 점프력 튜닝</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p>코드 상단의 <code>gravity</code>와 <code>jump_power</code> 값을 아래 표처럼 바꿔보고 캐릭터의 움직임이 어떻게 변하는지 관찰해 보세요.</p>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>실험</th>
+                    <th><code>gravity</code></th>
+                    <th><code>jump_power</code></th>
+                    <th>움직임의 느낌</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>A (기본)</strong></td>
+                    <td><code>0.8</code></td>
+                    <td><code>-14.0</code></td>
+                    <td>적당한 포물선</td>
+                  </tr>
+                  <tr>
+                    <td><strong>B (달나라)</strong></td>
+                    <td><code>0.2</code></td>
+                    <td><code>-8.0</code></td>
+                    <td>천천히 둥실 떠오름 (저중력)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>C (지오메트리 대시)</strong></td>
+                    <td><code>1.5</code></td>
+                    <td><code>-18.0</code></td>
+                    <td>빠르고 묵직하게 착지 (고속 액션)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 2] 무한 2단 점프 버그 만들기 & 고치기</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p><code>if event.key == pygame.K_SPACE and is_grounded:</code> 에서 <code>and is_grounded</code> 조건을 지워보세요. 어떤 현상이 발생하나요? 왜 이 조건이 플랫포머 게임에서 필수적인지 생각해 봅니다.</p>
+          </div>
+        </div>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 3] (도전) 좌우 화면 반대편으로 워프(Warp)하기</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p>캐릭터가 화면 오른쪽 끝을 넘어가면 왼쪽 끝에서 나타나고, 왼쪽 끝을 넘어가면 오른쪽 끝에서 나타나도록 <code>player_x</code> 좌표 갱신 코드를 수정해 보세요.</p>
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><span>💡</span> 힌트 코드</span>
+                <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button>
+              </div>
+              <pre><code class="language-python">if player_x > SCREEN_WIDTH:
+    player_x = -player_size
+elif player_x < -player_size:
+    player_x = SCREEN_WIDTH</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="chapter-nav-footer">
+          <button class="nav-footer-btn" onclick="switchChapter('chapter-csv-center')">
+            <span class="nav-footer-label">이전 단계</span>
+            <span class="nav-footer-title">👈 스테이지 CSV 다운로드</span>
+          </button>
+          <button class="nav-footer-btn next" onclick="switchChapter('chapter-02')">
+            <span class="nav-footer-label">다음 단계</span>
+            <span class="nav-footer-title">[활동지 02] 사각 충돌과 너그러운 판정 👉</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION: CHAPTER 02 -->
+      <!-- ========================================== -->
+      <section id="chapter-02" class="chapter-container">
+        <div class="chapter-header">
+          <div class="chapter-meta">
+            <span class="badge-tag">활동지 02</span>
+            <span class="badge-tag">충돌 판정</span>
+          </div>
+          <h1 class="chapter-title">[활동지 02] 사각 충돌(AABB)과 너그러운 판정(Hitbox Inset)</h1>
+        </div>
+
+        <div class="objectives-card">
+          <h4><span>🎯</span> 학습 목표</h4>
+          <ol>
+            <li>두 사각형이 겹치는 수학적 조건(AABB 충돌)을 유도하고 코드로 구현한다.</li>
+            <li>축 분리($x$ 축, $y$ 축 분리 이동) 방식을 통해 발판 착지와 벽 막힘을 정확히 처리한다.</li>
+            <li>렌더링 박스와 피격 판정 박스를 분리(패딩 적용)하여 불합리하지 않은 난이도를 설계한다.</li>
+          </ol>
+        </div>
+
+        <h2>1. 사각형은 언제 부딪힐까? (AABB 충돌 판정)</h2>
+        <p>두 직사각형 $A(x_1, y_1, w_1, h_1)$ 와 $B(x_2, y_2, w_2, h_2)$ 가 충돌하지 않고 완전히 떨어져 있는 경우는 4가지뿐입니다.</p>
+
+        <ol>
+          <li>$A$ 가 $B$ 의 <strong>완전 왼쪽</strong>에 있음: $x_1 + w_1 \le x_2$</li>
+          <li>$A$ 가 $B$ 의 <strong>완전 오른쪽</strong>에 있음: $x_1 \ge x_2 + w_2$</li>
+          <li>$A$ 가 $B$ 의 <strong>완전 위쪽</strong>에 있음: $y_1 + h_1 \le y_2$</li>
+          <li>$A$ 가 $B$ 의 <strong>완전 아래쪽</strong>에 있음: $y_1 \ge y_2 + h_2$</li>
+        </ol>
+
+        <p>따라서 <strong>두 사각형이 겹치는(충돌하는) 조건</strong>은 위 4가지 경우를 모두 벗어난 상태(드모르간 법칙의 여집합)입니다.</p>
+
+        <div class="math-block">
+          $$x_1 < x_2 + w_2 \quad \text{and} \quad x_1 + w_1 > x_2$$
+        </div>
+        <div class="math-block">
+          $$y_1 < y_2 + h_2 \quad \text{and} \quad y_1 + h_1 > y_2$$
+        </div>
+
+        <h2>2. 축 분리(Separation of Axes) 이동의 필요성</h2>
+        <p>$x$ 와 $y$ 좌표를 한꺼번에 더한 뒤 충돌을 검사하면 <strong>"벽에 옆으로 부딪힌 건지, 위에서 밟은 건지"</strong> 구별할 수 없어 캐릭터가 벽에 끼어버립니다.</p>
+
+        <ul>
+          <li><strong>해결 순서:</strong>
+            <ol>
+              <li>$x$ 축으로 먼저 이동 ($x \leftarrow x + v_x$) $\rightarrow$ 부딪히면 <strong>좌우 벽 충돌</strong>이므로 $x$ 위치를 벽 바로 앞/뒤로 밀어내고 $v_x = 0$.</li>
+              <li>$y$ 축으로 이동 ($y \leftarrow y + v_y$) $\rightarrow$ 부딪히면:
+                <ul>
+                  <li>떨어지는 중($v_y > 0$): <strong>발판 착지</strong> $\rightarrow$ $y = \text{block.top} - h$, $v_y = 0$, 점프 가능 상태로 리셋.</li>
+                  <li>솟구치는 중($v_y < 0$): <strong>머리 부딪힘</strong> $\rightarrow$ $y = \text{block.bottom}$, $v_y = 0$ 으로 강제 낙하.</li>
+                </ul>
+              </li>
+            </ol>
+          </li>
+        </ul>
+
+        <h3>📌 Step 1: 공중 발판과 축 분리 충돌 구현</h3>
+        <p>아래 코드를 복사하여 실행해 보세요. 공중에 떠 있는 발판 위에 올라서거나 아래에서 머리로 칠 수 있습니다.</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title"><span>🐍</span> step1_axis_separation.py</span>
+            <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button>
+          </div>
+          <pre><code class="language-python">import pygame
+import sys
+
+pygame.init()
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 450
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("2차시: AABB 축 분리 충돌 처리")
+clock = pygame.time.Clock()
+
+# 플레이어 속성 (Pygame Rect 사용)
+player = pygame.Rect(100, 100, 40, 40)
+speed = 5
+velocity_y = 0.0
+gravity = 0.8
+jump_power = -14.0
+is_grounded = False
+
+# 발판(장애물) 목록
+platforms = [
+    pygame.Rect(0, 380, 800, 70),     # 바닥
+    pygame.Rect(250, 280, 120, 30),   # 1번 공중 발판
+    pygame.Rect(450, 190, 140, 30),   # 2번 높은 발판
+    pygame.Rect(650, 280, 100, 30)    # 3번 발판
+]
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and is_grounded:
+                velocity_y = jump_power
+                is_grounded = False
+
+    # 1. 키보드 입력에 따른 좌우 이동 속도 계산
+    keys = pygame.key.get_pressed()
+    velocity_x = 0
+    if keys[pygame.K_LEFT]:
+        velocity_x = -speed
+    if keys[pygame.K_RIGHT]:
+        velocity_x = speed
+
+    # 2. X축 이동 및 충돌 보정 (좌우 벽 막힘)
+    player.x += velocity_x
+    for block in platforms:
+        if player.colliderect(block):
+            if velocity_x > 0:  # 오른쪽으로 가다 부딪힘
+                player.right = block.left
+            elif velocity_x < 0:  # 왼쪽으로 가다 부딪힘
+                player.left = block.right
+
+    # 3. Y축 이동 및 충돌 보정 (착지 및 머리 부딪힘)
+    velocity_y += gravity
+    player.y += int(velocity_y)
+    is_grounded = False  # 공중에 뜬 것으로 가정 후 충돌 시 참으로 변경
+
+    for block in platforms:
+        if player.colliderect(block):
+            if velocity_y > 0:  # 떨어지면서 발판 윗면에 착지
+                player.bottom = block.top
+                velocity_y = 0.0
+                is_grounded = True
+            elif velocity_y < 0:  # 위로 솟구치다 발판 아랫면에 머리 충돌
+                player.top = block.bottom
+                velocity_y = 0.0
+
+    # 4. 화면 그리기
+    screen.fill((25, 25, 35))
+    
+    # 발판 렌더링 (파란색)
+    for block in platforms:
+        pygame.draw.rect(screen, (52, 152, 219), block)
+    
+    # 플레이어 렌더링 (주황색)
+    pygame.draw.rect(screen, (230, 126, 34), player)
+
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
+sys.exit()</code></pre>
+        </div>
+
+        <h2>3. 너그러운 판정: 피격 박스 인셋 (Hitbox Padding)</h2>
+        <p>가시나 위험물에 겉 모서리가 $1\text{ px}$ 만 스쳐도 즉사하면 플레이어는 큰 불쾌감을 느낍니다.</p>
+
+        <ul>
+          <li><strong>해결책:</strong> 겉으로 보이는 그림($40 \times 40$)보다 <strong>실제 충돌 검사용 사각형 크기($40 - 2p$)를 안쪽으로 줄여서</strong> 판정합니다.</li>
+          <li><code>F1</code> 키를 눌러 겉 박스(파란선)와 내부 실제 피격 박스(빨간선)를 직접 확인해 봅시다.</li>
+        </ul>
+
+        <!-- Hitbox Padding Interactive Simulator -->
+        <div class="simulator-box">
+          <div class="sim-header">
+            <span class="sim-title"><span>🎯</span> 히트박스 패딩(Hitbox Padding) 판정 시뮬레이터</span>
+            <span style="font-size:0.8rem; color:var(--text-muted);">마우스로 플레이어를 드래그하여 가시에 접근해 보세요</span>
+          </div>
+          <canvas id="hitboxCanvas" class="sim-canvas" width="800" height="240"></canvas>
+          <div class="sim-controls">
+            <div class="control-group">
+              <div class="control-label">
+                <span>플레이어 패딩 (PLAYER_PAD)</span>
+                <span id="val_pad_p" style="color:var(--accent-blue);">4 px</span>
+              </div>
+              <input type="range" id="slider_pad_p" min="0" max="12" step="1" value="4" class="control-slider" oninput="updateHitboxSim()">
+            </div>
+            <div class="control-group">
+              <div class="control-label">
+                <span>가시 패딩 (HAZARD_PAD)</span>
+                <span id="val_pad_h" style="color:var(--accent-blue);">6 px</span>
+              </div>
+              <input type="range" id="slider_pad_h" min="0" max="12" step="1" value="6" class="control-slider" oninput="updateHitboxSim()">
+            </div>
+            <div class="control-group" style="justify-content:center;">
+              <label style="font-size:0.88rem; display:flex; align-items:center; gap:8px; cursor:pointer; color:var(--text-main);">
+                <input type="checkbox" id="check_debug_box" checked onchange="updateHitboxSim()">
+                디버그 테두리 표시 (F1 모드)
+              </label>
+            </div>
+          </div>
+          <div style="margin-top:10px; font-size:0.88rem; font-weight:700;" id="hitbox_status_text">
+            상태: <span style="color:var(--accent-green);">안전 (Safe)</span>
+          </div>
+        </div>
+
+        <h3>📌 Step 2: 위험 가시 장애물과 패딩(Padding) 판정</h3>
+        <p>아래 코드를 복사하여 가시 사이를 통과해 보세요. <code>F1</code> 키를 누르면 디버그 모드가 켜집니다.</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title"><span>🐍</span> step2_hazard_padding.py</span>
+            <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button>
+          </div>
+          <pre><code class="language-python">import pygame
+import sys
+
+pygame.init()
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 450
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("2차시: 히트박스 패딩과 사망/리스폰")
+clock = pygame.time.Clock()
+
+# 플레이어 속성
+SPAWN_POINT = (60, 300)
+player = pygame.Rect(SPAWN_POINT[0], SPAWN_POINT[1], 40, 40)
+speed = 5
+velocity_y = 0.0
+gravity = 0.8
+jump_power = -14.0
+is_grounded = False
+
+# 위험 장애물 판정 여유폭 (패딩값)
+PLAYER_PAD = 4   # 플레이어 안쪽 여유치 (가로세로 8px 축소)
+HAZARD_PAD = 6   # 가시 안쪽 여유치 (가로세로 12px 축소)
+debug_mode = False
+
+# 발판 및 위험 장애물(가시) 정의
+platforms = [
+    pygame.Rect(0, 380, 800, 70),
+    pygame.Rect(220, 290, 140, 20),
+    pygame.Rect(440, 230, 140, 20),
+]
+
+hazards = [
+    pygame.Rect(270, 260, 30, 30),  # 발판 위 가시
+    pygame.Rect(500, 350, 40, 30),  # 바닥 가시
+]
+
+def get_padded_rect(rect, pad):
+    """지정한 패딩만큼 안쪽으로 줄어든 판정용 사각형 반환"""
+    return pygame.Rect(rect.x + pad, rect.y + pad, rect.width - 2 * pad, rect.height - 2 * pad)
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and is_grounded:
+                velocity_y = jump_power
+                is_grounded = False
+            # F1 키로 디버그 모드 토글
+            if event.key == pygame.K_F1:
+                debug_mode = not debug_mode
+
+    # 1. 좌우 이동
+    keys = pygame.key.get_pressed()
+    velocity_x = 0
+    if keys[pygame.K_LEFT]:
+        velocity_x = -speed
+    if keys[pygame.K_RIGHT]:
+        velocity_x = speed
+
+    player.x += velocity_x
+    for block in platforms:
+        if player.colliderect(block):
+            if velocity_x > 0:
+                player.right = block.left
+            elif velocity_x < 0:
+                player.left = block.right
+
+    # 2. 중력 및 Y축 이동
+    velocity_y += gravity
+    player.y += int(velocity_y)
+    is_grounded = False
+
+    for block in platforms:
+        if player.colliderect(block):
+            if velocity_y > 0:
+                player.bottom = block.top
+                velocity_y = 0.0
+                is_grounded = True
+            elif velocity_y < 0:
+                player.top = block.bottom
+                velocity_y = 0.0
+
+    # 3. 위험 장애물(가시) 충돌 검사 (패딩 적용)
+    player_hitbox = get_padded_rect(player, PLAYER_PAD)
+    for spike in hazards:
+        spike_hitbox = get_padded_rect(spike, HAZARD_PAD)
+        if player_hitbox.colliderect(spike_hitbox):
+            # 사망 시 초기 위치로 리스폰
+            player.x, player.y = SPAWN_POINT
+            velocity_y = 0.0
+            break
+
+    # 4. 화면 렌더링
+    screen.fill((20, 20, 28))
+    
+    # 발판 (파란색)
+    for block in platforms:
+        pygame.draw.rect(screen, (52, 152, 219), block)
+    
+    # 가시 장애물 (빨간색)
+    for spike in hazards:
+        pygame.draw.rect(screen, (231, 76, 60), spike)
+    
+    # 플레이어 (노란색)
+    pygame.draw.rect(screen, (241, 196, 15), player)
+
+    # 디버그 모드 시 실제 판정 히트박스 테두리 표시
+    if debug_mode:
+        pygame.draw.rect(screen, (255, 255, 255), player_hitbox, 1)
+        for spike in hazards:
+            pygame.draw.rect(screen, (255, 255, 255), get_padded_rect(spike, HAZARD_PAD), 1)
+
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
+sys.exit()</code></pre>
+        </div>
+
+        <h2>4. 스스로 탐구하고 수정해보기 (Mission)</h2>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 1] 패딩 값에 따른 체감 난이도 비교</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p>코드 상단의 <code>PLAYER_PAD</code> 와 <code>HAZARD_PAD</code> 값을 각각 <code>0</code> (엄격함)과 <code>10</code> (매우 너그러움)으로 설정해보고 가시 모서리를 지날 때의 플레이 느낌 차이를 비교해 보세요.</p>
+          </div>
+        </div>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 2] 낙사 구역(화면 밑으로 추락) 처리</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p>플레이어가 발판을 밟지 못하고 화면 아래($y > \text{SCREEN\_HEIGHT}$)로 떨어졌을 때, 즉시 <code>SPAWN_POINT</code> 로 리스폰되는 조건문을 추가해 보세요.</p>
+          </div>
+        </div>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 3] (도전) 천장 부딪힘 시 점프 조기 종료</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p>현재 코드는 머리가 부딪히면 $v_y = 0$ 으로 멈추지만 가속도 때문에 살짝 둔탁하게 떨어집니다. 머리가 닿았을 때 아래로 즉시 튕겨 나가도록 $v_y = 2.0$ 과 같이 양수 속도를 주면 느낌이 어떻게 변하는지 확인해 보세요.</p>
+          </div>
+        </div>
+
+        <div class="chapter-nav-footer">
+          <button class="nav-footer-btn" onclick="switchChapter('chapter-01')">
+            <span class="nav-footer-label">이전 단계</span>
+            <span class="nav-footer-title">👈 [활동지 01] 화면과 중력, 점프</span>
+          </button>
+          <button class="nav-footer-btn next" onclick="switchChapter('chapter-03')">
+            <span class="nav-footer-label">다음 단계</span>
+            <span class="nav-footer-title">[활동지 03] 타일맵과 횡스크롤 카메라 👉</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION: CHAPTER 03 -->
+      <!-- ========================================== -->
+      <section id="chapter-03" class="chapter-container">
+        <div class="chapter-header">
+          <div class="chapter-meta">
+            <span class="badge-tag">활동지 03</span>
+            <span class="badge-tag">맵 디자인 & 카메라</span>
+          </div>
+          <h1 class="chapter-title">[활동지 03] 스프레드시트 맵 디자인과 CSV 타일맵 파서, 그리고 횡스크롤 카메라</h1>
+        </div>
+
+        <div class="objectives-card">
+          <h4><span>🎯</span> 학습 목표</h4>
+          <ol>
+            <li>구글 스프레드시트 또는 엑셀의 격자 셀을 이용해 시각적으로 게임 맵을 디자인하고 CSV 파일로 내보낸다.</li>
+            <li>파이썬 내장 <code>csv</code> 모듈을 활용해 2차원 데이터를 읽어와 월드 좌표계의 게임 오브젝트로 자동 변환한다.</li>
+            <li>플레이어의 이동에 맞춰 시점이 따라가는 횡스크롤 카메라 오프셋 시스템을 구현한다.</li>
+          </ol>
+        </div>
+
+        <h2>1. 스프레드시트 맵 에디터 세팅 및 타일 규칙</h2>
+        <p>코드를 직접 수정하지 않고 엑셀이나 구글 스프레드시트를 이용해 시각적으로 맵을 제작합니다.</p>
+
+        <h3>🛠️ 스프레드시트 작성 방법</h3>
+        <ol>
+          <li><strong>구글 시트 / 엑셀 실행:</strong> 새 문서를 열고 열 너비와 행 높이를 정사각형 모양(예: $30 \times 30\text{ px}$)으로 조절합니다.</li>
+          <li><strong>타일 ID 입력 규칙:</strong>
+            <ul>
+              <li><code>0</code> 또는 빈칸: 빈 공간 (허공)</li>
+              <li><code>1</code> : 일반 안전 발판 블록 (착지 및 벽 충돌)</li>
+              <li><code>2</code> : 위험 가시 장애물 (닿으면 사망/리스폰)</li>
+              <li><code>P</code> : 플레이어 시작 위치 (스폰 지점)</li>
+              <li><code>G</code> : 골인 지점 (스테이지 클리어 포탈)</li>
+            </ul>
+          </li>
+          <li><strong>CSV 파일로 저장:</strong> 메뉴의 <code>파일</code> $\rightarrow$ <code>다운로드</code> $\rightarrow$ <code>쉼표로 구분된 값(.csv)</code>을 클릭하여 <code>stage1.csv</code>로 저장합니다.</li>
+        </ol>
+
+        <div class="alert-box alert-tip">
+          <h5>💡 스테이지 CSV 파일이 이미 준비되어 있습니다!</h5>
+          <p>웹북 상단의 <a href="javascript:switchChapter('chapter-csv-center')" style="color:var(--accent-blue); font-weight:700;">[스테이지 CSV 다운로드 센터]</a> 탭에서 <code>stage1.csv</code> 파일을 바로 다운로드받을 수 있습니다.</p>
+        </div>
+
+        <h2>2. 횡스크롤 카메라: 월드 좌표계 $\rightarrow$ 스크린 좌표계</h2>
+        <p>맵의 가로 길이가 화면 너비($800\text{ px}$)보다 길어지면 실제 물체의 위치인 <strong>월드 좌표계</strong>와 모니터에 출력되는 <strong>스크린 좌표계</strong>를 분리해야 합니다.</p>
+
+        <ul>
+          <li><strong>카메라 위치 ($\text{camera\_x}$):</strong> 플레이어가 화면의 정중앙선($\text{SCREEN\_WIDTH} / 2$)을 넘어설 때만 화면이 플레이어를 추적하도록 오프셋을 계산합니다.</li>
+        </ul>
+
+        <div class="math-block">
+          $$\text{camera\_x} = \max(0, \text{player.centerx} - \text{SCREEN\_WIDTH} / 2)$$
+        </div>
+
+        <ul>
+          <li><strong>렌더링 위치 변환:</strong> 화면에 그리는 모든 오브젝트(발판, 가시, 플레이어 등)의 $x$ 좌표에서 $\text{camera\_x}$ 를 차감합니다.</li>
+        </ul>
+
+        <div class="math-block">
+          $$\text{screen\_x} = \text{world\_x} - \text{camera\_x}$$
+        </div>
+
+        <h2>3. 완성 코드 템플릿 (`main.py`)</h2>
+        <p>파이썬 파일과 동일한 폴더에 <code>stage1.csv</code> 파일이 준비된 상태에서 실행합니다.</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title"><span>🐍</span> main.py (3차시 완성본)</span>
+            <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button>
+          </div>
+          <pre><code class="language-python">import pygame
+import sys
+import os
+import csv
+
+# 1. 초기화 및 디스플레이 설정
+pygame.init()
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 450
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("3차시: CSV 타일맵 파서와 횡스크롤 카메라")
+clock = pygame.time.Clock()
+
+TILE_SIZE = 40
+
+# 게임 월드 엔티티 저장소
+platforms = []
+hazards = []
+goal_rect = None
+spawn_point = (100, 100)
+
+def load_map_from_csv(filepath):
+    """CSV 파일을 파싱하여 월드 좌표(x, y)에 맞는 오브젝트 생성"""
+    global platforms, hazards, goal_rect, spawn_point
+    platforms.clear()
+    hazards.clear()
+    goal_rect = None
+    spawn_point = (100, 100)
+
+    if not os.path.exists(filepath):
+        print(f"[경고] {filepath} 파일이 없습니다. 기본 바닥을 임시 생성합니다.")
+        platforms.append(pygame.Rect(0, 380, SCREEN_WIDTH * 2, 70))
+        return
+
+    with open(filepath, mode="r", encoding="utf-8-sig") as f:
+        reader = csv.reader(f)
+        for r, row in enumerate(reader):
+            for c, raw_val in enumerate(row):
+                val = raw_val.strip()
+                x = c * TILE_SIZE
+                y = r * TILE_SIZE
+
+                if val == "1":       # 안전 발판 블록
+                    platforms.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
+                elif val == "2":     # 위험 가시 장애물
+                    hazards.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
+                elif val.upper() == "P":  # 플레이어 스폰 위치
+                    spawn_point = (x, y)
+                elif val.upper() == "G":  # 골인 지점 포탈
+                    goal_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE * 2)
+
+# CSV 맵 로드
+load_map_from_csv("stage1.csv")
+
+# 2. 플레이어 물리 및 상태 변수
+player = pygame.Rect(spawn_point[0], spawn_point[1], TILE_SIZE, TILE_SIZE)
+speed = 6
+velocity_y = 0.0
+gravity = 0.8
+jump_power = -15.0
+is_grounded = False
+is_cleared = False
+
+# 판정 여유폭 (패딩값)
+PLAYER_PAD = 4
+HAZARD_PAD = 6
+
+def get_padded_rect(rect, pad):
+    """지정한 패딩만큼 축소된 판정용 히트박스 반환"""
+    return pygame.Rect(rect.x + pad, rect.y + pad, rect.width - 2 * pad, rect.height - 2 * pad)
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and is_grounded:
+                velocity_y = jump_power
+                is_grounded = False
+            # R 키로 현재 스테이지 재시작
+            if event.key == pygame.K_r:
+                player.x, player.y = spawn_point
+                velocity_y = 0.0
+                is_cleared = False
+
+    if not is_cleared:
+        # (1) 좌우 이동 및 X축 충돌 검사
+        keys = pygame.key.get_pressed()
+        velocity_x = 0
+        if keys[pygame.K_LEFT]:
+            velocity_x = -speed
+        if keys[pygame.K_RIGHT]:
+            velocity_x = speed
+
+        player.x += velocity_x
+        for block in platforms:
+            if player.colliderect(block):
+                if velocity_x > 0:
+                    player.right = block.left
+                elif velocity_x < 0:
+                    player.left = block.right
+
+        # (2) 중력 가속도 및 Y축 충돌 검사
+        velocity_y += gravity
+        player.y += int(velocity_y)
+        is_grounded = False
+
+        for block in platforms:
+            if player.colliderect(block):
+                if velocity_y > 0:
+                    player.bottom = block.top
+                    velocity_y = 0.0
+                    is_grounded = True
+                elif velocity_y < 0:
+                    player.top = block.bottom
+                    velocity_y = 0.0
+
+        # (3) 위험물 충돌(패딩 적용) 및 낙사 판정
+        player_hitbox = get_padded_rect(player, PLAYER_PAD)
+        for spike in hazards:
+            if player_hitbox.colliderect(get_padded_rect(spike, HAZARD_PAD)):
+                player.x, player.y = spawn_point
+                velocity_y = 0.0
+                break
+
+        if player.y > SCREEN_HEIGHT + 100:  # 바닥 구덩이 낙사
+            player.x, player.y = spawn_point
+            velocity_y = 0.0
+
+        # (4) 골인 포탈 도달 검사
+        if goal_rect and player.colliderect(goal_rect):
+            is_cleared = True
+
+    # (5) 카메라 오프셋 계산 (화면 중앙 기준 부드러운 추적)
+    camera_x = max(0, player.centerx - SCREEN_WIDTH // 2)
+
+    # (6) 화면 렌더링
+    screen.fill((20, 24, 34))
+
+    # 발판 렌더링 (파란색)
+    for block in platforms:
+        screen_rect = pygame.Rect(block.x - camera_x, block.y, block.width, block.height)
+        if -TILE_SIZE <= screen_rect.x <= SCREEN_WIDTH:
+            pygame.draw.rect(screen, (41, 128, 185), screen_rect)
+
+    # 가시 장애물 렌더링 (빨간색)
+    for spike in hazards:
+        screen_rect = pygame.Rect(spike.x - camera_x, spike.y, spike.width, spike.height)
+        if -TILE_SIZE <= screen_rect.x <= SCREEN_WIDTH:
+            pygame.draw.rect(screen, (231, 76, 60), screen_rect)
+
+    # 골인 지점 렌더링 (초록색 포탈)
+    if goal_rect:
+        screen_rect = pygame.Rect(goal_rect.x - camera_x, goal_rect.y, goal_rect.width, goal_rect.height)
+        pygame.draw.rect(screen, (46, 204, 113), screen_rect)
+
+    # 플레이어 렌더링 (노란색 큐브)
+    screen_player = pygame.Rect(player.x - camera_x, player.y, player.width, player.height)
+    pygame.draw.rect(screen, (241, 196, 15), screen_player)
+
+    # 클리어 메시지 출력
+    if is_cleared:
+        font = pygame.font.SysFont(None, 64)
+        text = font.render("STAGE CLEAR! (Press R to Restart)", True, (255, 255, 255))
+        screen.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2 - 30))
+
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
+sys.exit()</code></pre>
+        </div>
+
+        <h2>4. 스스로 탐구하고 수정해보기 (Mission)</h2>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 1] 물리 수치 기반 최대 점프 간격 계산</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p>현재 설정된 <code>speed = 6</code>, <code>jump_power = -15.0</code>, <code>gravity = 0.8</code> 일 때:</p>
+            <ol>
+              <li>최고점에 도달하는 시간: $t_{\text{top}} = \frac{15.0}{0.8} = 18.75\text{ frame}$</li>
+              <li>총 체공 시간: $t_{\text{air}} = 2 \times 18.75 = 37.5\text{ frame}$</li>
+              <li>수평 이동 가능 거리: $D = 6\text{ px} \times 37.5 = 225\text{ px}$ (타일 기준 약 $5.6\text{ 칸}$)</li>
+            </ol>
+            <p>스프레드시트에서 발판 사이 빈 공간(<code>0</code>)을 6칸 이상 벌려보고, 실제로 플레이어가 뛰어넘지 못하는지 확인해 보세요.</p>
+          </div>
+        </div>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 2] 구글 시트로 나만의 스테이지 제작</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p>스프레드시트에서 셀을 편집하여 다음 조건을 만족하는 <code>stage1.csv</code>를 직접 설계하고 게임에 적용해 보세요.</p>
+            <ul>
+              <li>점프로 피해야 하는 가시 장애물 구간 2곳 이상</li>
+              <li>높낮이가 다른 계단식 공중 발판 배치</li>
+              <li>바닥이 뚫려 있는 낙사 구역 1곳 이상</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 3] (도전) 맵 오른쪽 끝 이탈 방지 카메라 제한</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p>맵의 전체 가로 너비를 자동으로 계산하고, 카메라가 맵의 오른쪽 끝을 넘어 허공을 비추지 않도록 $\text{camera\_x}$ 값의 상한선을 설정해 보세요.</p>
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><span>💡</span> 힌트 코드</span>
+                <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button>
+              </div>
+              <pre><code class="language-python"># 가장 오른쪽에 있는 블록의 끝 좌표를 기준으로 맵 너비 계산
+max_world_x = max([b.right for b in platforms] + [SCREEN_WIDTH])
+max_camera_x = max(0, max_world_x - SCREEN_WIDTH)
+camera_x = min(max_camera_x, max(0, player.centerx - SCREEN_WIDTH // 2))</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="chapter-nav-footer">
+          <button class="nav-footer-btn" onclick="switchChapter('chapter-02')">
+            <span class="nav-footer-label">이전 단계</span>
+            <span class="nav-footer-title">👈 [활동지 02] 사각 충돌과 너그러운 판정</span>
+          </button>
+          <button class="nav-footer-btn next" onclick="switchChapter('chapter-04')">
+            <span class="nav-footer-label">다음 단계</span>
+            <span class="nav-footer-title">[활동지 04] 동적 오브젝트와 조작감 개선 👉</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION: CHAPTER 04 -->
+      <!-- ========================================== -->
+      <section id="chapter-04" class="chapter-container">
+        <div class="chapter-header">
+          <div class="chapter-meta">
+            <span class="badge-tag">활동지 04</span>
+            <span class="badge-tag">동적 기믹 & 조작감</span>
+          </div>
+          <h1 class="chapter-title">[활동지 04] 동적 오브젝트(움직이는 발판·점프대)와 조작감 개선(코요테 타임)</h1>
+        </div>
+
+        <div class="objectives-card">
+          <h4><span>🎯</span> 학습 목표</h4>
+          <ol>
+            <li>일정한 구간을 왕복하는 움직이는 발판(Moving Platform)을 구현하고, 탑승한 플레이어의 좌표를 동기화한다.</li>
+            <li>밟았을 때 강한 수직 반발력을 주는 점프대(Trampoline) 기믹을 구현한다.</li>
+            <li>발판 끝에서 살짝 늦게 점프해도 입력을 인정해 주는 코요테 타임(Coyote Time)을 적용하여 조작감을 개선한다.</li>
+          </ol>
+        </div>
+
+        <h2>1. 동적 오브젝트: 움직이는 발판과 좌표 동기화</h2>
+        <p>정적인 지형과 달리, 스스로 움직이는 발판은 <strong>발판의 이동 변위($\Delta x$)만큼 그 위에 서 있는 플레이어도 함께 이동</strong>시켜야 캐릭터가 미끄러져 떨어지지 않습니다.</p>
+
+        <ul>
+          <li><strong>발판 왕복 메커니즘:</strong> 발판의 현재 위치가 시작점과 끝점 사이를 벗어나면 속도 부호를 반전($v_{\text{plat}} \leftarrow -v_{\text{plat}}$)합니다.</li>
+          <li><strong>탑승 판정 및 동기화 순서:</strong>
+            <ol>
+              <li>발판이 먼저 이동합니다 ($x_{\text{plat}} \leftarrow x_{\text{plat}} + v_{\text{plat}}$).</li>
+              <li>플레이어가 발판 위에 서 있는 상태(<code>on_platform</code>)라면 플레이어의 $x$ 좌표에도 발판의 이동량($v_{\text{plat}}$)을 더해줍니다.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <h2>2. 특수 기믹과 조작감 개선 (Game Juice)</h2>
+        <h3>(1) 점프대 (Trampoline / Spring Block)</h3>
+        <p>플레이어가 하강 중($v_y > 0$) 점프대 블록 윗면에 닿았을 때, 일반 착지 대신 <strong>일반 점프보다 강력한 상향 속도($-v_{\text{bounce}}$)</strong>를 즉시 부여합니다.</p>
+
+        <h3>(2) 코요테 타임 (Coyote Time)</h3>
+        <p>만화 캐릭터가 절벽을 벗어나 허공을 밟아도 잠깐 동안 떨어지지 않는 연출에서 유래한 기법입니다. 발판에서 발이 떨어진 직후 $5 \sim 6\text{ frame}$ (약 0.1초) 동안은 공중에 떠 있어도 점프 입력을 허용하여, 플레이어가 억울하게 낙사하는 상황을 방지합니다.</p>
+
+        <div class="math-block">
+          $$\text{coyote\_timer} \leftarrow \begin{cases} \text{COYOTE\_FRAMES} & (\text{is\_grounded = True}) \\ \max(0, \text{coyote\_timer} - 1) & (\text{is\_grounded = False}) \end{cases}$$
+        </div>
+
+        <h2>3. 완성 코드 템플릿</h2>
+        <p>아래 코드를 복사하여 실행해 보세요. 움직이는 발판에 올라타 이동하고, 보라색 점프대를 밟아 높이 뛰어오르며, 절벽 끝에서 살짝 늦게 점프를 눌러도 성공하는 조작감을 체험합니다.</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title"><span>🐍</span> step4_moving_platform_coyote.py</span>
+            <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button>
+          </div>
+          <pre><code class="language-python">import pygame
+import sys
+
+pygame.init()
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 450
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("4차시: 움직이는 발판, 점프대, 코요테 타임")
+clock = pygame.time.Clock()
+
+TILE_SIZE = 40
+
+# 1. 플레이어 속성
+SPAWN_POINT = (60, 200)
+player = pygame.Rect(SPAWN_POINT[0], SPAWN_POINT[1], TILE_SIZE, TILE_SIZE)
+speed = 6
+velocity_y = 0.0
+gravity = 0.8
+jump_power = -14.0
+spring_power = -21.0  # 점프대 반발력
+is_grounded = False
+
+# 코요테 타임 파라미터 (프레임 단위)
+COYOTE_MAX = 6
+coyote_timer = 0
+
+# 2. 정적 발판 및 기믹 목록
+static_platforms = [
+    pygame.Rect(0, 380, 200, 70),     # 시작 바닥
+    pygame.Rect(600, 380, 200, 70),   # 도착 바닥
+    pygame.Rect(450, 180, 120, 25)    # 높은 공중 발판
+]
+
+# 점프대 (보라색 블록)
+springs = [
+    pygame.Rect(120, 355, 50, 25)
+]
+
+# 3. 움직이는 발판 클래스 정의
+class MovingPlatform:
+    def __init__(self, x, y, width, height, move_range_x, move_speed):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.start_x = x
+        self.end_x = x + move_range_x
+        self.speed_x = move_speed
+
+    def update(self):
+        self.rect.x += self.speed_x
+        # 이동 범위 도달 시 방향 반전
+        if self.rect.x >= self.end_x or self.rect.x <= self.start_x:
+            self.speed_x *= -1
+            return self.speed_x * -1  # 반전 전 이동량 반환
+        return self.speed_x
+
+moving_platform = MovingPlatform(220, 300, 100, 25, move_range_x=200, move_speed=3)
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.KEYDOWN:
+            # 점프 조건: 바닥에 있거나 코요테 타이머가 남아있는 경우
+            if event.key == pygame.K_SPACE and coyote_timer > 0:
+                velocity_y = jump_power
+                coyote_timer = 0  # 점프 소모 시 타이머 즉시 리셋
+                is_grounded = False
+
+    # 1. 움직이는 발판 위치 갱신
+    plat_dx = moving_platform.update()
+
+    # 2. 좌우 입력 처리
+    keys = pygame.key.get_pressed()
+    velocity_x = 0
+    if keys[pygame.K_LEFT]:
+        velocity_x = -speed
+    if keys[pygame.K_RIGHT]:
+        velocity_x = speed
+
+    # X축 이동 및 정적 블록 충돌
+    player.x += velocity_x
+    for block in static_platforms:
+        if player.colliderect(block):
+            if velocity_x > 0:
+                player.right = block.left
+            elif velocity_x < 0:
+                player.left = block.right
+
+    # 3. Y축 이동 및 중력 적용
+    velocity_y += gravity
+    player.y += int(velocity_y)
+    
+    # 접지 상태 판정 초기화
+    was_grounded = is_grounded
+    is_grounded = False
+
+    # 정적 발판 충돌
+    for block in static_platforms:
+        if player.colliderect(block):
+            if velocity_y > 0:
+                player.bottom = block.top
+                velocity_y = 0.0
+                is_grounded = True
+            elif velocity_y < 0:
+                player.top = block.bottom
+                velocity_y = 0.0
+
+    # 움직이는 발판 착지 충돌
+    if player.colliderect(moving_platform.rect):
+        if velocity_y > 0 and player.bottom - int(velocity_y) <= moving_platform.rect.top + 10:
+            player.bottom = moving_platform.rect.top
+            velocity_y = 0.0
+            is_grounded = True
+            # 발판 위에 타고 있으므로 발판의 이동량만큼 플레이어도 수평 이동
+            player.x += plat_dx
+
+    # 점프대 충돌 (하강 중 밟았을 때 강력 점프)
+    for spring in springs:
+        if player.colliderect(spring) and velocity_y > 0:
+            player.bottom = spring.top
+            velocity_y = spring_power
+            is_grounded = False
+
+    # 4. 코요테 타이머 갱신
+    if is_grounded:
+        coyote_timer = COYOTE_MAX
+    else:
+        coyote_timer = max(0, coyote_timer - 1)
+
+    # 낙사 처리 (화면 아래로 떨어지면 리스폰)
+    if player.y > SCREEN_HEIGHT + 50:
+        player.x, player.y = SPAWN_POINT
+        velocity_y = 0.0
+
+    # 5. 화면 렌더링
+    screen.fill((22, 24, 32))
+
+    # 정적 발판 (파란색)
+    for block in static_platforms:
+        pygame.draw.rect(screen, (52, 152, 219), block)
+
+    # 움직이는 발판 (하늘색)
+    pygame.draw.rect(screen, (26, 188, 156), moving_platform.rect)
+
+    # 점프대 (보라색)
+    for spring in springs:
+        pygame.draw.rect(screen, (155, 89, 182), spring)
+
+    # 플레이어 (노란색)
+    pygame.draw.rect(screen, (241, 196, 15), player)
+
+    # 코요테 타임 인디케이터 (디버그 UI)
+    font = pygame.font.SysFont(None, 24)
+    ui_text = font.render(f"Coyote Frame: {coyote_timer} / Grounded: {is_grounded}", True, (200, 200, 200))
+    screen.blit(ui_text, (20, 20))
+
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
+sys.exit()</code></pre>
+        </div>
+
+        <h2>4. 스스로 탐구하고 수정해보기 (Mission)</h2>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 1] 상하(수직)로 왕복하는 엘리베이터 발판 제작</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p>현재 <code>MovingPlatform</code> 클래스를 확장하거나 수정하여 $y$ 축으로 오르내리는 엘리베이터 발판을 만들어 보세요. 위로 올라갈 때 플레이어를 태우고 상승하도록 좌표를 맞춰봅니다.</p>
+          </div>
+        </div>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 2] 점프 버퍼링(Jump Buffering) 시스템 구현</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p>코요테 타임이 '발판을 벗어난 직후의 점프'를 구제해 준다면, <strong>점프 버퍼링</strong>은 '공중에서 바닥에 착지하기 직전(약 0.1초 전)에 누른 점프 입력'을 기억했다가 착지 즉시 점프를 실행해 주는 기법입니다.</p>
+            <p>💡 <em>힌트: 점프 키 입력 시 <code>jump_buffer_timer = 6</code> 을 설정하고, <code>is_grounded</code> 가 되는 순간 버퍼 타이머가 남아있으면 점프를 실행합니다.</em></p>
+          </div>
+        </div>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 3] (도전) 점프대 연속 콤보 구간 맵 배치</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p>점프대를 밟고 솟구쳤을 때만 닿을 수 있는 높은 공중 발판을 배치하고, 그 발판 끝에 또 다른 점프대를 설치하여 연속으로 튀어 오르는 파쿠르 구간을 구성해 보세요.</p>
+          </div>
+        </div>
+
+        <div class="chapter-nav-footer">
+          <button class="nav-footer-btn" onclick="switchChapter('chapter-03')">
+            <span class="nav-footer-label">이전 단계</span>
+            <span class="nav-footer-title">👈 [활동지 03] 타일맵과 횡스크롤 카메라</span>
+          </button>
+          <button class="nav-footer-btn next" onclick="switchChapter('chapter-05')">
+            <span class="nav-footer-label">다음 단계</span>
+            <span class="nav-footer-title">[활동지 05] 시각 연출과 오디오 피드백 👉</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION: CHAPTER 05 -->
+      <!-- ========================================== -->
+      <section id="chapter-05" class="chapter-container">
+        <div class="chapter-header">
+          <div class="chapter-meta">
+            <span class="badge-tag">활동지 05</span>
+            <span class="badge-tag">연출 & 사운드</span>
+          </div>
+          <h1 class="chapter-title">[활동지 05] 시각 연출(화면 흔들림·파티클)과 오디오 피드백 (Game Polish)</h1>
+        </div>
+
+        <div class="objectives-card">
+          <h4><span>🎯</span> 학습 목표</h4>
+          <ol>
+            <li>사망이나 충돌 시 카메라에 무작위 진동 오프셋을 부여하는 <strong>화면 흔들림(Screen Shake)</strong> 알고리즘을 구현한다.</li>
+            <li>사각 조각들이 사방으로 튀어나가며 사라지는 <strong>사각 파티클 물리 시스템</strong>을 구축한다.</li>
+            <li>외부 파일 없이 파이썬 내부 배열 연산으로 간단한 8비트 사운드를 생성하여 오디오 피드백을 완성한다.</li>
+          </ol>
+        </div>
+
+        <h2>1. 타격감의 핵심: 화면 흔들림 (Screen Shake)</h2>
+        <p>캐릭터가 가시에 부딪혀 사망할 때 화면이 정적으로 멈추는 대신 강하게 흔들리면 즉각적인 시각적 충격을 전달할 수 있습니다.</p>
+
+        <h3>원리와 수식 모델링</h3>
+        <ul>
+          <li>흔들림 강도($S$)를 설정하고, 매 프레임마다 임의의 오프셋 $(\Delta x, \Delta y)$ 을 화면 렌더링 위치에 더해줍니다.</li>
+          <li>흔들림 값은 가만히 유지되지 않고 매 프레임 감쇠 계수($\text{decay} \approx 0.9$)에 의해 점차 $0$ 으로 수렴합니다.</li>
+        </ul>
+
+        <div class="math-block">
+          $$\Delta x = \text{random}(-\text{shake}, +\text{shake}), \quad \Delta y = \text{random}(-\text{shake}, +\text{shake})$$
+        </div>
+        <div class="math-block">
+          $$\text{shake} \leftarrow \max(0, \text{shake} \times 0.9 - 0.1)$$
+        </div>
+
+        <h2>2. 사각 파티클(Particle) 폭발 물리 시스템</h2>
+        <p>지오메트리 대시 스타일의 사망 연출은 하나의 큰 사각형이 여러 개의 작은 사각형 조각으로 깨져 사방으로 튀어나가는 구조입니다.</p>
+
+        <ul>
+          <li><strong>파티클 속성:</strong> 위치 $(x, y)$, 무작위 속도 $(v_x, v_y)$, 크기($s$), 수명(Lifetime).</li>
+          <li><strong>매 프레임 갱신:</strong>
+            <ul>
+              <li>중력 누적: $v_y \leftarrow v_y + g_{\text{particle}}$</li>
+              <li>위치 이동: $x \leftarrow x + v_x, \quad y \leftarrow y + v_y$</li>
+              <li>크기 축소: 수명이 다할수록 크기를 점차 줄여 자연스럽게 소멸 ($s \leftarrow s - \Delta s$).</li>
+            </ul>
+          </li>
+        </ul>
+
+        <!-- Screen Shake & Particle Interactive Demo -->
+        <div class="simulator-box">
+          <div class="sim-header">
+            <span class="sim-title"><span>💥</span> 화면 흔들림 & 파티클 폭발 & 8비트 사운드 체험기</span>
+            <span style="font-size:0.8rem; color:var(--text-muted);">버튼이나 캔버스를 클릭하여 폭발과 사운드를 발생시켜 보세요!</span>
+          </div>
+          <canvas id="particleCanvas" class="sim-canvas" width="800" height="260" onclick="triggerParticleDemo(event)"></canvas>
+          <div class="sim-btn-group" style="margin-top:12px;">
+            <button class="sim-btn" onclick="triggerParticleDemoDirect(400, 130, 'death')">💥 사망 폭발 이펙트 + 사운드</button>
+            <button class="sim-btn" style="background:var(--accent-green); color:#000;" onclick="triggerParticleDemoDirect(400, 130, 'jump')">💨 점프 먼지 이펙트 + 사운드</button>
+            <button class="sim-btn" style="background:var(--accent-purple); color:#fff;" onclick="triggerParticleDemoDirect(400, 130, 'clear')">🎉 축하 무지개 폭죽</button>
+          </div>
+        </div>
+
+        <h2>3. 완성 코드 템플릿</h2>
+        <p>외부 이미지나 사운드 파일 없이도 바로 실행할 수 있도록 <code>pygame.sndarray</code> 기반의 8비트 신디사이저 사운드 생성기를 내장한 코드입니다.</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title"><span>🐍</span> step5_shake_particle_synth.py</span>
+            <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button>
+          </div>
+          <pre><code class="language-python">import pygame
+import sys
+import random
+import math
+import array
+
+# 1. 사운드 믹서 및 기본 초기화
+pygame.mixer.pre_init(44100, -16, 1, 512)
+pygame.init()
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 450
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("5차시: 화면 흔들림, 파티클 폭발, 사운드 연출")
+clock = pygame.time.Clock()
+
+# --- 절차적 8비트 효과음 생성 함수 (외부 wav 파일 불필요) ---
+def generate_beep_sound(freq_start, freq_end, duration_ms, wave_type="square"):
+    sample_rate = 44100
+    n_samples = int(sample_rate * (duration_ms / 1000.0))
+    buf = array.array('h')
+    
+    for i in range(n_samples):
+        t = i / n_samples
+        freq = freq_start + (freq_end - freq_start) * t
+        phase = 2.0 * math.pi * freq * (i / sample_rate)
+        
+        if wave_type == "square":
+            val = 16000 if math.sin(phase) >= 0 else -16000
+        elif wave_type == "noise":
+            val = random.randint(-16000, 16000)
+        else:
+            val = int(16000 * math.sin(phase))
+            
+        # 끝부분 부드럽게 감쇠 (클릭 노이즈 방지)
+        decay = (1.0 - t)
+        buf.append(int(val * decay))
+        
+    return pygame.mixer.Sound(buf)
+
+# 효과음 인스턴스 생성
+snd_jump = generate_beep_sound(200, 600, 120, "square")
+snd_death = generate_beep_sound(400, 60, 250, "noise")
+
+# 2. 파티클 시스템 클래스
+class Particle:
+    def __init__(self, x, y, color):
+        self.x = x
+        self.y = y
+        self.color = color
+        self.size = random.randint(6, 12)
+        angle = random.uniform(0, 2 * math.pi)
+        speed = random.uniform(3, 9)
+        self.vx = math.cos(angle) * speed
+        self.vy = math.sin(angle) * speed - 2  # 살짝 위로 솟구치도록
+        self.gravity = 0.4
+        self.life = 1.0  # 1.0 -> 0.0 으로 소멸
+        self.decay = random.uniform(0.02, 0.04)
+
+    def update(self):
+        self.vy += self.gravity
+        self.x += self.vx
+        self.y += self.vy
+        self.life -= self.decay
+        self.size = max(0, self.size - 0.15)
+
+    def draw(self, surface, offset_x, offset_y):
+        if self.life > 0 and self.size > 0:
+            rect = pygame.Rect(int(self.x + offset_x), int(self.y + offset_y), int(self.size), int(self.size))
+            pygame.draw.rect(surface, self.color, rect)
+
+# 3. 게임 변수
+SPAWN_POINT = (80, 250)
+player = pygame.Rect(SPAWN_POINT[0], SPAWN_POINT[1], 40, 40)
+speed = 6
+velocity_y = 0.0
+gravity = 0.8
+jump_power = -14.0
+is_grounded = False
+
+# 연출 제어 변수
+screen_shake = 0.0
+particles = []
+is_dead = False
+respawn_timer = 0
+
+platforms = [
+    pygame.Rect(0, 380, 800, 70),
+    pygame.Rect(260, 280, 140, 30),
+    pygame.Rect(520, 220, 140, 30)
+]
+
+hazards = [
+    pygame.Rect(310, 250, 40, 30),
+    pygame.Rect(450, 350, 40, 30)
+]
+
+def spawn_explosion(x, y, color, count=24):
+    for _ in range(count):
+        particles.append(Particle(x, y, color))
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and is_grounded and not is_dead:
+                velocity_y = jump_power
+                is_grounded = False
+                snd_jump.play()
+                # 점프 시 발밑에 작은 먼지 파티클 생성
+                for _ in range(6):
+                    particles.append(Particle(player.centerx, player.bottom, (180, 180, 180)))
+
+    # --- 사망 리스폰 타이머 처리 ---
+    if is_dead:
+        respawn_timer -= 1
+        if respawn_timer <= 0:
+            is_dead = False
+            player.x, player.y = SPAWN_POINT
+            velocity_y = 0.0
+    else:
+        # 1. 플레이어 이동
+        keys = pygame.key.get_pressed()
+        velocity_x = 0
+        if keys[pygame.K_LEFT]:
+            velocity_x = -speed
+        if keys[pygame.K_RIGHT]:
+            velocity_x = speed
+
+        player.x += velocity_x
+        for block in platforms:
+            if player.colliderect(block):
+                if velocity_x > 0:
+                    player.right = block.left
+                elif velocity_x < 0:
+                    player.left = block.right
+
+        # 2. 중력 및 착지
+        velocity_y += gravity
+        player.y += int(velocity_y)
+        is_grounded = False
+
+        for block in platforms:
+            if player.colliderect(block):
+                if velocity_y > 0:
+                    player.bottom = block.top
+                    velocity_y = 0.0
+                    is_grounded = True
+                elif velocity_y < 0:
+                    player.top = block.bottom
+                    velocity_y = 0.0
+
+        # 3. 위험 가시 충돌 (사망 연출 트리거)
+        player_hitbox = pygame.Rect(player.x + 4, player.y + 4, 32, 32)
+        for spike in hazards:
+            spike_hitbox = pygame.Rect(spike.x + 6, spike.y + 6, 28, 18)
+            if player_hitbox.colliderect(spike_hitbox):
+                is_dead = True
+                respawn_timer = 40  # 약 0.6초 후 부활
+                screen_shake = 16.0  # 강한 화면 흔들림 부여
+                spawn_explosion(player.centerx, player.centery, (241, 196, 15), count=30)
+                snd_death.play()
+                break
+
+    # --- 연출 파라미터 업데이트 ---
+    # 파티클 업데이트 및 수명 다한 파티클 제거
+    for p in particles[:]:
+        p.update()
+        if p.life <= 0 or p.size <= 0:
+            particles.remove(p)
+
+    # 화면 흔들림 오프셋 계산 및 감쇠
+    offset_x = 0
+    offset_y = 0
+    if screen_shake > 0:
+        offset_x = random.uniform(-screen_shake, screen_shake)
+        offset_y = random.uniform(-screen_shake, screen_shake)
+        screen_shake = max(0.0, screen_shake * 0.9 - 0.2)
+
+    # --- 화면 렌더링 ---
+    screen.fill((20, 22, 30))
+
+    # 발판 (화면 흔들림 오프셋 적용)
+    for block in platforms:
+        draw_rect = pygame.Rect(block.x + offset_x, block.y + offset_y, block.width, block.height)
+        pygame.draw.rect(screen, (52, 152, 219), draw_rect)
+
+    # 가시 장애물
+    for spike in hazards:
+        draw_rect = pygame.Rect(spike.x + offset_x, spike.y + offset_y, spike.width, spike.height)
+        pygame.draw.rect(screen, (231, 76, 60), draw_rect)
+
+    # 플레이어 (살아있을 때만 렌더링)
+    if not is_dead:
+        draw_rect = pygame.Rect(player.x + offset_x, player.y + offset_y, player.width, player.height)
+        pygame.draw.rect(screen, (241, 196, 15), draw_rect)
+
+    # 파티클 렌더링
+    for p in particles:
+        p.draw(screen, offset_x, offset_y)
+
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
+sys.exit()</code></pre>
+        </div>
+
+        <h2>4. 스스로 탐구하고 수정해보기 (Mission)</h2>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 1] 흔들림 감쇠 계수 실험</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p><code>screen_shake = max(0.0, screen_shake * 0.9 - 0.2)</code> 수식에서 <code>0.9</code>를 <code>0.5</code>(급격한 멈춤)와 <code>0.98</code>(오래 지속되는 여진)로 수정해보고 진동 전달감의 차이를 비교해 보세요.</p>
+          </div>
+        </div>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 2] 착지 시 흙먼지 파티클 추가</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p>공중에 떠 있다가 바닥에 착지하는 순간(<code>is_grounded</code> 가 <code>False</code> 에서 <code>True</code> 로 바뀌는 프레임)에 발밑 좌우로 퍼지는 회색 사각 파티클을 생성해 보세요.</p>
+          </div>
+        </div>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 3] (도전) 스테이지 클리어 축하 폭죽 연출</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p><code>spawn_explosion()</code> 함수를 활용하여 골인 지점에 도달했을 때 무지개색(다양한 색상) 파티클이 연속으로 터져 나오는 클리어 이펙트를 제작해 보세요.</p>
+          </div>
+        </div>
+
+        <div class="chapter-nav-footer">
+          <button class="nav-footer-btn" onclick="switchChapter('chapter-04')">
+            <span class="nav-footer-label">이전 단계</span>
+            <span class="nav-footer-title">👈 [활동지 04] 동적 오브젝트와 조작감</span>
+          </button>
+          <button class="nav-footer-btn next" onclick="switchChapter('chapter-06')">
+            <span class="nav-footer-label">다음 단계</span>
+            <span class="nav-footer-title">[활동지 06] 다중 스테이지와 상태 머신 👉</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION: CHAPTER 06 -->
+      <!-- ========================================== -->
+      <section id="chapter-06" class="chapter-container">
+        <div class="chapter-header">
+          <div class="chapter-meta">
+            <span class="badge-tag">활동지 06</span>
+            <span class="badge-tag">FSM 상태 머신 & 다중 맵</span>
+          </div>
+          <h1 class="chapter-title">[활동지 06] CSV 다중 스테이지 로더와 게임 상태 머신(FSM)</h1>
+        </div>
+
+        <div class="objectives-card">
+          <h4><span>🎯</span> 학습 목표</h4>
+          <ol>
+            <li>파이썬의 <code>csv</code> 모듈을 활용하여 여러 개의 스테이지 파일(<code>stage1.csv</code>, <code>stage2.csv</code> 등)을 순차적으로 불러오는 다중 맵 로더를 구축한다.</li>
+            <li><code>START</code>, <code>PLAYING</code>, <code>CLEAR</code>, <code>GAME_OVER</code>로 이어지는 <strong>유한 상태 머신(FSM)</strong> 구조를 설계한다.</li>
+            <li>스테이지 클리어 시 다음 맵으로 자동 전환되고, 전 스테이지를 완주하면 최종 엔딩을 표시하는 완전한 게임 루프를 완성한다.</li>
+          </ol>
+        </div>
+
+        <h2>1. 스테이지 준비: 스프레드시트로 다중 맵 제작</h2>
+        <p>구글 스프레드시트 또는 엑셀에서 탭을 2개 만들어 각각 <code>stage1.csv</code>, <code>stage2.csv</code>로 다운로드합니다. 파일은 파이썬 소스 코드와 <strong>동일한 폴더</strong>에 저장합니다.</p>
+
+        <div class="alert-box alert-tip">
+          <h5>💡 상단 데이터 센터에서 파일 다운로드 가능</h5>
+          <p><a href="javascript:switchChapter('chapter-csv-center')" style="color:var(--accent-blue); font-weight:700;">[스테이지 CSV 다운로드 센터]</a>에서 이미 제작된 <code>stage1.csv</code>, <code>stage2.csv</code>, <code>stage3.csv</code>를 바로 받으실 수 있습니다.</p>
+        </div>
+
+        <h2>2. 유한 상태 머신 (FSM, Finite State Machine)</h2>
+        <p>게임의 실행 상태를 상수로 정의하고, 하나의 메인 루프 안에서 현재 상태에 따라 키보드 입력 및 화면 렌더링을 분기 처리합니다.</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title"><span>🔄</span> 게임 상태 전이도 (State Transition Flow)</span>
+          </div>
+          <pre><code class="language-text">[STATE_START]      --(SPACE 키)---------> [STATE_PLAYING]
+                                               │
+                                 ┌─────────────┴─────────────┐
+                         (가시 충돌 / 낙사)              (골인 도달)
+                                 │                           │
+                                 ▼                           ▼
+                        [STATE_GAME_OVER]            [STATE_CLEAR]
+                                 │                           │
+                             (R 키: 재시도)             (SPACE 키: 다음 맵)
+                                 │                           │
+                                 └──────────> [STATE_PLAYING] <─┘
+                                                     │ (마지막 스테이지 완주 시)
+                                                     ▼
+                                            [STATE_ALL_CLEAR]</code></pre>
+        </div>
+
+        <h2>3. 완성 코드 템플릿 (`main.py`)</h2>
+        <p>아래 코드를 복사하여 실행합니다. 시작 화면에서 <code>Space</code>를 눌러 시작하고, 스테이지 1을 클리어하면 <code>stage2.csv</code>가 자동으로 이어집니다.</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title"><span>🐍</span> main.py (최종 완성본)</span>
+            <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button>
+          </div>
+          <pre><code class="language-python">import pygame
+import sys
+import os
+import csv
+
+# 1. 초기화 및 화면 세팅
+pygame.init()
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 450
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("6차시: CSV 다중 스테이지와 게임 상태 머신")
+clock = pygame.time.Clock()
+
+font_title = pygame.font.SysFont(None, 64)
+font_ui = pygame.font.SysFont(None, 32)
+
+TILE_SIZE = 40
+
+# --- 상태 머신(FSM) 상수 정의 ---
+STATE_START = 0
+STATE_PLAYING = 1
+STATE_CLEAR = 2
+STATE_GAME_OVER = 3
+STATE_ALL_CLEAR = 4
+
+current_state = STATE_START
+current_stage_idx = 0
+stage_files = ["stage1.csv", "stage2.csv"]  # 등록된 스테이지 목록
+
+# 게임 월드 엔티티 저장소
+platforms = []
+hazards = []
+goal_rect = None
+spawn_point = (100, 100)
+death_count = 0
+
+def load_map_from_csv(filepath):
+    """CSV 파일을 읽어 타일 좌표를 계산하고 월드 오브젝트 생성"""
+    global platforms, hazards, goal_rect, spawn_point
+    platforms.clear()
+    hazards.clear()
+    goal_rect = None
+    spawn_point = (100, 100)
+
+    if not os.path.exists(filepath):
+        print(f"[경고] {filepath} 파일이 없습니다. 기본 바닥을 생성합니다.")
+        platforms.append(pygame.Rect(0, 380, SCREEN_WIDTH * 2, 70))
+        return
+
+    with open(filepath, mode="r", encoding="utf-8-sig") as f:
+        reader = csv.reader(f)
+        for r, row in enumerate(reader):
+            for c, raw_val in enumerate(row):
+                val = raw_val.strip()
+                x = c * TILE_SIZE
+                y = r * TILE_SIZE
+
+                if val == "1":
+                    platforms.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
+                elif val == "2":
+                    hazards.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
+                elif val.upper() == "P":
+                    spawn_point = (x, y)
+                elif val.upper() == "G":
+                    goal_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE * 2)
+
+# 플레이어 변수
+player = pygame.Rect(0, 0, TILE_SIZE, TILE_SIZE)
+speed = 6
+velocity_y = 0.0
+gravity = 0.8
+jump_power = -15.0
+is_grounded = False
+
+# 패딩값
+PLAYER_PAD = 4
+HAZARD_PAD = 6
+
+def get_padded_rect(rect, pad):
+    return pygame.Rect(rect.x + pad, rect.y + pad, rect.width - 2 * pad, rect.height - 2 * pad)
+
+def reset_player_to_spawn():
+    global velocity_y, is_grounded
+    player.x, player.y = spawn_point
+    velocity_y = 0.0
+    is_grounded = False
+
+# 초기 첫 스테이지 로드
+load_map_from_csv(stage_files[current_stage_idx])
+reset_player_to_spawn()
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+        if event.type == pygame.KEYDOWN:
+            # 1) 시작 화면
+            if current_state == STATE_START:
+                if event.key == pygame.K_SPACE:
+                    current_stage_idx = 0
+                    death_count = 0
+                    load_map_from_csv(stage_files[current_stage_idx])
+                    reset_player_to_spawn()
+                    current_state = STATE_PLAYING
+
+            # 2) 인게임 플레이 중
+            elif current_state == STATE_PLAYING:
+                if event.key == pygame.K_SPACE and is_grounded:
+                    velocity_y = jump_power
+                    is_grounded = False
+
+            # 3) 개별 스테이지 클리어
+            elif current_state == STATE_CLEAR:
+                if event.key == pygame.K_SPACE:
+                    current_stage_idx += 1
+                    if current_stage_idx < len(stage_files):
+                        load_map_from_csv(stage_files[current_stage_idx])
+                        reset_player_to_spawn()
+                        current_state = STATE_PLAYING
+                    else:
+                        current_state = STATE_ALL_CLEAR
+
+            # 4) 게임 오버 (사망)
+            elif current_state == STATE_GAME_OVER:
+                if event.key == pygame.K_r:
+                    load_map_from_csv(stage_files[current_stage_idx])
+                    reset_player_to_spawn()
+                    current_state = STATE_PLAYING
+
+            # 5) 모든 스테이지 완주 (올 클리어)
+            elif current_state == STATE_ALL_CLEAR:
+                if event.key == pygame.K_SPACE:
+                    current_state = STATE_START
+
+    # --- 상태별 물리 연산 및 업데이트 ---
+    if current_state == STATE_PLAYING:
+        # 좌우 이동
+        keys = pygame.key.get_pressed()
+        velocity_x = 0
+        if keys[pygame.K_LEFT]:
+            velocity_x = -speed
+        if keys[pygame.K_RIGHT]:
+            velocity_x = speed
+
+        player.x += velocity_x
+        for block in platforms:
+            if player.colliderect(block):
+                if velocity_x > 0:
+                    player.right = block.left
+                elif velocity_x < 0:
+                    player.left = block.right
+
+        # 중력 및 착지
+        velocity_y += gravity
+        player.y += int(velocity_y)
+        is_grounded = False
+
+        for block in platforms:
+            if player.colliderect(block):
+                if velocity_y > 0:
+                    player.bottom = block.top
+                    velocity_y = 0.0
+                    is_grounded = True
+                elif velocity_y < 0:
+                    player.top = block.bottom
+                    velocity_y = 0.0
+
+        # 가시 충돌(패딩 적용) 및 바닥 낙사 검사
+        player_hitbox = get_padded_rect(player, PLAYER_PAD)
+        for spike in hazards:
+            if player_hitbox.colliderect(get_padded_rect(spike, HAZARD_PAD)):
+                death_count += 1
+                current_state = STATE_GAME_OVER
+                break
+
+        if player.y > SCREEN_HEIGHT + 100:
+            death_count += 1
+            current_state = STATE_GAME_OVER
+
+        # 골인 도달 검사
+        if goal_rect and player.colliderect(goal_rect):
+            current_state = STATE_CLEAR
+
+    # --- 화면 렌더링 ---
+    screen.fill((20, 24, 34))
+    camera_x = max(0, player.centerx - SCREEN_WIDTH // 2)
+
+    if current_state in [STATE_PLAYING, STATE_CLEAR, STATE_GAME_OVER]:
+        # 월드 오브젝트 그리기
+        for block in platforms:
+            screen_rect = pygame.Rect(block.x - camera_x, block.y, block.width, block.height)
+            if -TILE_SIZE <= screen_rect.x <= SCREEN_WIDTH:
+                pygame.draw.rect(screen, (41, 128, 185), screen_rect)
+
+        for spike in hazards:
+            screen_rect = pygame.Rect(spike.x - camera_x, spike.y, spike.width, spike.height)
+            if -TILE_SIZE <= screen_rect.x <= SCREEN_WIDTH:
+                pygame.draw.rect(screen, (231, 76, 60), screen_rect)
+
+        if goal_rect:
+            screen_rect = pygame.Rect(goal_rect.x - camera_x, goal_rect.y, goal_rect.width, goal_rect.height)
+            pygame.draw.rect(screen, (46, 204, 113), screen_rect)
+
+        # 플레이어 그리기 (사망 상태가 아닐 때만)
+        if current_state != STATE_GAME_OVER:
+            screen_player = pygame.Rect(player.x - camera_x, player.y, player.width, player.height)
+            pygame.draw.rect(screen, (241, 196, 15), screen_player)
+
+        # 상단 HUD 정보 표시
+        ui_stage = font_ui.render(f"Stage: {current_stage_idx + 1} / {len(stage_files)}", True, (220, 220, 220))
+        ui_deaths = font_ui.render(f"Deaths: {death_count}", True, (231, 76, 60))
+        screen.blit(ui_stage, (20, 20))
+        screen.blit(ui_deaths, (SCREEN_WIDTH - ui_deaths.get_width() - 20, 20))
+
+    # --- UI 오버레이 (상태별 안내 메시지) ---
+    if current_state == STATE_START:
+        title = font_title.render("SQUARE RUNNER", True, (241, 196, 15))
+        sub = font_ui.render("Press SPACE to Start Game", True, (200, 200, 200))
+        screen.blit(title, (SCREEN_WIDTH // 2 - title.get_width() // 2, 140))
+        screen.blit(sub, (SCREEN_WIDTH // 2 - sub.get_width() // 2, 230))
+
+    elif current_state == STATE_CLEAR:
+        msg = font_title.render(f"STAGE {current_stage_idx + 1} CLEAR!", True, (46, 204, 113))
+        sub = font_ui.render("Press SPACE for Next Stage", True, (255, 255, 255))
+        screen.blit(msg, (SCREEN_WIDTH // 2 - msg.get_width() // 2, 140))
+        screen.blit(sub, (SCREEN_WIDTH // 2 - sub.get_width() // 2, 230))
+
+    elif current_state == STATE_GAME_OVER:
+        msg = font_title.render("GAME OVER", True, (231, 76, 60))
+        sub = font_ui.render("Press R to Retry This Stage", True, (255, 255, 255))
+        screen.blit(msg, (SCREEN_WIDTH // 2 - msg.get_width() // 2, 140))
+        screen.blit(sub, (SCREEN_WIDTH // 2 - sub.get_width() // 2, 230))
+
+    elif current_state == STATE_ALL_CLEAR:
+        msg = font_title.render("CONGRATULATIONS!", True, (241, 196, 15))
+        score = font_ui.render(f"All Stages Cleared! Total Deaths: {death_count}", True, (46, 204, 113))
+        sub = font_ui.render("Press SPACE to Return to Title", True, (200, 200, 200))
+        screen.blit(msg, (SCREEN_WIDTH // 2 - msg.get_width() // 2, 130))
+        screen.blit(score, (SCREEN_WIDTH // 2 - score.get_width() // 2, 200))
+        screen.blit(sub, (SCREEN_WIDTH // 2 - sub.get_width() // 2, 260))
+
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
+sys.exit()</code></pre>
+        </div>
+
+        <h2>4. 스스로 탐구하고 수정해보기 (Mission)</h2>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 1] 스프레드시트로 3번째 스테이지(`stage3.csv`) 추가</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p>스프레드시트에서 가장 어려운 난이도의 맵을 디자인하여 <code>stage3.csv</code>로 다운로드하고, 파이썬 코드의 <code>stage_files</code> 리스트에 등록하여 3단계로 이어지는 게임을 완성해 보세요.</p>
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><span>💡</span> 힌트 코드</span>
+                <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button>
+              </div>
+              <pre><code class="language-python">stage_files = ["stage1.csv", "stage2.csv", "stage3.csv"]</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 2] 스테이지별 소요 시간(Timer) 기록 추가</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p><code>pygame.time.get_ticks()</code> 함수를 활용하여 게임 시작부터 클리어까지 걸린 총 시간을 측정하고, 최종 엔딩 화면(<code>STATE_ALL_CLEAR</code>)에서 총 사망 횟수와 함께 총 소요 시간을 초 단위로 표시해 보세요.</p>
+          </div>
+        </div>
+
+        <div class="mission-card">
+          <div class="mission-header" onclick="toggleMission(this)">
+            <div class="mission-title">
+              <input type="checkbox" class="mission-checkbox" onclick="event.stopPropagation()">
+              <span>[미션 3] (도전) 5차시 시각/오디오 피드백 모듈 병합</span>
+            </div>
+            <span>▼</span>
+          </div>
+          <div class="mission-body">
+            <p>5차시에서 만들었던 <code>spawn_explosion()</code> 파티클 폭발 함수와 <code>screen_shake</code> 화면 흔들림 코드를 이번 6차시 코드의 <code>STATE_GAME_OVER</code> 발생 시점에 결합해 보세요.</p>
+          </div>
+        </div>
+
+        <div class="chapter-nav-footer">
+          <button class="nav-footer-btn" onclick="switchChapter('chapter-05')">
+            <span class="nav-footer-label">이전 단계</span>
+            <span class="nav-footer-title">👈 [활동지 05] 시각 연출과 오디오 피드백</span>
+          </button>
+          <button class="nav-footer-btn next" onclick="switchChapter('chapter-final')">
+            <span class="nav-footer-label">다음 단계</span>
+            <span class="nav-footer-title">🏆 완주 체크리스트 & 챌린지 👉</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION: FINAL CHECKLIST -->
+      <!-- ========================================== -->
+      <section id="chapter-final" class="chapter-container">
+        <div class="chapter-header">
+          <div class="chapter-meta">
+            <span class="badge-tag">완주 축하</span>
+            <span class="badge-tag">종합 포트폴리오</span>
+          </div>
+          <h1 class="chapter-title">🏆 전체 완주 체크리스트 & 창의 챌린지</h1>
+          <p>수학적 원리를 컴퓨터 코드로 구현하여 하나의 완성된 2D 플랫폼 게임을 제작하셨습니다! 아래 체크리스트로 성취도를 확인해 보세요.</p>
+        </div>
+
+        <div class="objectives-card" style="border-left-color: var(--accent-green); background: rgba(74, 222, 128, 0.08);">
+          <h4 style="color: var(--accent-green);"><span>✅</span> 학습 성취도 체크리스트</h4>
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 12px;">
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+              <input type="checkbox" class="mission-checkbox" checked>
+              <span>1차시: 모니터 좌표계($y$축 반전)와 중력 가속도($v_y \leftarrow v_y + g$) 이해 및 구현</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+              <input type="checkbox" class="mission-checkbox" checked>
+              <span>2차시: AABB 사각 충돌 공식 유도 및 히트박스 패딩(너그러운 판정) 적용</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+              <input type="checkbox" class="mission-checkbox" checked>
+              <span>3차시: 스프레드시트로 맵을 디자인하고 CSV 파서 및 횡스크롤 카메라 구현</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+              <input type="checkbox" class="mission-checkbox" checked>
+              <span>4차시: 움직이는 발판 좌표 동기화, 점프대 기믹, 코요테 타임 조작감 튜닝</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+              <input type="checkbox" class="mission-checkbox" checked>
+              <span>5차시: 화면 흔들림(감쇠 진동), 사각 파티클 폭발, 8비트 사운드 신디사이저 연출</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+              <input type="checkbox" class="mission-checkbox" checked>
+              <span>6차시: 다중 CSV 스테이지 전환 및 유한 상태 머신(FSM) 완성</span>
+            </label>
+          </div>
+        </div>
+
+        <h2>🚀 나만의 게임 발전 아이디어 (창의 챌린지)</h2>
+        <div class="env-grid">
+          <div class="env-card">
+            <h4><span>🪙</span> 코인 수집 & 점수 시스템</h4>
+            <p>CSV에 타일 ID <code>C</code>(Coin)를 정의하고, 플레이어가 닿으면 코인이 사라지며 사운드가 재생되고 HUD 스코어가 증가하도록 구현해 보세요.</p>
+          </div>
+          <div class="env-card">
+            <h4><span>⚡</span> 대시(Dash) 스킬 구현</h4>
+            <p><code>Shift</code> 키를 눌렀을 때 중력을 무시하고 순간적으로 전방으로 빠르게 돌진하는 대시 물리 수식을 추가해 보세요.</p>
+          </div>
+          <div class="env-card">
+            <h4><span>👾</span> 패트롤(순찰) 몬스터 AI</h4>
+            <p>발판 위를 좌우로 스스로 왕복하다가 플레이어와 닿으면 피해를 주는 몬스터 클래스를 설계해 보세요.</p>
+          </div>
+        </div>
+
+        <div class="chapter-nav-footer">
+          <button class="nav-footer-btn" onclick="switchChapter('chapter-06')">
+            <span class="nav-footer-label">이전 단계</span>
+            <span class="nav-footer-title">👈 [활동지 06] 다중 스테이지와 상태 머신</span>
+          </button>
+          <button class="nav-footer-btn next" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+            <span class="nav-footer-label">맨 위로</span>
+            <span class="nav-footer-title">🔝 상단으로 이동</span>
+          </button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // CSV Data strings
+    const stage1Data = `0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,1,1,2,0,0,0,0,0,0,0,0,0,0,0,G
+0,P,0,0,0,0,1,1,1,0,0,0,1,1,1,1,1,1,1,0,0,2,0,0,2,2,0,0,2,1
+1,1,1,1,0,0,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,1,1,1,0,0,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1`;
+
+    const stage2Data = `0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,1,1,1,0,0,0,0,0,0,0,0,G
+0,P,0,0,0,0,0,2,2,2,0,0,0,0,1,1,1,1,1,1,1,0,0,2,2,2,2,0,0,1
+1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1`;
+
+    const stage3Data = `0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,2,1,1,1,2,0,0,0,1,1,1,0,0,0,0,0,G
+0,P,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,2,0,0,0,0,0,2,1
+1,1,1,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,0,0,1,1,1,1
+1,1,1,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,0,0,1,1,1,1`;
+
+    // Download CSV Function
+    function downloadCSV(filename, content) {
+      const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast(`📁 ${filename} 다운로드가 시작되었습니다!`);
+    }
+
+    // Copy to clipboard with Toast
+    function copyToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast("✅ 클립보드에 복사되었습니다!");
+        }).catch(() => {
+          fallbackCopy(text);
+        });
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast("✅ 클립보드에 복사되었습니다!");
+    }
+
+    function copyCode(btn) {
+      const pre = btn.closest('.code-container').querySelector('pre code');
+      const text = pre.innerText;
+      copyToClipboard(text);
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<span>✔️</span> 복사완료!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.classList.remove('copied');
+      }, 2000);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    // Chapter Switching
+    const chapterNames = {
+      'chapter-env': '실습 환경 구축 가이드',
+      'chapter-csv-center': '스테이지 CSV 다운로드 센터',
+      'chapter-01': '[활동지 01] 화면과 중력, 점프',
+      'chapter-02': '[활동지 02] 사각 충돌과 너그러운 판정',
+      'chapter-03': '[활동지 03] 타일맵과 횡스크롤 카메라',
+      'chapter-04': '[활동지 04] 동적 오브젝트와 조작감',
+      'chapter-05': '[활동지 05] 시각 연출과 오디오 피드백',
+      'chapter-06': '[활동지 06] 다중 스테이지와 상태 머신',
+      'chapter-final': '🏆 전체 완주 체크리스트 & 챌린지'
+    };
+
+    function switchChapter(id) {
+      document.querySelectorAll('.chapter-container').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById(id);
+      if (target) {
+        target.classList.add('active');
+      }
+
+      // Update Nav active
+      document.querySelectorAll('.nav-item').forEach(el => {
+        if (el.getAttribute('onclick') && el.getAttribute('onclick').includes(id)) {
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
+        }
+      });
+
+      // Update Breadcrumb
+      document.getElementById('currentBreadcrumb').innerText = chapterNames[id] || '';
+
+      // Scroll top
+      document.getElementById('content').scrollTop = 0;
+
+      // Trigger Simulators if activated
+      if (id === 'chapter-01') initSim1();
+      if (id === 'chapter-02') initHitboxSim();
+      if (id === 'chapter-csv-center') renderMapPreview(1);
+      if (id === 'chapter-05') initParticleDemo();
+
+      // Close sidebar on mobile
+      if (window.innerWidth < 900) {
+        document.getElementById('sidebar').classList.remove('open');
+      }
+    }
+
+    function toggleMission(header) {
+      const body = header.nextElementSibling;
+      const arrow = header.querySelector('span:last-child');
+      if (body.style.display === 'none') {
+        body.style.display = 'block';
+        arrow.innerText = '▼';
+      } else {
+        body.style.display = 'none';
+        arrow.innerText = '▶';
+      }
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    function filterNav() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      document.querySelectorAll('.nav-item').forEach(item => {
+        const text = item.innerText.toLowerCase();
+        item.style.display = text.includes(q) ? 'flex' : 'none';
+      });
+    }
+
+    // Theme Toggle
+    function toggleTheme() {
+      const isDark = document.body.getAttribute('data-theme') !== 'light';
+      if (isDark) {
+        document.body.setAttribute('data-theme', 'light');
+        document.getElementById('themeIcon').innerText = '🌙';
+        document.getElementById('themeText').innerText = '다크 모드';
+      } else {
+        document.body.removeAttribute('data-theme');
+        document.getElementById('themeIcon').innerText = '☀️';
+        document.getElementById('themeText').innerText = '라이트 모드';
+      }
+    }
+
+    // Reading Progress
+    document.getElementById('content').addEventListener('scroll', function() {
+      const el = this;
+      const progress = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+      document.getElementById('readingProgress').style.width = Math.min(100, Math.max(0, progress)) + '%';
+    });
+
+    // ==========================================
+    // SIMULATOR 1: Gravity & Jump Trajectory
+    // ==========================================
+    let sim1_g = 0.8;
+    let sim1_jump = -14.0;
+    let sim1_speed = 5.0;
+    let sim1_player = { x: 50, y: 220, vy: 0, grounded: true };
+    let sim1_trail = [];
+    let sim1_anim = null;
+
+    function initSim1() {
+      const cvs = document.getElementById('physicsCanvas1');
+      if (!cvs) return;
+      sim1_player = { x: 50, y: 220, vy: 0, grounded: true };
+      sim1_trail = [];
+      updatePhysicsParams();
+      if (!sim1_anim) sim1_loop();
+    }
+
+    function updatePhysicsParams() {
+      sim1_g = parseFloat(document.getElementById('slider_g').value);
+      sim1_jump = parseFloat(document.getElementById('slider_jump').value);
+      sim1_speed = parseFloat(document.getElementById('slider_speed').value);
+      
+      document.getElementById('val_g').innerText = sim1_g.toFixed(1);
+      document.getElementById('val_jump').innerText = sim1_jump.toFixed(1);
+      document.getElementById('val_speed').innerText = sim1_speed.toFixed(1);
+
+      // Calculate Theoretical airtime & distance
+      const t_top = Math.abs(sim1_jump) / sim1_g;
+      const t_air = 2 * t_top;
+      const dist = sim1_speed * t_air;
+
+      document.getElementById('sim1_airtime').innerText = t_air.toFixed(1) + ' frame';
+      document.getElementById('sim1_dist').innerText = Math.round(dist) + ' px';
+    }
+
+    function triggerJumpSim1() {
+      if (sim1_player.grounded) {
+        sim1_player.vy = sim1_jump;
+        sim1_player.grounded = false;
+        sim1_trail = [];
+      }
+    }
+
+    function resetSim1() {
+      sim1_player = { x: 50, y: 220, vy: 0, grounded: true };
+      sim1_trail = [];
+    }
+
+    function sim1_loop() {
+      const cvs = document.getElementById('physicsCanvas1');
+      if (cvs && cvs.offsetParent !== null) {
+        const ctx = cvs.getContext('2d');
+        const floorY = 240;
+
+        // Physics Update
+        if (!sim1_player.grounded) {
+          sim1_player.vy += sim1_g;
+          sim1_player.y += sim1_player.vy;
+          sim1_player.x += sim1_speed;
+
+          sim1_trail.push({ x: sim1_player.x + 15, y: sim1_player.y + 15 });
+
+          if (sim1_player.y + 30 >= floorY) {
+            sim1_player.y = floorY - 30;
+            sim1_player.vy = 0;
+            sim1_player.grounded = true;
+          }
+
+          if (sim1_player.x > 750) {
+            sim1_player.x = 50;
+            sim1_trail = [];
+          }
+        }
+
+        // Render
+        ctx.fillStyle = '#121622';
+        ctx.fillRect(0, 0, cvs.width, cvs.height);
+
+        // Grid lines
+        ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x < cvs.width; x += 40) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, cvs.height); ctx.stroke();
+        }
+        for (let y = 0; y < cvs.height; y += 40) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(cvs.width, y); ctx.stroke();
+        }
+
+        // Floor
+        ctx.fillStyle = '#2ecc71';
+        ctx.fillRect(0, floorY, cvs.width, cvs.height - floorY);
+
+        // Parabolic Trail
+        if (sim1_trail.length > 1) {
+          ctx.strokeStyle = '#38bdf8';
+          ctx.lineWidth = 3;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.moveTo(sim1_trail[0].x, sim1_trail[0].y);
+          for (let i = 1; i < sim1_trail.length; i++) {
+            ctx.lineTo(sim1_trail[i].x, sim1_trail[i].y);
+          }
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+
+        // Player
+        ctx.fillStyle = '#e67e22';
+        ctx.fillRect(sim1_player.x, sim1_player.y, 30, 30);
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(sim1_player.x, sim1_player.y, 30, 30);
+      }
+      requestAnimationFrame(sim1_loop);
+    }
+
+    // ==========================================
+    // SIMULATOR 2: Hitbox Padding Visualizer
+    // ==========================================
+    let hitboxPlayer = { x: 180, y: 100, w: 60, h: 60 };
+    let hitboxSpike = { x: 420, y: 100, w: 60, h: 60 };
+    let isDraggingPlayer = false;
+
+    function initHitboxSim() {
+      const cvs = document.getElementById('hitboxCanvas');
+      if (!cvs) return;
+
+      cvs.onmousedown = (e) => {
+        const rect = cvs.getBoundingClientRect();
+        const mx = (e.clientX - rect.left) * (cvs.width / rect.width);
+        const my = (e.clientY - rect.top) * (cvs.height / rect.height);
+        if (mx >= hitboxPlayer.x && mx <= hitboxPlayer.x + hitboxPlayer.w &&
+            my >= hitboxPlayer.y && my <= hitboxPlayer.y + hitboxPlayer.h) {
+          isDraggingPlayer = true;
+        }
+      };
+
+      window.onmousemove = (e) => {
+        if (!isDraggingPlayer) return;
+        const rect = cvs.getBoundingClientRect();
+        const mx = (e.clientX - rect.left) * (cvs.width / rect.width);
+        const my = (e.clientY - rect.top) * (cvs.height / rect.height);
+        hitboxPlayer.x = Math.max(10, Math.min(cvs.width - 70, mx - 30));
+        hitboxPlayer.y = Math.max(10, Math.min(cvs.height - 70, my - 30));
+        updateHitboxSim();
+      };
+
+      window.onmouseup = () => { isDraggingPlayer = false; };
+      updateHitboxSim();
+    }
+
+    function updateHitboxSim() {
+      const cvs = document.getElementById('hitboxCanvas');
+      if (!cvs) return;
+      const ctx = cvs.getContext('2d');
+
+      const p_pad = parseInt(document.getElementById('slider_pad_p').value);
+      const h_pad = parseInt(document.getElementById('slider_pad_h').value);
+      const showDebug = document.getElementById('check_debug_box').checked;
+
+      document.getElementById('val_pad_p').innerText = p_pad + ' px';
+      document.getElementById('val_pad_h').innerText = h_pad + ' px';
+
+      // Inner hitboxes
+      const pHit = {
+        x: hitboxPlayer.x + p_pad,
+        y: hitboxPlayer.y + p_pad,
+        w: hitboxPlayer.w - 2 * p_pad,
+        h: hitboxPlayer.h - 2 * p_pad
+      };
+      const sHit = {
+        x: hitboxSpike.x + h_pad,
+        y: hitboxSpike.y + h_pad,
+        w: hitboxSpike.w - 2 * h_pad,
+        h: hitboxSpike.h - 2 * h_pad
+      };
+
+      // AABB Collision check
+      const rawColl = (hitboxPlayer.x < hitboxSpike.x + hitboxSpike.w &&
+                       hitboxPlayer.x + hitboxPlayer.w > hitboxSpike.x &&
+                       hitboxPlayer.y < hitboxSpike.y + hitboxSpike.h &&
+                       hitboxPlayer.y + hitboxPlayer.h > hitboxSpike.y);
+
+      const paddedColl = (pHit.x < sHit.x + sHit.w &&
+                          pHit.x + pHit.w > sHit.x &&
+                          pHit.y < sHit.y + sHit.h &&
+                          pHit.y + pHit.h > sHit.y);
+
+      // Status text
+      const statusEl = document.getElementById('hitbox_status_text');
+      if (paddedColl) {
+        statusEl.innerHTML = '상태: <span style="color:var(--accent-red);">💥 충돌/사망 (Deadly Hit!)</span>';
+      } else if (rawColl) {
+        statusEl.innerHTML = '상태: <span style="color:var(--accent-green);">🛡️ 너그러운 판정 적용으로 생존! (Safe by Padding)</span>';
+      } else {
+        statusEl.innerHTML = '상태: <span style="color:var(--text-muted);">안전 거리 유지 중 (Far)</span>';
+      }
+
+      // Render
+      ctx.fillStyle = '#141824';
+      ctx.fillRect(0, 0, cvs.width, cvs.height);
+
+      // Draw Spike (Outer)
+      ctx.fillStyle = '#e74c3c';
+      ctx.fillRect(hitboxSpike.x, hitboxSpike.y, hitboxSpike.w, hitboxSpike.h);
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 12px Pretendard';
+      ctx.fillText('가시 장애물', hitboxSpike.x + 2, hitboxSpike.y - 8);
+
+      // Draw Player (Outer)
+      ctx.fillStyle = '#f1c40f';
+      ctx.fillRect(hitboxPlayer.x, hitboxPlayer.y, hitboxPlayer.w, hitboxPlayer.h);
+      ctx.fillStyle = '#fff';
+      ctx.fillText('플레이어 (드래그)', hitboxPlayer.x - 10, hitboxPlayer.y - 8);
+
+      // Debug Overlays
+      if (showDebug) {
+        // Player inner hitbox
+        ctx.strokeStyle = '#00ffcc';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 4]);
+        ctx.strokeRect(pHit.x, pHit.y, pHit.w, pHit.h);
+
+        // Spike inner hitbox
+        ctx.strokeStyle = '#ffffff';
+        ctx.strokeRect(sHit.x, sHit.y, sHit.w, sHit.h);
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = '#00ffcc';
+        ctx.font = '11px monospace';
+        ctx.fillText(`P-Pad: ${p_pad}px`, pHit.x + 4, pHit.y + 16);
+      }
+    }
+
+    // ==========================================
+    // SIMULATOR 3: Tilemap Visualizer
+    // ==========================================
+    function renderMapPreview(stageNum) {
+      const cvs = document.getElementById('tilemapCanvas');
+      if (!cvs) return;
+      const ctx = cvs.getContext('2d');
+      const csvStr = stageNum === 1 ? stage1Data : (stageNum === 2 ? stage2Data : stage3Data);
+
+      const rows = csvStr.trim().split('\n');
+      const tileSize = 20;
+
+      cvs.width = Math.max(800, rows[0].split(',').length * tileSize);
+      cvs.height = rows.length * tileSize + 40;
+
+      ctx.fillStyle = '#141822';
+      ctx.fillRect(0, 0, cvs.width, cvs.height);
+
+      rows.forEach((rStr, r) => {
+        const cols = rStr.split(',');
+        cols.forEach((valRaw, c) => {
+          const val = valRaw.trim();
+          const x = c * tileSize;
+          const y = r * tileSize;
+
+          if (val === '1') {
+            ctx.fillStyle = '#2980b9';
+            ctx.fillRect(x, y, tileSize - 1, tileSize - 1);
+          } else if (val === '2') {
+            ctx.fillStyle = '#e74c3c';
+            ctx.fillRect(x, y + tileSize / 2, tileSize - 1, tileSize / 2 - 1);
+          } else if (val.toUpperCase() === 'P') {
+            ctx.fillStyle = '#f1c40f';
+            ctx.fillRect(x, y, tileSize - 1, tileSize - 1);
+            ctx.fillStyle = '#000';
+            ctx.font = 'bold 11px sans-serif';
+            ctx.fillText('P', x + 5, y + 14);
+          } else if (val.toUpperCase() === 'G') {
+            ctx.fillStyle = '#2ecc71';
+            ctx.fillRect(x, y, tileSize - 1, tileSize * 2 - 1);
+            ctx.fillStyle = '#000';
+            ctx.font = 'bold 11px sans-serif';
+            ctx.fillText('G', x + 4, y + 16);
+          }
+        });
+      });
+
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = 'bold 13px Pretendard';
+      ctx.fillText(`🗺️ Stage ${stageNum} 렌더링 결과 (총 ${rows[0].split(',').length} x ${rows.length} 타일)`, 10, cvs.height - 12);
+    }
+
+    // ==========================================
+    // SIMULATOR 5: Screen Shake & Web Audio Synth
+    // ==========================================
+    let audioCtx = null;
+    let demoParticles = [];
+    let demoShake = 0;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function play8BitSound(type) {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        const now = ctx.currentTime;
+        if (type === 'jump') {
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(180, now);
+          osc.frequency.exponentialRampToValueAtTime(600, now + 0.12);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+          osc.start(now);
+          osc.stop(now + 0.12);
+        } else if (type === 'death') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(350, now);
+          osc.frequency.exponentialRampToValueAtTime(40, now + 0.25);
+          gain.gain.setValueAtTime(0.4, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === 'clear') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.setValueAtTime(554, now + 0.08);
+          osc.frequency.setValueAtTime(659, now + 0.16);
+          osc.frequency.setValueAtTime(880, now + 0.24);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+          osc.start(now);
+          osc.stop(now + 0.4);
+        }
+      } catch (e) {
+        console.log('Web Audio not allowed yet', e);
+      }
+    }
+
+    function triggerParticleDemoDirect(x, y, type) {
+      play8BitSound(type);
+      if (type === 'death') {
+        demoShake = 18.0;
+        for (let i = 0; i < 35; i++) {
+          demoParticles.push({
+            x: x, y: y,
+            vx: (Math.random() - 0.5) * 12,
+            vy: (Math.random() - 0.7) * 12,
+            size: Math.random() * 8 + 6,
+            color: '#f1c40f',
+            life: 1.0,
+            decay: Math.random() * 0.03 + 0.02
+          });
+        }
+      } else if (type === 'jump') {
+        demoShake = 3.0;
+        for (let i = 0; i < 10; i++) {
+          demoParticles.push({
+            x: x + (Math.random() - 0.5) * 20, y: y + 10,
+            vx: (Math.random() - 0.5) * 6,
+            vy: (Math.random() - 0.3) * 4,
+            size: Math.random() * 5 + 3,
+            color: '#94a3b8',
+            life: 0.8,
+            decay: 0.04
+          });
+        }
+      } else if (type === 'clear') {
+        demoShake = 8.0;
+        const colors = ['#f87171', '#fb923c', '#facc15', '#4ade80', '#38bdf8', '#c084fc'];
+        for (let i = 0; i < 50; i++) {
+          demoParticles.push({
+            x: x, y: y,
+            vx: (Math.random() - 0.5) * 14,
+            vy: (Math.random() - 0.8) * 14,
+            size: Math.random() * 7 + 4,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            life: 1.2,
+            decay: Math.random() * 0.02 + 0.015
+          });
+        }
+      }
+    }
+
+    function triggerParticleDemo(e) {
+      const cvs = document.getElementById('particleCanvas');
+      const rect = cvs.getBoundingClientRect();
+      const mx = (e.clientX - rect.left) * (cvs.width / rect.width);
+      const my = (e.clientY - rect.top) * (cvs.height / rect.height);
+      triggerParticleDemoDirect(mx, my, 'death');
+    }
+
+    let particleAnimStarted = false;
+    function initParticleDemo() {
+      if (!particleAnimStarted) {
+        particleAnimStarted = true;
+        particleDemoLoop();
+      }
+    }
+
+    function particleDemoLoop() {
+      const cvs = document.getElementById('particleCanvas');
+      if (cvs && cvs.offsetParent !== null) {
+        const ctx = cvs.getContext('2d');
+
+        // Shake offset
+        let ox = 0, oy = 0;
+        if (demoShake > 0) {
+          ox = (Math.random() - 0.5) * demoShake * 2;
+          oy = (Math.random() - 0.5) * demoShake * 2;
+          demoShake = Math.max(0, demoShake * 0.9 - 0.2);
+        }
+
+        ctx.fillStyle = '#10141f';
+        ctx.fillRect(0, 0, cvs.width, cvs.height);
+
+        // Central box placeholder
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(360 + ox, 90 + oy, 80, 80);
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(360 + ox, 90 + oy, 80, 80);
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '12px Pretendard';
+        ctx.fillText('CLICK ME!', 375 + ox, 135 + oy);
+
+        // Update & draw particles
+        for (let i = demoParticles.length - 1; i >= 0; i--) {
+          const p = demoParticles[i];
+          p.vy += 0.35; // Gravity
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life -= p.decay;
+          p.size = Math.max(0, p.size - 0.12);
+
+          if (p.life <= 0 || p.size <= 0) {
+            demoParticles.splice(i, 1);
+          } else {
+            ctx.fillStyle = p.color;
+            ctx.fillRect(p.x + ox, p.y + oy, p.size, p.size);
+          }
+        }
+      }
+      requestAnimationFrame(particleDemoLoop);
+    }
+
+    // Auto Render KaTeX & Math on load
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false }
+          ]
+        });
+      }
+      initSim1();
+      initHitboxSim();
+      initParticleDemo();
+      renderMapPreview(1);
+    });
+  </script>
+</body>
+</html>
+
