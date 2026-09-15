@@ -188,13 +188,6 @@
  .code-container pre { margin: 0; padding: 16px 18px; overflow-x: auto; font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.6; }
  .code-container pre code { background: transparent !important; padding: 0 !important; font-family: inherit; }
 
- .table-container { overflow-x: auto; margin: 20px 0; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-card); }
- table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; }
- th { background: var(--bg-secondary); padding: 12px 16px; font-weight: 700; color: var(--text-main); border-bottom: 1px solid var(--border-color); }
- td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); color: var(--text-sub); }
- tr:last-child td { border-bottom: none; }
- tr:hover td { background: var(--bg-card-hover); }
-
  .mission-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); margin: 16px 0; overflow: hidden; transition: border-color 0.2s; }
  .mission-card:hover { border-color: rgba(56, 189, 248, 0.4); }
  .mission-header { padding: 14px 18px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
@@ -214,136 +207,24 @@
  .sim-btn { padding: 6px 14px; background: var(--accent-blue); color: #000; border: none; border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
  .sim-btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
- /* ===================================================
-    NEW: REDESIGNED STACKED MAP EDITOR STYLES
-    =================================================== */
- .editor-panel {
- display: flex;
- flex-direction: column;
- gap: 14px;
- margin-top: 10px;
- }
- .editor-toolbar {
- display: flex;
- flex-wrap: wrap;
- gap: 10px;
- align-items: center;
- justify-content: space-between;
- background: var(--bg-secondary);
- padding: 12px 16px;
- border-radius: var(--radius-md);
- border: 1px solid var(--border-color);
- }
- .editor-dim-inputs {
- display: flex;
- align-items: center;
- gap: 8px;
- font-size: 0.86rem;
- font-weight: 600;
- }
- .editor-dim-inputs input {
- width: 60px;
- padding: 5px 8px;
- background: var(--bg-primary);
- border: 1px solid var(--border-color);
- border-radius: var(--radius-sm);
- color: #fff;
- text-align: center;
- font-family: var(--font-mono);
- }
- .editor-palette {
- display: flex;
- gap: 6px;
- flex-wrap: wrap;
- align-items: center;
- background: rgba(0,0,0,0.25);
- padding: 8px 12px;
- border-radius: var(--radius-sm);
- border: 1px solid var(--border-color);
- }
- .palette-btn {
- padding: 4px 10px;
- border-radius: 4px;
- border: 1px solid var(--border-color);
- font-size: 0.78rem;
- font-weight: 700;
- cursor: pointer;
- transition: all 0.15s;
- }
- .palette-btn.active {
- border-color: #fff;
- transform: scale(1.05);
- box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
- }
+ /* Redesigned Stacked Map Editor Styles */
+ .editor-panel { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
+ .editor-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; background: var(--bg-secondary); padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
+ .editor-dim-inputs { display: flex; align-items: center; gap: 8px; font-size: 0.86rem; font-weight: 600; }
+ .editor-dim-inputs input { width: 60px; padding: 5px 8px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: #fff; text-align: center; font-family: var(--font-mono); }
+ .editor-palette { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; background: rgba(0,0,0,0.25); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
+ .palette-btn { padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color); font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+ .palette-btn.active { border-color: #fff; transform: scale(1.05); box-shadow: 0 0 8px rgba(255, 255, 255, 0.3); }
 
- .editor-preview-wrapper {
- background: #0c101c;
- border: 1px solid var(--border-color);
- border-radius: var(--radius-md);
- padding: 12px;
- display: flex;
- flex-direction: column;
- gap: 8px;
- }
- .editor-canvas-scroll {
- width: 100%;
- max-height: 180px;
- overflow: auto;
- border-radius: var(--radius-sm);
- background: #121622;
- border: 1px solid rgba(255, 255, 255, 0.05);
- }
+ .editor-preview-wrapper { background: #0c101c; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+ .editor-canvas-scroll { width: 100%; max-height: 180px; overflow: auto; border-radius: var(--radius-sm); background: #121622; border: 1px solid rgba(255, 255, 255, 0.05); }
 
- .editor-table-wrapper {
- background: #0c101c;
- border: 1px solid var(--border-color);
- border-radius: var(--radius-md);
- padding: 12px;
- display: flex;
- flex-direction: column;
- gap: 8px;
- }
- .editor-table-scroll {
- width: 100%;
- max-height: 280px;
- overflow: auto;
- border-radius: var(--radius-sm);
- background: #070a12;
- border: 1px solid rgba(255, 255, 255, 0.05);
- padding: 8px;
- }
- .editor-grid-table {
- border-collapse: collapse;
- margin: 0;
- }
- .editor-col-header, .editor-row-header {
- font-size: 0.68rem;
- font-family: var(--font-mono);
- color: var(--text-muted);
- padding: 2px;
- text-align: center;
- user-select: none;
- }
- .editor-cell-input {
- width: 28px;
- height: 28px;
- min-width: 28px;
- text-align: center;
- font-family: var(--font-mono);
- font-size: 0.82rem;
- font-weight: 700;
- background: #1a2234;
- color: #fff;
- border: 1px solid #334155;
- padding: 0;
- outline: none;
- transition: all 0.15s;
- }
- .editor-cell-input:focus {
- border-color: var(--accent-blue);
- box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.4);
- z-index: 2;
- }
+ .editor-table-wrapper { background: #0c101c; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+ .editor-table-scroll { width: 100%; max-height: 280px; overflow: auto; border-radius: var(--radius-sm); background: #070a12; border: 1px solid rgba(255, 255, 255, 0.05); padding: 8px; }
+ .editor-grid-table { border-collapse: collapse; margin: 0; }
+ .editor-col-header, .editor-row-header { font-size: 0.68rem; font-family: var(--font-mono); color: var(--text-muted); padding: 2px; text-align: center; user-select: none; }
+ .editor-cell-input { width: 28px; height: 28px; min-width: 28px; text-align: center; font-family: var(--font-mono); font-size: 0.82rem; font-weight: 700; background: #1a2234; color: #fff; border: 1px solid #334155; padding: 0; outline: none; transition: all 0.15s; }
+ .editor-cell-input:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.4); z-index: 2; }
 
  .chapter-nav-footer { display: flex; justify-content: space-between; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border-color); gap: 16px; }
  .nav-footer-btn { flex: 1; padding: 14px 20px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-main); text-decoration: none; display: flex; flex-direction: column; gap: 4px; cursor: pointer; transition: all 0.2s; }
@@ -523,13 +404,6 @@
  <pre><code class="language-bash">pip install pygame</code></pre>
  </div>
 
- <div class="alert-box alert-tip">
- <h5>💡 'pip' 명령어가 인식되지 않는 경우</h5>
- <p>파이썬 설치 시 PATH 체크를 놓친 경우 아래 명령어로 시도해 보세요.</p>
- <code>python -m pip install --upgrade pip</code><br>
- <code>python -m pip install pygame</code>
- </div>
-
  <h2>📁 실습 프로젝트 폴더 구조</h2>
  <p>바탕화면에 <code>game_project</code> 폴더를 하나 만들고, 파이썬 소스 코드(<code>main.py</code>)와 맵 파일(<code>stage1.csv</code>, <code>stage2.csv</code> 등)을 <strong>모두 같은 폴더 안</strong>에 저장해야 합니다.</p>
 
@@ -557,7 +431,7 @@
  </section>
 
  <!-- ========================================== -->
- <!-- SECTION: CSV DOWNLOAD CENTER & REDESIGNED MAP EDITOR -->
+ <!-- SECTION: CSV CENTER & STACKED MAP EDITOR -->
  <!-- ========================================== -->
  <section id="chapter-csv-center" class="chapter-container">
  <div class="chapter-header">
@@ -566,12 +440,9 @@
  <span class="badge-tag">상하 스택 레이아웃</span>
  </div>
  <h1 class="chapter-title">📄 스테이지 CSV 다운로드 & 인터랙티브 맵 편집기</h1>
- <p>제작된 스테이지 맵을 바로 다운로드하거나, <strong>가로로 늘어지지 않는 스택형 맵 에디터</strong>를 통해 직접 타일을 편집하고 CSV 파일로 내보낼 수 있습니다.</p>
+ <p>준비된 스테이지 파일을 바로 다운로드하거나, <strong>가로로 늘어지지 않는 스택형 맵 에디터</strong>를 통해 직접 타일을 편집하고 CSV 파일로 내보낼 수 있습니다[cite: 1].</p>
  </div>
 
- <!-- ========================================== -->
- <!-- REDESIGNED MAP EDITOR (STACKED LAYOUT) -->
- <!-- ========================================== -->
  <h2>🛠️ 나만의 스테이지 제작: 반응형 스택 맵 에디터</h2>
  <p>원하는 가로·세로 격자 크기를 설정하고 타일을 입력하면, 상단의 실시간 프리뷰에 즉시 렌더링됩니다. 선택된 팔레트 도구로 클릭하여 손쉽게 배치할 수 있습니다.</p>
 
@@ -624,9 +495,7 @@
  <span style="font-size:0.75rem;">가로 스크롤로 긴 맵을 확인하세요</span>
  </div>
  <div class="editor-table-scroll">
- <table class="editor-grid-table" id="editorTable">
- <!-- Dynamically Rendered -->
- </table>
+ <table class="editor-grid-table" id="editorTable"></table>
  </div>
  </div>
 
@@ -644,21 +513,14 @@
 
  <!-- Ready-made Stages Download List -->
  <h2>1️⃣ 스테이지 1: 튜토리얼 맵 (stage1.csv)</h2>
- <p>기본 평지와 간단한 점프 구간으로 구성된 입문용 맵입니다.</p>
+ <p>기본 평지와 간단한 점프 구간으로 구성된 입문용 맵입니다[cite: 1].</p>
  <div class="sim-btn-group" style="margin-bottom: 12px;">
- <button class="sim-btn" onclick="downloadCSV('stage1.csv', stage1Data)">
- <span>⬇️</span> stage1.csv 파일 다운로드
- </button>
- <button class="copy-btn" onclick="copyToClipboard(stage1Data)">
- <span>📋</span> 텍스트 복사
- </button>
+ <button class="sim-btn" onclick="downloadCSV('stage1.csv', stage1Data)"><span>⬇️</span> stage1.csv 파일 다운로드</button>
+ <button class="copy-btn" onclick="copyToClipboard(stage1Data)"><span>📋</span> 텍스트 복사</button>
  </div>
  <div class="code-container">
- <div class="code-header">
- <span class="code-title"><span>📄</span> stage1.csv 미리보기</span>
- <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button>
- </div>
- <pre><code class="language-csv">0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+ <div class="code-header"><span class="code-title"><span>📄</span> stage1.csv 미리보기</span><button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button></div>
+ <pre><code class="language-csv" id="stage1Preview">0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,1,1,2,0,0,0,0,0,0,0,0,0,0,0,G
 0,P,0,0,0,0,1,1,1,0,0,0,1,1,1,1,1,1,1,0,0,2,0,0,2,2,0,0,2,1
@@ -667,21 +529,14 @@
  </div>
 
  <h2>2️⃣ 스테이지 2: 공중 점프 심화 맵 (stage2.csv)</h2>
- <p>넓은 가시밭과 높은 공중 발판으로 정밀한 점프가 요구되는 맵입니다.</p>
+ <p>넓은 가시밭과 높은 공중 발판으로 정밀한 점프가 요구되는 맵입니다[cite: 1].</p>
  <div class="sim-btn-group" style="margin-bottom: 12px;">
- <button class="sim-btn" onclick="downloadCSV('stage2.csv', stage2Data)">
- <span>⬇️</span> stage2.csv 파일 다운로드
- </button>
- <button class="copy-btn" onclick="copyToClipboard(stage2Data)">
- <span>📋</span> 텍스트 복사
- </button>
+ <button class="sim-btn" onclick="downloadCSV('stage2.csv', stage2Data)"><span>⬇️</span> stage2.csv 파일 다운로드</button>
+ <button class="copy-btn" onclick="copyToClipboard(stage2Data)"><span>📋</span> 텍스트 복사</button>
  </div>
  <div class="code-container">
- <div class="code-header">
- <span class="code-title"><span>📄</span> stage2.csv 미리보기</span>
- <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button>
- </div>
- <pre><code class="language-csv">0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+ <div class="code-header"><span class="code-title"><span>📄</span> stage2.csv 미리보기</span><button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button></div>
+ <pre><code class="language-csv" id="stage2Preview">0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,1,1,1,0,0,0,0,0,0,0,0,G
 0,P,0,0,0,0,0,2,2,2,0,0,0,0,1,1,1,1,1,1,1,0,0,2,2,2,2,0,0,1
@@ -690,21 +545,14 @@
  </div>
 
  <h2>3️⃣ 스테이지 3: 마스터 챌린지 맵 (stage3.csv)</h2>
- <p>낙사 구간과 계단식 점프가 결합된 최고 난이도 보너스 맵입니다.</p>
+ <p>낙사 구간과 계단식 점프가 결합된 최고 난이도 보너스 맵입니다[cite: 1].</p>
  <div class="sim-btn-group" style="margin-bottom: 12px;">
- <button class="sim-btn" onclick="downloadCSV('stage3.csv', stage3Data)">
- <span>⬇️</span> stage3.csv 파일 다운로드
- </button>
- <button class="copy-btn" onclick="copyToClipboard(stage3Data)">
- <span>📋</span> 텍스트 복사
- </button>
+ <button class="sim-btn" onclick="downloadCSV('stage3.csv', stage3Data)"><span>⬇️</span> stage3.csv 파일 다운로드</button>
+ <button class="copy-btn" onclick="copyToClipboard(stage3Data)"><span>📋</span> 텍스트 복사</button>
  </div>
  <div class="code-container">
- <div class="code-header">
- <span class="code-title"><span>📄</span> stage3.csv 미리보기</span>
- <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button>
- </div>
- <pre><code class="language-csv">0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+ <div class="code-header"><span class="code-title"><span>📄</span> stage3.csv 미리보기</span><button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button></div>
+ <pre><code class="language-csv" id="stage3Preview">0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,2,1,1,1,2,0,0,0,1,1,1,0,0,0,0,0,G
 0,P,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,2,0,0,0,0,0,2,1
@@ -715,18 +563,11 @@
  <h2>4️⃣ 스테이지 4: 방어막 & 넉백 실습 맵 (stage_shield.csv)</h2>
  <p>7차시 실습용 맵으로, <code>S</code> 타일을 획득하여 방어막을 켜고 가시에 부딪혀 튕겨 나가는 넉백 물리를 테스트할 수 있습니다.</p>
  <div class="sim-btn-group" style="margin-bottom: 12px;">
- <button class="sim-btn" style="background:var(--accent-blue);" onclick="downloadCSV('stage_shield.csv', stageShieldData)">
- <span>⬇️</span> stage_shield.csv 파일 다운로드
- </button>
- <button class="copy-btn" onclick="copyToClipboard(stageShieldData)">
- <span>📋</span> 텍스트 복사
- </button>
+ <button class="sim-btn" style="background:var(--accent-blue);" onclick="downloadCSV('stage_shield.csv', stageShieldData)"><span>⬇️</span> stage_shield.csv 다운로드</button>
+ <button class="copy-btn" onclick="copyToClipboard(stageShieldData)"><span>📋</span> 텍스트 복사</button>
  </div>
  <div class="code-container">
- <div class="code-header">
- <span class="code-title"><span>📄</span> stage_shield.csv 미리보기</span>
- <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button>
- </div>
+ <div class="code-header"><span class="code-title"><span>📄</span> stage_shield.csv 미리보기</span><button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button></div>
  <pre><code class="language-csv" id="stageShieldPreview">0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 0,0,0,S,0,0,0,0,0,0,0,0,0,2,1,1,1,2,0,0,0,0,0,0,0,0,0,0,0,G
@@ -738,18 +579,11 @@
  <h2>5️⃣ 스테이지 5: A* 비행 워프 실습 맵 (stage_warp.csv)</h2>
  <p>8차시 실습용 맵으로, <code>W</code> 타일을 획득하여 마우스 클릭 지점까지 중력을 무시하고 최단 경로로 날아가는 $A^*$ 알고리즘을 테스트합니다.</p>
  <div class="sim-btn-group" style="margin-bottom: 12px;">
- <button class="sim-btn" style="background:var(--accent-orange); color:#000;" onclick="downloadCSV('stage_warp.csv', stageWarpData)">
- <span>⬇️</span> stage_warp.csv 파일 다운로드
- </button>
- <button class="copy-btn" onclick="copyToClipboard(stageWarpData)">
- <span>📋</span> 텍스트 복사
- </button>
+ <button class="sim-btn" style="background:var(--accent-orange); color:#000;" onclick="downloadCSV('stage_warp.csv', stageWarpData)"><span>⬇️</span> stage_warp.csv 다운로드</button>
+ <button class="copy-btn" onclick="copyToClipboard(stageWarpData)"><span>📋</span> 텍스트 복사</button>
  </div>
  <div class="code-container">
- <div class="code-header">
- <span class="code-title"><span>📄</span> stage_warp.csv 미리보기</span>
- <button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button>
- </div>
+ <div class="code-header"><span class="code-title"><span>📄</span> stage_warp.csv 미리보기</span><button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 복사</button></div>
  <pre><code class="language-csv" id="stageWarpPreview">0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -787,7 +621,7 @@
  </section>
 
  <!-- ========================================== -->
- <!-- SECTION: CHAPTER 01 (FULL CODE & MISSIONS) -->
+ <!-- SECTION: CHAPTER 01 (WITH DETAILED MATH COMMENTS) -->
  <!-- ========================================== -->
  <section id="chapter-01" class="chapter-container">
  <div class="chapter-header">
@@ -808,44 +642,55 @@
  <li><strong>$x$ 축:</strong> 오른쪽으로 갈수록 값이 커집니다 ($+$).</li>
  <li><strong>$y$ 축:</strong> 아래로 내려갈수록 값이 커집니다 ($+$).</li>
  </ul>
- <p>게임은 멈춰 있는 그림이 아닙니다. <strong>"입력 받기 $\rightarrow$ 위치 계산하기 $\rightarrow$ 화면 새로 그리기"</strong> 과정을 1초에 60번씩 반복하는 <strong>게임 루프(Game Loop)</strong> 위에서 돌아갑니다.</p>
 
  <h3>📌 Step 1: 기본 창 띄우고 좌우로 움직이기</h3>
  <div class="code-container">
  <div class="code-header"><span class="code-title"><span>🐍</span> step1_basic_loop.py</span><button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button></div>
- <pre><code class="language-python">import pygame
+ <pre><code class="language-python"># [1차시 Step 1] 컴퓨터 화면 좌표계와 게임 루프의 기본 구조
+import pygame
 import sys
 
+# 1. 화면 및 시계(FPS) 초기화
 pygame.init()
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 450
+SCREEN_WIDTH = 800     # 화면의 가로 픽셀 길이 (x축의 최대 범위)
+SCREEN_HEIGHT = 450    # 화면의 세로 픽셀 길이 (y축의 최대 범위)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("1차시: 플레이어 이동과 기본 루프")
 clock = pygame.time.Clock()
 
-player_x = 100
-player_y = 200
-player_size = 40
-speed = 5
+# 2. 플레이어의 초기 상태 정의 (수학의 점 (x, y)에 크기를 부여)
+player_x = 100         # 시작 x좌표 (화면 왼쪽에서 100px)
+player_y = 200         # 시작 y좌표 (화면 위쪽에서 200px)
+player_size = 40       # 한 변의 길이가 40px인 정사각형 캐릭터
+speed = 5              # 1프레임당 이동할 변위 Delta x (픽셀 단위의 수평 속도)
 
+# --- 메인 게임 루프 (Game Loop: 초당 60회 반복 수행되는 시간의 흐름) ---
 running = True
 while running:
- for event in pygame.event.get():
- if event.type == pygame.QUIT:
- running = False
+    # (1) 이벤트 수집: 사용자의 입력(마우스, 키보드, 창 닫기 등)을 감지
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
- keys = pygame.key.get_pressed()
- if keys[pygame.K_LEFT]:
- player_x -= speed
- if keys[pygame.K_RIGHT]:
- player_x += speed
+    # (2) 입력에 따른 좌표 갱신 (위치 함수의 이산적 변화: x(t+1) = x(t) + v)
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        player_x -= speed  # 왼쪽 이동: x좌표 감소 (음의 방향 이동)
+    if keys[pygame.K_RIGHT]:
+        player_x += speed  # 오른쪽 이동: x좌표 증가 (양의 방향 이동)
 
- player_x = max(0, min(player_x, SCREEN_WIDTH - player_size))
+    # (3) 화면 밖 이탈 방지 (수학적 닫힌 구간 클램핑: 0 <= player_x <= MAX_X)
+    # min과 max 함수를 합성하여 좌표를 화면 영역 내부 [0, SCREEN_WIDTH - 크기]로 제한
+    player_x = max(0, min(player_x, SCREEN_WIDTH - player_size))
 
- screen.fill((30, 30, 30))
- pygame.draw.rect(screen, (0, 200, 255), (player_x, player_y, player_size, player_size))
- pygame.display.flip()
- clock.tick(60)
+    # (4) 렌더링 (화면 출력: 매 순간마다 이전 그림을 지우고 새 위치에 그리기)
+    screen.fill((30, 30, 30))  # 어두운 단색으로 화면을 덮어 이전 잔상을 지움
+    # 모니터 좌표계 상에 사각형을 그림: Rect(x, y, width, height)
+    pygame.draw.rect(screen, (0, 200, 255), (player_x, player_y, player_size, player_size))
+    pygame.display.flip()
+
+    # 1초에 정확히 60번 루프를 돌도록 제어 (dt = 1/60초 고정)
+    clock.tick(60)
 
 pygame.quit()
 sys.exit()</code></pre>
@@ -884,7 +729,8 @@ sys.exit()</code></pre>
  <h3>📌 Step 2: 중력과 점프 구현하기</h3>
  <div class="code-container">
  <div class="code-header"><span class="code-title"><span>🐍</span> step2_gravity_jump.py</span><button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button></div>
- <pre><code class="language-python">import pygame
+ <pre><code class="language-python"># [1차시 Step 2] 등가속도 운동 점화식을 이용한 자유낙하와 포물선 점프 모델링
+import pygame
 import sys
 
 pygame.init()
@@ -899,40 +745,56 @@ player_y = 100
 player_size = 40
 speed = 5
 
-velocity_y = 0.0
-gravity = 0.8
-jump_power = -14.0
-is_grounded = False
+# --- 물리 엔진 파라미터 (미적분학의 이산적 오일러 적분 모델) ---
+velocity_y = 0.0      # 세로 방향 현재 속도 v_y (초기 속도는 0)
+gravity = 0.8         # 중력 가속도 g (매 프레임마다 속도에 더해지는 상수: 등가속도)
+jump_power = -14.0    # 점프 초기 속도 v_0 (컴퓨터 화면은 위쪽이 음수이므로 음의 부호 부여)
+is_grounded = False   # 바닥 착지 여부를 나타내는 불리언(Boolean) 상태 플래그
+
+# 지면의 y좌표 방정식: y = FLOOR_Y
 FLOOR_Y = 380
 
 running = True
 while running:
- for event in pygame.event.get():
- if event.type == pygame.QUIT:
- running = False
- if event.type == pygame.KEYDOWN:
- if event.key == pygame.K_SPACE and is_grounded:
- velocity_y = jump_power
- is_grounded = False
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
- keys = pygame.key.get_pressed()
- if keys[pygame.K_LEFT]: player_x -= speed
- if keys[pygame.K_RIGHT]: player_x += speed
- player_x = max(0, min(player_x, SCREEN_WIDTH - player_size))
+        # [점프 트리거 조건] 바닥에 닿아 있을 때만(is_grounded == True) 위쪽 초기속도를 부여
+        # 이 조건이 없으면 공중에서 계속 점프할 수 있는 무한 다단 점프 버그가 발생함
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and is_grounded:
+                velocity_y = jump_power   # 상향 초기속도 부여 (포물선 운동의 시작점)
+                is_grounded = False       # 점프 즉시 공중에 뜬 상태로 전환
 
- velocity_y += gravity
- player_y += velocity_y
+    # 1. 수평 등속도 이동 처리
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]: player_x -= speed
+    if keys[pygame.K_RIGHT]: player_x += speed
+    player_x = max(0, min(player_x, SCREEN_WIDTH - player_size))
 
- if player_y + player_size >= FLOOR_Y:
- player_y = FLOOR_Y - player_size
- velocity_y = 0.0
- is_grounded = True
+    # 2. 물리 연산 (수열의 점화식을 매 프레임 누적 계산)
+    # 속도의 변화: v(t+1) = v(t) + g (가속도를 적분하여 속도 갱신)
+    velocity_y += gravity
+    # 위치의 변화: y(t+1) = y(t) + v(t+1) (속도를 적분하여 위치 갱신)
+    player_y += velocity_y
 
- screen.fill((25, 25, 35))
- pygame.draw.rect(screen, (46, 204, 113), (0, FLOOR_Y, SCREEN_WIDTH, SCREEN_HEIGHT - FLOOR_Y))
- pygame.draw.rect(screen, (230, 126, 34), (player_x, int(player_y), player_size, player_size))
- pygame.display.flip()
- clock.tick(60)
+    # 3. 바닥 충돌 및 수직항력(Normal Force) 시뮬레이션
+    # 플레이어의 발밑 y좌표(player_y + player_size)가 바닥(FLOOR_Y)보다 아래로 내려갔을 때
+    if player_y + player_size >= FLOOR_Y:
+        player_y = FLOOR_Y - player_size  # (위치 보정) 땅을 파고들지 않도록 지면 바로 위에 위치시킴
+        velocity_y = 0.0                  # (속도 상쇄) 지면에 닿았으므로 하강 속도를 0으로 리셋
+        is_grounded = True                # 다시 점프할 수 있는 접지 상태로 갱신
+
+    # 4. 화면 그리기
+    screen.fill((25, 25, 35))
+    # 바닥 사각형 렌더링 (초록색 지면)
+    pygame.draw.rect(screen, (46, 204, 113), (0, FLOOR_Y, SCREEN_WIDTH, SCREEN_HEIGHT - FLOOR_Y))
+    # 플레이어 큐브 렌더링 (주황색 네모)
+    pygame.draw.rect(screen, (230, 126, 34), (player_x, int(player_y), player_size, player_size))
+
+    pygame.display.flip()
+    clock.tick(60)
 
 pygame.quit()
 sys.exit()</code></pre>
@@ -976,7 +838,7 @@ sys.exit()</code></pre>
  </section>
 
  <!-- ========================================== -->
- <!-- SECTION: CHAPTER 02 (FULL CODE & MISSIONS) -->
+ <!-- SECTION: CHAPTER 02 (WITH DETAILED MATH COMMENTS) -->
  <!-- ========================================== -->
  <section id="chapter-02" class="chapter-container">
  <div class="chapter-header">
@@ -997,7 +859,8 @@ sys.exit()</code></pre>
 
  <div class="code-container">
  <div class="code-header"><span class="code-title"><span>🐍</span> step2_hazard_padding.py</span><button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button></div>
- <pre><code class="language-python">import pygame
+ <pre><code class="language-python"># [2차시 Step 2] 부등식 영역에 기반한 AABB 충돌 판정과 히트박스 패딩(축소) 설계
+import pygame
 import sys
 
 pygame.init()
@@ -1008,6 +871,7 @@ pygame.display.set_caption("2차시: 히트박스 패딩과 사망/리스폰")
 clock = pygame.time.Clock()
 
 SPAWN_POINT = (60, 300)
+# 플레이어 사각형 객체 생성: Rect(left_x, top_y, width, height)
 player = pygame.Rect(SPAWN_POINT[0], SPAWN_POINT[1], 40, 40)
 speed = 5
 velocity_y = 0.0
@@ -1015,79 +879,102 @@ gravity = 0.8
 jump_power = -14.0
 is_grounded = False
 
-PLAYER_PAD = 4
-HAZARD_PAD = 6
+# [너그러운 판정 설계] 수학적으로 렌더링 상자 크기와 충돌 검사 상자 크기를 분리
+# 가로세로를 각각 2*pad 만큼 줄여 계산함으로써 모서리를 살짝 스쳤을 때 생존하도록 허용함
+PLAYER_PAD = 4   # 플레이어 안쪽 여유치 (40x40 -> 32x32)
+HAZARD_PAD = 6   # 가시 안쪽 여유치 (가로세로 12px 축소)
 debug_mode = False
 
+# 발판(충돌 블록) 집합
 platforms = [
- pygame.Rect(0, 380, 800, 70),
- pygame.Rect(220, 290, 140, 20),
- pygame.Rect(440, 230, 140, 20),
+    pygame.Rect(0, 380, 800, 70),     # 바닥 지면
+    pygame.Rect(220, 290, 140, 20),   # 공중 발판 1
+    pygame.Rect(440, 230, 140, 20),   # 공중 발판 2
 ]
+
+# 위험물(가시) 집합
 hazards = [
- pygame.Rect(270, 260, 30, 30),
- pygame.Rect(500, 350, 40, 30),
+    pygame.Rect(270, 260, 30, 30),    # 발판 1 위 가시
+    pygame.Rect(500, 350, 40, 30),    # 바닥 가시
 ]
 
 def get_padded_rect(rect, pad):
- return pygame.Rect(rect.x + pad, rect.y + pad, rect.width - 2 * pad, rect.height - 2 * pad)
+    """
+    [수학적 패딩 공식 적용 함수]
+    원래 사각형 [x, y, w, h]에 대해 상하좌우를 pad 만큼 축소한 영역 반환:
+    x' = x + pad,  y' = y + pad
+    w' = w - 2*pad, h' = h - 2*pad
+    """
+    return pygame.Rect(rect.x + pad, rect.y + pad, rect.width - 2 * pad, rect.height - 2 * pad)
 
 running = True
 while running:
- for event in pygame.event.get():
- if event.type == pygame.QUIT:
- running = False
- if event.type == pygame.KEYDOWN:
- if event.key == pygame.K_SPACE and is_grounded:
- velocity_y = jump_power
- is_grounded = False
- if event.key == pygame.K_F1:
- debug_mode = not debug_mode
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and is_grounded:
+                velocity_y = jump_power
+                is_grounded = False
+            # F1 키를 눌러 디버그 모드(실제 수학적 판정 영역 테두리 표시) 토글
+            if event.key == pygame.K_F1:
+                debug_mode = not debug_mode
 
- keys = pygame.key.get_pressed()
- velocity_x = 0
- if keys[pygame.K_LEFT]: velocity_x = -speed
- if keys[pygame.K_RIGHT]: velocity_x = speed
+    # 1. X축 독립 이동 및 충돌 판정 (축 분리: x와 y를 동시에 풀면 대각선 충돌 시 벽인지 바닥인지 모호해짐)
+    keys = pygame.key.get_pressed()
+    velocity_x = 0
+    if keys[pygame.K_LEFT]: velocity_x = -speed
+    if keys[pygame.K_RIGHT]: velocity_x = speed
 
- player.x += velocity_x
- for block in platforms:
- if player.colliderect(block):
- if velocity_x > 0: player.right = block.left
- elif velocity_x < 0: player.left = block.right
+    player.x += velocity_x
+    for block in platforms:
+        # AABB 겹침 판정: x1 < x2+w2 and x1+w1 > x2 and y1 < y2+h2 and y1+h1 > y2
+        if player.colliderect(block):
+            if velocity_x > 0:  # 오른쪽으로 이동하다 벽에 닿음
+                player.right = block.left  # x좌표를 블록의 왼쪽 모서리에 맞춤 (진입 차단)
+            elif velocity_x < 0: # 왼쪽으로 이동하다 벽에 닿음
+                player.left = block.right  # x좌표를 블록의 오른쪽 모서리에 맞춤
 
- velocity_y += gravity
- player.y += int(velocity_y)
- is_grounded = False
+    # 2. Y축 독립 이동 및 중력 적용
+    velocity_y += gravity
+    player.y += int(velocity_y)
+    is_grounded = False  # 일단 공중에 뜬 것으로 가정
 
- for block in platforms:
- if player.colliderect(block):
- if velocity_y > 0:
- player.bottom = block.top
- velocity_y = 0.0
- is_grounded = True
- elif velocity_y < 0:
- player.top = block.bottom
- velocity_y = 0.0
+    for block in platforms:
+        if player.colliderect(block):
+            if velocity_y > 0:  # 아래로 떨어지며 블록 윗면에 닿음 -> 착지 성공!
+                player.bottom = block.top
+                velocity_y = 0.0
+                is_grounded = True
+            elif velocity_y < 0: # 위로 점프하다 블록 아랫면에 머리가 닿음 -> 하강 전환!
+                player.top = block.bottom
+                velocity_y = 0.0
 
- player_hitbox = get_padded_rect(player, PLAYER_PAD)
- for spike in hazards:
- if player_hitbox.colliderect(get_padded_rect(spike, HAZARD_PAD)):
- player.x, player.y = SPAWN_POINT
- velocity_y = 0.0
- break
+    # 3. 위험 장애물 충돌 검사 (패딩이 적용된 축소 사각형끼리 비교)
+    player_hitbox = get_padded_rect(player, PLAYER_PAD)
+    for spike in hazards:
+        spike_hitbox = get_padded_rect(spike, HAZARD_PAD)
+        # 겉 껍질이 닿았더라도 내부 축소 박스가 겹치지 않으면 살아남음
+        if player_hitbox.colliderect(spike_hitbox):
+            # 사망 시 초기 스폰 지점으로 위치 및 물리 상태 리셋
+            player.x, player.y = SPAWN_POINT
+            velocity_y = 0.0
+            break
 
- screen.fill((20, 20, 28))
- for block in platforms: pygame.draw.rect(screen, (52, 152, 219), block)
- for spike in hazards: pygame.draw.rect(screen, (231, 76, 60), spike)
- pygame.draw.rect(screen, (241, 196, 15), player)
+    # 4. 화면 그리기
+    screen.fill((20, 20, 28))
+    for block in platforms: pygame.draw.rect(screen, (52, 152, 219), block)
+    for spike in hazards: pygame.draw.rect(screen, (231, 76, 60), spike)
+    pygame.draw.rect(screen, (241, 196, 15), player)
 
- if debug_mode:
- pygame.draw.rect(screen, (255, 255, 255), player_hitbox, 1)
- for spike in hazards:
- pygame.draw.rect(screen, (255, 255, 255), get_padded_rect(spike, HAZARD_PAD), 1)
+    # 디버그 모드가 켜진 경우, 하얀색 실선으로 실제 내부 판정 상자를 시각화
+    if debug_mode:
+        pygame.draw.rect(screen, (255, 255, 255), player_hitbox, 1)
+        for spike in hazards:
+            pygame.draw.rect(screen, (255, 255, 255), get_padded_rect(spike, HAZARD_PAD), 1)
 
- pygame.display.flip()
- clock.tick(60)
+    pygame.display.flip()
+    clock.tick(60)
 
 pygame.quit()
 sys.exit()</code></pre>
@@ -1109,7 +996,7 @@ sys.exit()</code></pre>
  </section>
 
  <!-- ========================================== -->
- <!-- SECTION: CHAPTER 03 (FULL CODE & MISSIONS) -->
+ <!-- SECTION: CHAPTER 03 (WITH DETAILED MATH COMMENTS) -->
  <!-- ========================================== -->
  <section id="chapter-03" class="chapter-container">
  <div class="chapter-header">
@@ -1129,7 +1016,8 @@ sys.exit()</code></pre>
 
  <div class="code-container">
  <div class="code-header"><span class="code-title"><span>🐍</span> step3_csv_camera.py</span><button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button></div>
- <pre><code class="language-python">import pygame
+ <pre><code class="language-python"># [3차시] 2차원 행렬(CSV)을 이용한 지형 데이터 파싱 및 카메라 좌표 평행이동 변환
+import pygame
 import sys
 import os
 import csv
@@ -1141,35 +1029,49 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("3차시: CSV 타일맵 파서와 횡스크롤 카메라")
 clock = pygame.time.Clock()
 
+# 한 타일의 가로/세로 길이 (픽셀 단위의 기본 격자 간격)
 TILE_SIZE = 40
+
 platforms = []
 hazards = []
 goal_rect = None
 spawn_point = (100, 100)
 
 def load_map_from_csv(filepath):
- global platforms, hazards, goal_rect, spawn_point
- platforms.clear()
- hazards.clear()
- goal_rect = None
- spawn_point = (100, 100)
+    """
+    [이산 행렬 좌표 -> 연속 공간 좌표 변환 공식]
+    행렬의 인덱스 (행: r, 열: c)가 주어졌을 때, 픽셀 좌표 (x, y)는:
+    x = c * TILE_SIZE
+    y = r * TILE_SIZE
+    """
+    global platforms, hazards, goal_rect, spawn_point
+    platforms.clear()
+    hazards.clear()
+    goal_rect = None
+    spawn_point = (100, 100)
 
- if not os.path.exists(filepath):
- platforms.append(pygame.Rect(0, 380, SCREEN_WIDTH * 2, 70))
- return
+    if not os.path.exists(filepath):
+        platforms.append(pygame.Rect(0, 380, SCREEN_WIDTH * 2, 70))
+        return
 
- with open(filepath, mode="r", encoding="utf-8-sig") as f:
- reader = csv.reader(f)
- for r, row in enumerate(reader):
- for c, raw_val in enumerate(row):
- val = raw_val.strip()
- x = c * TILE_SIZE
- y = r * TILE_SIZE
- if val == "1": platforms.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
- elif val == "2": hazards.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
- elif val.upper() == "P": spawn_point = (x, y)
- elif val.upper() == "G": goal_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE * 2)
+    # UTF-8 BOM 인코딩을 고려하여 파일 읽기
+    with open(filepath, mode="r", encoding="utf-8-sig") as f:
+        reader = csv.reader(f)
+        for r, row in enumerate(reader):
+            for c, raw_val in enumerate(row):
+                val = raw_val.strip()
+                x = c * TILE_SIZE
+                y = r * TILE_SIZE
+                if val == "1":       # 타일 1: 안전 발판
+                    platforms.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
+                elif val == "2":     # 타일 2: 위험 가시
+                    hazards.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
+                elif val.upper() == "P":  # 문자 P: 플레이어 스폰 위치 벡터
+                    spawn_point = (x, y)
+                elif val.upper() == "G":  # 문자 G: 클리어 골인 포탈
+                    goal_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE * 2)
 
+# 외부 맵 파일 로드
 load_map_from_csv("stage1.csv")
 
 player = pygame.Rect(spawn_point[0], spawn_point[1], TILE_SIZE, TILE_SIZE)
@@ -1181,86 +1083,99 @@ is_grounded = False
 is_cleared = False
 
 def get_padded_rect(rect, pad):
- return pygame.Rect(rect.x + pad, rect.y + pad, rect.width - 2 * pad, rect.height - 2 * pad)
+    return pygame.Rect(rect.x + pad, rect.y + pad, rect.width - 2 * pad, rect.height - 2 * pad)
 
 running = True
 while running:
- for event in pygame.event.get():
- if event.type == pygame.QUIT: running = False
- if event.type == pygame.KEYDOWN:
- if event.key == pygame.K_SPACE and is_grounded:
- velocity_y = jump_power
- is_grounded = False
- if event.key == pygame.K_r:
- player.x, player.y = spawn_point
- velocity_y = 0.0
- is_cleared = False
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT: running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and is_grounded:
+                velocity_y = jump_power
+                is_grounded = False
+            if event.key == pygame.K_r:
+                player.x, player.y = spawn_point
+                velocity_y = 0.0
+                is_cleared = False
 
- if not is_cleared:
- keys = pygame.key.get_pressed()
- velocity_x = 0
- if keys[pygame.K_LEFT]: velocity_x = -speed
- if keys[pygame.K_RIGHT]: velocity_x = speed
+    if not is_cleared:
+        # 1. 플레이어 수평 이동 및 충돌
+        keys = pygame.key.get_pressed()
+        velocity_x = 0
+        if keys[pygame.K_LEFT]: velocity_x = -speed
+        if keys[pygame.K_RIGHT]: velocity_x = speed
 
- player.x += velocity_x
- for block in platforms:
- if player.colliderect(block):
- if velocity_x > 0: player.right = block.left
- elif velocity_x < 0: player.left = block.right
+        player.x += velocity_x
+        for block in platforms:
+            if player.colliderect(block):
+                if velocity_x > 0: player.right = block.left
+                elif velocity_x < 0: player.left = block.right
 
- velocity_y += gravity
- player.y += int(velocity_y)
- is_grounded = False
+        # 2. 플레이어 수직 이동 및 중력
+        velocity_y += gravity
+        player.y += int(velocity_y)
+        is_grounded = False
 
- for block in platforms:
- if player.colliderect(block):
- if velocity_y > 0:
- player.bottom = block.top
- velocity_y = 0.0
- is_grounded = True
- elif velocity_y < 0:
- player.top = block.bottom
- velocity_y = 0.0
+        for block in platforms:
+            if player.colliderect(block):
+                if velocity_y > 0:
+                    player.bottom = block.top
+                    velocity_y = 0.0
+                    is_grounded = True
+                elif velocity_y < 0:
+                    player.top = block.bottom
+                    velocity_y = 0.0
 
- player_hitbox = get_padded_rect(player, 4)
- for spike in hazards:
- if player_hitbox.colliderect(get_padded_rect(spike, 6)):
- player.x, player.y = spawn_point
- velocity_y = 0.0
- break
+        # 3. 위험물 및 낙사
+        player_hitbox = get_padded_rect(player, 4)
+        for spike in hazards:
+            if player_hitbox.colliderect(get_padded_rect(spike, 6)):
+                player.x, player.y = spawn_point
+                velocity_y = 0.0
+                break
 
- if player.y > SCREEN_HEIGHT + 100:
- player.x, player.y = spawn_point
- velocity_y = 0.0
+        if player.y > SCREEN_HEIGHT + 100:
+            player.x, player.y = spawn_point
+            velocity_y = 0.0
 
- if goal_rect and player.colliderect(goal_rect):
- is_cleared = True
+        if goal_rect and player.colliderect(goal_rect):
+            is_cleared = True
 
- camera_x = max(0, player.centerx - SCREEN_WIDTH // 2)
- screen.fill((20, 24, 34))
+    # 4. [카메라 오프셋 계산: 기하학적 평행이동 변환]
+    # 플레이어가 화면 중앙선(SCREEN_WIDTH / 2)을 넘어갈 때만 카메라가 우측으로 추적
+    # camera_x = max(0, player_center_x - 화면반너비)
+    camera_x = max(0, player.centerx - SCREEN_WIDTH // 2)
 
- for block in platforms:
- screen_rect = pygame.Rect(block.x - camera_x, block.y, block.width, block.height)
- if -TILE_SIZE <= screen_rect.x <= SCREEN_WIDTH: pygame.draw.rect(screen, (41, 128, 185), screen_rect)
+    # 5. 화면 렌더링 (월드 좌표 -> 화면 좌표 변환 공식: screen_x = world_x - camera_x)
+    screen.fill((20, 24, 34))
 
- for spike in hazards:
- screen_rect = pygame.Rect(spike.x - camera_x, spike.y, spike.width, spike.height)
- if -TILE_SIZE <= screen_rect.x <= SCREEN_WIDTH: pygame.draw.rect(screen, (231, 76, 60), screen_rect)
+    for block in platforms:
+        # 모든 월드 오브젝트의 x좌표에서 카메라 변위(camera_x)를 감산하여 스크린 위치 결정
+        screen_rect = pygame.Rect(block.x - camera_x, block.y, block.width, block.height)
+        # 화면 내부 [-TILE_SIZE, SCREEN_WIDTH]에 들어오는 객체만 렌더링 (화면 밖 렌더링 제외 최적화)
+        if -TILE_SIZE <= screen_rect.x <= SCREEN_WIDTH:
+            pygame.draw.rect(screen, (41, 128, 185), screen_rect)
 
- if goal_rect:
- screen_rect = pygame.Rect(goal_rect.x - camera_x, goal_rect.y, goal_rect.width, goal_rect.height)
- pygame.draw.rect(screen, (46, 204, 113), screen_rect)
+    for spike in hazards:
+        screen_rect = pygame.Rect(spike.x - camera_x, spike.y, spike.width, spike.height)
+        if -TILE_SIZE <= screen_rect.x <= SCREEN_WIDTH:
+            pygame.draw.rect(screen, (231, 76, 60), screen_rect)
 
- screen_player = pygame.Rect(player.x - camera_x, player.y, player.width, player.height)
- pygame.draw.rect(screen, (241, 196, 15), screen_player)
+    if goal_rect:
+        screen_rect = pygame.Rect(goal_rect.x - camera_x, goal_rect.y, goal_rect.width, goal_rect.height)
+        pygame.draw.rect(screen, (46, 204, 113), screen_rect)
 
- if is_cleared:
- font = pygame.font.SysFont(None, 64)
- text = font.render("STAGE CLEAR! (Press R to Restart)", True, (255, 255, 255))
- screen.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2 - 30))
+    # 플레이어 화면 위치 역시 평행이동 적용
+    screen_player = pygame.Rect(player.x - camera_x, player.y, player.width, player.height)
+    pygame.draw.rect(screen, (241, 196, 15), screen_player)
 
- pygame.display.flip()
- clock.tick(60)
+    if is_cleared:
+        font = pygame.font.SysFont(None, 64)
+        text = font.render("STAGE CLEAR! (Press R to Restart)", True, (255, 255, 255))
+        screen.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2 - 30))
+
+    pygame.display.flip()
+    clock.tick(60)
 
 pygame.quit()
 sys.exit()</code></pre>
@@ -1272,7 +1187,7 @@ sys.exit()</code></pre>
  </section>
 
  <!-- ========================================== -->
- <!-- SECTION: CHAPTER 04 (FULL CODE & MISSIONS) -->
+ <!-- SECTION: CHAPTER 04 (WITH DETAILED MATH COMMENTS) -->
  <!-- ========================================== -->
  <section id="chapter-04" class="chapter-container">
  <div class="chapter-header">
@@ -1291,7 +1206,8 @@ sys.exit()</code></pre>
 
  <div class="code-container">
  <div class="code-header"><span class="code-title"><span>🐍</span> step4_moving_platform_coyote.py</span><button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button></div>
- <pre><code class="language-python">import pygame
+ <pre><code class="language-python"># [4차시] 상대 운동(갈릴레이 변환)을 이용한 움직이는 발판과 이산 타이머(코요테 타임)
+import pygame
 import sys
 
 pygame.init()
@@ -1308,104 +1224,122 @@ speed = 6
 velocity_y = 0.0
 gravity = 0.8
 jump_power = -14.0
-spring_power = -21.0
+spring_power = -21.0  # 점프대 반발력 (일반 점프보다 1.5배 강력한 초기 상향 속도)
 is_grounded = False
 
+# [코요테 타임] 발판을 벗어난 직후에도 점프를 허용하는 유예 시간 (프레임 단위)
 COYOTE_MAX = 6
 coyote_timer = 0
 
 static_platforms = [
- pygame.Rect(0, 380, 200, 70),
- pygame.Rect(600, 380, 200, 70),
- pygame.Rect(450, 180, 120, 25)
+    pygame.Rect(0, 380, 200, 70),
+    pygame.Rect(600, 380, 200, 70),
+    pygame.Rect(450, 180, 120, 25)
 ]
 springs = [pygame.Rect(120, 355, 50, 25)]
 
 class MovingPlatform:
- def __init__(self, x, y, width, height, move_range_x, move_speed):
- self.rect = pygame.Rect(x, y, width, height)
- self.start_x = x
- self.end_x = x + move_range_x
- self.speed_x = move_speed
+    """수평 닫힌 구간 [start_x, end_x] 사이를 일정한 속도로 왕복 운동하는 발판"""
+    def __init__(self, x, y, width, height, move_range_x, move_speed):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.start_x = x
+        self.end_x = x + move_range_x
+        self.speed_x = move_speed
 
- def update(self):
- self.rect.x += self.speed_x
- if self.rect.x >= self.end_x or self.rect.x <= self.start_x:
- self.speed_x *= -1
- return self.speed_x * -1
- return self.speed_x
+    def update(self):
+        # 발판의 위치 갱신: x(t+1) = x(t) + v_platform
+        self.rect.x += self.speed_x
+        # 경계 도달 시 속도 부호 반전 (v <- -v)
+        if self.rect.x >= self.end_x or self.rect.x <= self.start_x:
+            self.speed_x *= -1
+            return self.speed_x * -1  # 방향 반전 직전의 1프레임 변위 반환
+        return self.speed_x
 
 moving_platform = MovingPlatform(220, 300, 100, 25, move_range_x=200, move_speed=3)
 
 running = True
 while running:
- for event in pygame.event.get():
- if event.type == pygame.QUIT: running = False
- if event.type == pygame.KEYDOWN:
- if event.key == pygame.K_SPACE and coyote_timer > 0:
- velocity_y = jump_power
- coyote_timer = 0
- is_grounded = False
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT: running = False
+        if event.type == pygame.KEYDOWN:
+            # 점프 가능 조건: 바닥에 닿아있거나 OR 코요테 타이머가 아직 0보다 클 때
+            if event.key == pygame.K_SPACE and coyote_timer > 0:
+                velocity_y = jump_power
+                coyote_timer = 0      # 점프 기회를 소모했으므로 타이머 리셋
+                is_grounded = False
 
- plat_dx = moving_platform.update()
+    # 1. 움직이는 발판 위치 갱신 및 이번 프레임의 발판 변위(plat_dx) 획득
+    plat_dx = moving_platform.update()
 
- keys = pygame.key.get_pressed()
- velocity_x = 0
- if keys[pygame.K_LEFT]: velocity_x = -speed
- if keys[pygame.K_RIGHT]: velocity_x = speed
+    # 2. 플레이어 수평 이동
+    keys = pygame.key.get_pressed()
+    velocity_x = 0
+    if keys[pygame.K_LEFT]: velocity_x = -speed
+    if keys[pygame.K_RIGHT]: velocity_x = speed
 
- player.x += velocity_x
- for block in static_platforms:
- if player.colliderect(block):
- if velocity_x > 0: player.right = block.left
- elif velocity_x < 0: player.left = block.right
+    player.x += velocity_x
+    for block in static_platforms:
+        if player.colliderect(block):
+            if velocity_x > 0: player.right = block.left
+            elif velocity_x < 0: player.left = block.right
 
- velocity_y += gravity
- player.y += int(velocity_y)
- is_grounded = False
+    # 3. 중력 적용 및 수직 충돌
+    velocity_y += gravity
+    player.y += int(velocity_y)
+    is_grounded = False
 
- for block in static_platforms:
- if player.colliderect(block):
- if velocity_y > 0:
- player.bottom = block.top
- velocity_y = 0.0
- is_grounded = True
- elif velocity_y < 0:
- player.top = block.bottom
- velocity_y = 0.0
+    # 고정 발판 착지
+    for block in static_platforms:
+        if player.colliderect(block):
+            if velocity_y > 0:
+                player.bottom = block.top
+                velocity_y = 0.0
+                is_grounded = True
+            elif velocity_y < 0:
+                player.top = block.bottom
+                velocity_y = 0.0
 
- if player.colliderect(moving_platform.rect):
- if velocity_y > 0 and player.bottom - int(velocity_y) <= moving_platform.rect.top + 10:
- player.bottom = moving_platform.rect.top
- velocity_y = 0.0
- is_grounded = True
- player.x += plat_dx
+    # [상대 좌표 동기화] 움직이는 발판 위에 서 있는 경우
+    if player.colliderect(moving_platform.rect):
+        # 플레이어의 발이 발판 윗면에 닿았을 때
+        if velocity_y > 0 and player.bottom - int(velocity_y) <= moving_platform.rect.top + 10:
+            player.bottom = moving_platform.rect.top
+            velocity_y = 0.0
+            is_grounded = True
+            # 물리 법칙: 발판이 움직인 변위만큼 탑승자도 함께 평행이동함 (x_player <- x_player + plat_dx)
+            player.x += plat_dx
 
- for spring in springs:
- if player.colliderect(spring) and velocity_y > 0:
- player.bottom = spring.top
- velocity_y = spring_power
- is_grounded = False
+    # 점프대(트램펄린) 충돌 처리
+    for spring in springs:
+        if player.colliderect(spring) and velocity_y > 0:
+            player.bottom = spring.top
+            velocity_y = spring_power  # 즉시 강력한 상향 탄성 속도 부여
+            is_grounded = False
 
- if is_grounded: coyote_timer = COYOTE_MAX
- else: coyote_timer = max(0, coyote_timer - 1)
+    # 4. [코요테 타이머 수열 제어]
+    # 바닥에 닿아있으면 타이머를 최대치(6)로 유지하고, 허공에 뜨면 매 프레임 1씩 감소
+    if is_grounded:
+        coyote_timer = COYOTE_MAX
+    else:
+        coyote_timer = max(0, coyote_timer - 1)
 
- if player.y > SCREEN_HEIGHT + 50:
- player.x, player.y = SPAWN_POINT
- velocity_y = 0.0
+    if player.y > SCREEN_HEIGHT + 50:
+        player.x, player.y = SPAWN_POINT
+        velocity_y = 0.0
 
- screen.fill((22, 24, 32))
- for block in static_platforms: pygame.draw.rect(screen, (52, 152, 219), block)
- pygame.draw.rect(screen, (26, 188, 156), moving_platform.rect)
- for spring in springs: pygame.draw.rect(screen, (155, 89, 182), spring)
- pygame.draw.rect(screen, (241, 196, 15), player)
+    # 5. 화면 렌더링
+    screen.fill((22, 24, 32))
+    for block in static_platforms: pygame.draw.rect(screen, (52, 152, 219), block)
+    pygame.draw.rect(screen, (26, 188, 156), moving_platform.rect)
+    for spring in springs: pygame.draw.rect(screen, (155, 89, 182), spring)
+    pygame.draw.rect(screen, (241, 196, 15), player)
 
- font = pygame.font.SysFont(None, 24)
- ui_text = font.render(f"Coyote: {coyote_timer} / Grounded: {is_grounded}", True, (200, 200, 200))
- screen.blit(ui_text, (20, 20))
+    font = pygame.font.SysFont(None, 24)
+    ui_text = font.render(f"Coyote: {coyote_timer} / Grounded: {is_grounded}", True, (200, 200, 200))
+    screen.blit(ui_text, (20, 20))
 
- pygame.display.flip()
- clock.tick(60)
+    pygame.display.flip()
+    clock.tick(60)
 
 pygame.quit()
 sys.exit()</code></pre>
@@ -1417,7 +1351,7 @@ sys.exit()</code></pre>
  </section>
 
  <!-- ========================================== -->
- <!-- SECTION: CHAPTER 05 (FULL CODE & MISSIONS) -->
+ <!-- SECTION: CHAPTER 05 (WITH DETAILED MATH COMMENTS) -->
  <!-- ========================================== -->
  <section id="chapter-05" class="chapter-container">
  <div class="chapter-header">
@@ -1447,7 +1381,8 @@ sys.exit()</code></pre>
 
  <div class="code-container">
  <div class="code-header"><span class="code-title"><span>🐍</span> step5_shake_particle_synth.py</span><button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button></div>
- <pre><code class="language-python">import pygame
+ <pre><code class="language-python"># [5차시] 극좌표계(삼각비)를 이용한 파티클 분산과 지수 감쇠 진동 화면 흔들림
+import pygame
 import sys
 import random
 import math
@@ -1462,42 +1397,49 @@ pygame.display.set_caption("5차시: 화면 흔들림, 파티클, 사운드 연�
 clock = pygame.time.Clock()
 
 def generate_beep_sound(freq_start, freq_end, duration_ms, wave_type="square"):
- sample_rate = 44100
- n_samples = int(sample_rate * (duration_ms / 1000.0))
- buf = array.array('h')
- for i in range(n_samples):
- t = i / n_samples
- freq = freq_start + (freq_end - freq_start) * t
- phase = 2.0 * math.pi * freq * (i / sample_rate)
- val = 16000 if math.sin(phase) >= 0 else -16000
- decay = (1.0 - t)
- buf.append(int(val * decay))
- return pygame.mixer.Sound(buf)
+    """
+    [삼각함수 음파 생성기]
+    주파수 f를 가진 소리는 사인파 y = A * sin(2 * pi * f * t)로 표현됨
+    외부 wav 파일 없이 수학적 파동 함수를 직접 연산하여 8비트 사운드 버퍼 생성
+    """
+    sample_rate = 44100  # 1초당 샘플 수 (44.1kHz)
+    n_samples = int(sample_rate * (duration_ms / 1000.0))
+    buf = array.array('h')
+    for i in range(n_samples):
+        t = i / n_samples
+        freq = freq_start + (freq_end - freq_start) * t  # 시간에 따른 주파수 선형 보간
+        phase = 2.0 * math.pi * freq * (i / sample_rate) # 위상각 세타 계산
+        val = 16000 if math.sin(phase) >= 0 else -16000 # 구형파(Square wave) 양수/음수 이진화
+        decay = (1.0 - t)                                # 선형 감쇠 (음량이 점차 줄어듦)
+        buf.append(int(val * decay))
+    return pygame.mixer.Sound(buf)
 
 snd_jump = generate_beep_sound(200, 600, 120, "square")
 
 class Particle:
- def __init__(self, x, y, color):
- self.x, self.y = x, y
- self.color = color
- self.size = random.randint(6, 12)
- angle = random.uniform(0, 2 * math.pi)
- speed = random.uniform(3, 8)
- self.vx = math.cos(angle) * speed
- self.vy = math.sin(angle) * speed - 2
- self.gravity = 0.4
- self.life = 1.0
+    """[극좌표계 -> 직교좌표계 변환] 임의의 각도(세타)와 속력(v)으로 튀어나가는 미세 파티클"""
+    def __init__(self, x, y, color):
+        self.x, self.y = x, y
+        self.color = color
+        self.size = random.randint(6, 12)
+        angle = random.uniform(0, 2 * math.pi)  # 0부터 2pi 사이의 무작위 라디안 각도 세타
+        speed = random.uniform(3, 8)            # 스칼라 속력 v
+        # 극좌표를 데카르트 성분 벡터로 분해: vx = v*cos(세타), vy = v*sin(세타)
+        self.vx = math.cos(angle) * speed
+        self.vy = math.sin(angle) * speed - 2   # 살짝 위쪽으로 솟구치도록 y속도 오프셋
+        self.gravity = 0.4
+        self.life = 1.0  # 생명력 1.0에서 시작하여 0.0으로 감소
 
- def update(self):
- self.vy += self.gravity
- self.x += self.vx
- self.y += self.vy
- self.life -= 0.03
- self.size = max(0, self.size - 0.15)
+    def update(self):
+        self.vy += self.gravity  # 파티클에도 작은 중력 가속도 적용
+        self.x += self.vx
+        self.y += self.vy
+        self.life -= 0.03        # 매 프레임 수명 감소
+        self.size = max(0, self.size - 0.15)  # 시간에 따라 크기 축소 (닮음비 축소)
 
- def draw(self, surface, ox, oy):
- if self.life > 0 and self.size > 0:
- pygame.draw.rect(surface, self.color, (int(self.x + ox), int(self.y + oy), int(self.size), int(self.size)))
+    def draw(self, surface, ox, oy):
+        if self.life > 0 and self.size > 0:
+            pygame.draw.rect(surface, self.color, (int(self.x + ox), int(self.y + oy), int(self.size), int(self.size)))
 
 SPAWN_POINT = (80, 250)
 player = pygame.Rect(SPAWN_POINT[0], SPAWN_POINT[1], 40, 40)
@@ -1514,66 +1456,73 @@ hazards = [pygame.Rect(450, 350, 40, 30)]
 
 running = True
 while running:
- for event in pygame.event.get():
- if event.type == pygame.QUIT: running = False
- if event.type == pygame.KEYDOWN:
- if event.key == pygame.K_SPACE and is_grounded:
- velocity_y = jump_power
- is_grounded = False
- snd_jump.play()
- for _ in range(6): particles.append(Particle(player.centerx, player.bottom, (180, 180, 180)))
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT: running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and is_grounded:
+                velocity_y = jump_power
+                is_grounded = False
+                snd_jump.play()
+                # 점프 시 발밑에 6개의 작은 먼지 파티클 생성
+                for _ in range(6): particles.append(Particle(player.centerx, player.bottom, (180, 180, 180)))
 
- keys = pygame.key.get_pressed()
- velocity_x = 0
- if keys[pygame.K_LEFT]: velocity_x = -speed
- if keys[pygame.K_RIGHT]: velocity_x = speed
+    keys = pygame.key.get_pressed()
+    velocity_x = 0
+    if keys[pygame.K_LEFT]: velocity_x = -speed
+    if keys[pygame.K_RIGHT]: velocity_x = speed
 
- player.x += velocity_x
- for block in platforms:
- if player.colliderect(block):
- if velocity_x > 0: player.right = block.left
- elif velocity_x < 0: player.left = block.right
+    player.x += velocity_x
+    for block in platforms:
+        if player.colliderect(block):
+            if velocity_x > 0: player.right = block.left
+            elif velocity_x < 0: player.left = block.right
 
- velocity_y += gravity
- player.y += int(velocity_y)
- is_grounded = False
+    velocity_y += gravity
+    player.y += int(velocity_y)
+    is_grounded = False
 
- for block in platforms:
- if player.colliderect(block):
- if velocity_y > 0:
- player.bottom = block.top
- velocity_y = 0.0
- is_grounded = True
- elif velocity_y < 0:
- player.top = block.bottom
- velocity_y = 0.0
+    for block in platforms:
+        if player.colliderect(block):
+            if velocity_y > 0:
+                player.bottom = block.top
+                velocity_y = 0.0
+                is_grounded = True
+            elif velocity_y < 0:
+                player.top = block.bottom
+                velocity_y = 0.0
 
- for spike in hazards:
- if player.colliderect(spike):
- screen_shake = 16.0
- for _ in range(25): particles.append(Particle(player.centerx, player.centery, (241, 196, 15)))
- player.x, player.y = SPAWN_POINT
- velocity_y = 0.0
- break
+    # 가시 충돌 시 폭발 파티클 및 강한 진동 트리거
+    for spike in hazards:
+        if player.colliderect(spike):
+            screen_shake = 16.0  # 진폭 A = 16px의 진동 부여
+            # 캐릭터 위치에서 25개의 파편이 360도로 폭발 분산
+            for _ in range(25): particles.append(Particle(player.centerx, player.centery, (241, 196, 15)))
+            player.x, player.y = SPAWN_POINT
+            velocity_y = 0.0
+            break
 
- for p in particles[:]:
- p.update()
- if p.life <= 0 or p.size <= 0: particles.remove(p)
+    # 파티클 업데이트 및 수명 다한 파티클 리스트에서 제거
+    for p in particles[:]:
+        p.update()
+        if p.life <= 0 or p.size <= 0: particles.remove(p)
 
- ox = oy = 0
- if screen_shake > 0:
- ox = random.uniform(-screen_shake, screen_shake)
- oy = random.uniform(-screen_shake, screen_shake)
- screen_shake = max(0.0, screen_shake * 0.9 - 0.2)
+    # [지수 감쇠 진동 (Exponential Decay)]
+    # 진동 세기: S(t+1) = S(t) * 0.9 - 0.2 (등비수열 형태의 감쇠로 잔여 진동이 부드럽게 0으로 수렴)
+    ox = oy = 0
+    if screen_shake > 0:
+        ox = random.uniform(-screen_shake, screen_shake)
+        oy = random.uniform(-screen_shake, screen_shake)
+        screen_shake = max(0.0, screen_shake * 0.9 - 0.2)
 
- screen.fill((20, 22, 30))
- for block in platforms: pygame.draw.rect(screen, (52, 152, 219), (block.x + ox, block.y + oy, block.width, block.height))
- for spike in hazards: pygame.draw.rect(screen, (231, 76, 60), (spike.x + ox, spike.y + oy, spike.width, spike.height))
- pygame.draw.rect(screen, (241, 196, 15), (player.x + ox, player.y + oy, player.width, player.height))
- for p in particles: p.draw(screen, ox, oy)
+    # 화면 렌더링 시 진동 오프셋 (ox, oy)를 모든 대상에 더해 화면 흔들림 효과 연출
+    screen.fill((20, 22, 30))
+    for block in platforms: pygame.draw.rect(screen, (52, 152, 219), (block.x + ox, block.y + oy, block.width, block.height))
+    for spike in hazards: pygame.draw.rect(screen, (231, 76, 60), (spike.x + ox, spike.y + oy, spike.width, spike.height))
+    pygame.draw.rect(screen, (241, 196, 15), (player.x + ox, player.y + oy, player.width, player.height))
+    for p in particles: p.draw(screen, ox, oy)
 
- pygame.display.flip()
- clock.tick(60)
+    pygame.display.flip()
+    clock.tick(60)
 
 pygame.quit()
 sys.exit()</code></pre>
@@ -1585,7 +1534,7 @@ sys.exit()</code></pre>
  </section>
 
  <!-- ========================================== -->
- <!-- SECTION: CHAPTER 06 (FULL CODE & MISSIONS) -->
+ <!-- SECTION: CHAPTER 06 (WITH DETAILED MATH COMMENTS) -->
  <!-- ========================================== -->
  <section id="chapter-06" class="chapter-container">
  <div class="chapter-header">
@@ -1603,7 +1552,8 @@ sys.exit()</code></pre>
 
  <div class="code-container">
  <div class="code-header"><span class="code-title"><span>🐍</span> main.py (6차시 완성본)</span><button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button></div>
- <pre><code class="language-python">import pygame
+ <pre><code class="language-python"># [6차시] 유한 상태 머신(FSM: 상태 전이도)을 이용한 다중 스테이지 게임 루프 완성
+import pygame
 import sys
 import os
 import csv
@@ -1619,38 +1569,41 @@ font_title = pygame.font.SysFont(None, 64)
 font_ui = pygame.font.SysFont(None, 32)
 TILE_SIZE = 40
 
+# --- 유한 상태 머신 (FSM: Finite State Machine) 상수 정의 ---
+# 수학의 상태 집합 S = {START, PLAYING, CLEAR, GAME_OVER, ALL_CLEAR}
 STATE_START, STATE_PLAYING, STATE_CLEAR, STATE_GAME_OVER, STATE_ALL_CLEAR = range(5)
 current_state = STATE_START
 current_stage_idx = 0
-stage_files = ["stage1.csv", "stage2.csv", "stage3.csv"]
+stage_files = ["stage1.csv", "stage2.csv", "stage3.csv"]  # 다중 스테이지 배열
 
 platforms, hazards = [], []
 goal_rect = None
 spawn_point = (100, 100)
-death_count = 0
+death_count = 0  # 사망 횟수 누적 정수 변수
 
 def load_map_from_csv(filepath):
- global platforms, hazards, goal_rect, spawn_point
- platforms.clear()
- hazards.clear()
- goal_rect = None
- spawn_point = (100, 100)
+    """지정된 CSV 파일 경로를 열어 월드 블록 좌표를 새로 구성"""
+    global platforms, hazards, goal_rect, spawn_point
+    platforms.clear()
+    hazards.clear()
+    goal_rect = None
+    spawn_point = (100, 100)
 
- if not os.path.exists(filepath):
- platforms.append(pygame.Rect(0, 380, SCREEN_WIDTH * 2, 70))
- return
+    if not os.path.exists(filepath):
+        platforms.append(pygame.Rect(0, 380, SCREEN_WIDTH * 2, 70))
+        return
 
- with open(filepath, mode="r", encoding="utf-8-sig") as f:
- reader = csv.reader(f)
- for r, row in enumerate(reader):
- for c, raw_val in enumerate(row):
- val = raw_val.strip()
- x = c * TILE_SIZE
- y = r * TILE_SIZE
- if val == "1": platforms.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
- elif val == "2": hazards.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
- elif val.upper() == "P": spawn_point = (x, y)
- elif val.upper() == "G": goal_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE * 2)
+    with open(filepath, mode="r", encoding="utf-8-sig") as f:
+        reader = csv.reader(f)
+        for r, row in enumerate(reader):
+            for c, raw_val in enumerate(row):
+                val = raw_val.strip()
+                x = c * TILE_SIZE
+                y = r * TILE_SIZE
+                if val == "1": platforms.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
+                elif val == "2": hazards.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
+                elif val.upper() == "P": spawn_point = (x, y)
+                elif val.upper() == "G": goal_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE * 2)
 
 player = pygame.Rect(0, 0, TILE_SIZE, TILE_SIZE)
 speed = 6
@@ -1660,123 +1613,142 @@ jump_power = -15.0
 is_grounded = False
 
 def reset_player():
- global velocity_y, is_grounded
- player.x, player.y = spawn_point
- velocity_y = 0.0
- is_grounded = False
+    global velocity_y, is_grounded
+    player.x, player.y = spawn_point
+    velocity_y = 0.0
+    is_grounded = False
 
+# 초기 1단계 맵 로드
 load_map_from_csv(stage_files[current_stage_idx])
 reset_player()
 
 running = True
 while running:
- for event in pygame.event.get():
- if event.type == pygame.QUIT: running = False
- if event.type == pygame.KEYDOWN:
- if current_state == STATE_START and event.key == pygame.K_SPACE:
- current_stage_idx = death_count = 0
- load_map_from_csv(stage_files[current_stage_idx])
- reset_player()
- current_state = STATE_PLAYING
- elif current_state == STATE_PLAYING and event.key == pygame.K_SPACE and is_grounded:
- velocity_y = jump_power
- is_grounded = False
- elif current_state == STATE_CLEAR and event.key == pygame.K_SPACE:
- current_stage_idx += 1
- if current_stage_idx < len(stage_files):
- load_map_from_csv(stage_files[current_stage_idx])
- reset_player()
- current_state = STATE_PLAYING
- else: current_state = STATE_ALL_CLEAR
- elif current_state == STATE_GAME_OVER and event.key == pygame.K_r:
- load_map_from_csv(stage_files[current_stage_idx])
- reset_player()
- current_state = STATE_PLAYING
- elif current_state == STATE_ALL_CLEAR and event.key == pygame.K_SPACE:
- current_state = STATE_START
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT: running = False
+        if event.type == pygame.KEYDOWN:
+            # [상태 전이 1] 타이틀 화면에서 스페이스바 -> 플레이 시작
+            if current_state == STATE_START and event.key == pygame.K_SPACE:
+                current_stage_idx = death_count = 0
+                load_map_from_csv(stage_files[current_stage_idx])
+                reset_player()
+                current_state = STATE_PLAYING
 
- if current_state == STATE_PLAYING:
- keys = pygame.key.get_pressed()
- velocity_x = 0
- if keys[pygame.K_LEFT]: velocity_x = -speed
- if keys[pygame.K_RIGHT]: velocity_x = speed
+            # [상태 전이 2] 플레이 중 스페이스바 -> 점프
+            elif current_state == STATE_PLAYING and event.key == pygame.K_SPACE and is_grounded:
+                velocity_y = jump_power
+                is_grounded = False
 
- player.x += velocity_x
- for block in platforms:
- if player.colliderect(block):
- if velocity_x > 0: player.right = block.left
- elif velocity_x < 0: player.left = block.right
+            # [상태 전이 3] 스테이지 클리어에서 스페이스바 -> 다음 스테이지로 전이
+            elif current_state == STATE_CLEAR and event.key == pygame.K_SPACE:
+                current_stage_idx += 1
+                if current_stage_idx < len(stage_files):
+                    load_map_from_csv(stage_files[current_stage_idx])
+                    reset_player()
+                    current_state = STATE_PLAYING
+                else:
+                    current_state = STATE_ALL_CLEAR  # 모든 맵을 클리어한 최종 종단 상태
 
- velocity_y += gravity
- player.y += int(velocity_y)
- is_grounded = False
+            # [상태 전이 4] 게임 오버에서 R키 -> 현재 스테이지 재도전
+            elif current_state == STATE_GAME_OVER and event.key == pygame.K_r:
+                load_map_from_csv(stage_files[current_stage_idx])
+                reset_player()
+                current_state = STATE_PLAYING
 
- for block in platforms:
- if player.colliderect(block):
- if velocity_y > 0:
- player.bottom = block.top
- velocity_y = 0.0
- is_grounded = True
- elif velocity_y < 0:
- player.top = block.bottom
- velocity_y = 0.0
+            # [상태 전이 5] 최종 올클리어에서 스페이스바 -> 시작 타이틀로 귀환
+            elif current_state == STATE_ALL_CLEAR and event.key == pygame.K_SPACE:
+                current_state = STATE_START
 
- for spike in hazards:
- if player.colliderect(spike):
- death_count += 1
- current_state = STATE_GAME_OVER
- break
+    # --- 현재 상태가 PLAYING일 때만 물리 연산 실행 ---
+    if current_state == STATE_PLAYING:
+        keys = pygame.key.get_pressed()
+        velocity_x = 0
+        if keys[pygame.K_LEFT]: velocity_x = -speed
+        if keys[pygame.K_RIGHT]: velocity_x = speed
 
- if player.y > SCREEN_HEIGHT + 100:
- death_count += 1
- current_state = STATE_GAME_OVER
+        player.x += velocity_x
+        for block in platforms:
+            if player.colliderect(block):
+                if velocity_x > 0: player.right = block.left
+                elif velocity_x < 0: player.left = block.right
 
- if goal_rect and player.colliderect(goal_rect):
- current_state = STATE_CLEAR
+        velocity_y += gravity
+        player.y += int(velocity_y)
+        is_grounded = False
 
- screen.fill((20, 24, 34))
- camera_x = max(0, player.centerx - SCREEN_WIDTH // 2)
+        for block in platforms:
+            if player.colliderect(block):
+                if velocity_y > 0:
+                    player.bottom = block.top
+                    velocity_y = 0.0
+                    is_grounded = True
+                elif velocity_y < 0:
+                    player.top = block.bottom
+                    velocity_y = 0.0
 
- if current_state in [STATE_PLAYING, STATE_CLEAR, STATE_GAME_OVER]:
- for block in platforms:
- r = pygame.Rect(block.x - camera_x, block.y, block.width, block.height)
- if -TILE_SIZE <= r.x <= SCREEN_WIDTH: pygame.draw.rect(screen, (41, 128, 185), r)
- for spike in hazards:
- r = pygame.Rect(spike.x - camera_x, spike.y, spike.width, spike.height)
- if -TILE_SIZE <= r.x <= SCREEN_WIDTH: pygame.draw.rect(screen, (231, 76, 60), r)
- if goal_rect:
- r = pygame.Rect(goal_rect.x - camera_x, goal_rect.y, goal_rect.width, goal_rect.height)
- pygame.draw.rect(screen, (46, 204, 113), r)
- if current_state != STATE_GAME_OVER:
- screen_player = pygame.Rect(player.x - camera_x, player.y, player.width, player.height)
- pygame.draw.rect(screen, (241, 196, 15), screen_player)
+        # 가시 충돌 시 사망 상태로 전이 (GAME_OVER)
+        for spike in hazards:
+            if player.colliderect(spike):
+                death_count += 1
+                current_state = STATE_GAME_OVER
+                break
 
- ui_stage = font_ui.render(f"Stage: {current_stage_idx + 1} / {len(stage_files)}", True, (220, 220, 220))
- ui_deaths = font_ui.render(f"Deaths: {death_count}", True, (231, 76, 60))
- screen.blit(ui_stage, (20, 20))
- screen.blit(ui_deaths, (SCREEN_WIDTH - ui_deaths.get_width() - 20, 20))
+        # 화면 밖 낙사 시 사망 상태로 전이
+        if player.y > SCREEN_HEIGHT + 100:
+            death_count += 1
+            current_state = STATE_GAME_OVER
 
- if current_state == STATE_START:
- t = font_title.render("SQUARE RUNNER", True, (241, 196, 15))
- s = font_ui.render("Press SPACE to Start Game", True, (200, 200, 200))
- screen.blit(t, (SCREEN_WIDTH // 2 - t.get_width() // 2, 140))
- screen.blit(s, (SCREEN_WIDTH // 2 - s.get_width() // 2, 230))
- elif current_state == STATE_CLEAR:
- m = font_title.render(f"STAGE {current_stage_idx + 1} CLEAR!", True, (46, 204, 113))
- screen.blit(m, (SCREEN_WIDTH // 2 - m.get_width() // 2, 140))
- elif current_state == STATE_GAME_OVER:
- m = font_title.render("GAME OVER", True, (231, 76, 60))
- s = font_ui.render("Press R to Retry This Stage", True, (255, 255, 255))
- screen.blit(m, (SCREEN_WIDTH // 2 - m.get_width() // 2, 140))
- screen.blit(s, (SCREEN_WIDTH // 2 - s.get_width() // 2, 230))
- elif current_state == STATE_ALL_CLEAR:
- m = font_title.render("ALL STAGES CLEARED!", True, (241, 196, 15))
- s = font_ui.render(f"Total Deaths: {death_count} | Press SPACE", True, (46, 204, 113))
- screen.blit(m, (SCREEN_WIDTH // 2 - m.get_width() // 2, 140))
- screen.blit(s, (SCREEN_WIDTH // 2 - s.get_width() // 2, 230))
+        # 골인 포탈 접촉 시 클리어 상태로 전이 (CLEAR)
+        if goal_rect and player.colliderect(goal_rect):
+            current_state = STATE_CLEAR
 
- pygame.display.flip()
- clock.tick(60)
+    # --- 화면 렌더링 ---
+    screen.fill((20, 24, 34))
+    camera_x = max(0, player.centerx - SCREEN_WIDTH // 2)
+
+    # 인게임 오브젝트는 플레이/클리어/게임오버 화면에서 유지 렌더링
+    if current_state in [STATE_PLAYING, STATE_CLEAR, STATE_GAME_OVER]:
+        for block in platforms:
+            r = pygame.Rect(block.x - camera_x, block.y, block.width, block.height)
+            if -TILE_SIZE <= r.x <= SCREEN_WIDTH: pygame.draw.rect(screen, (41, 128, 185), r)
+        for spike in hazards:
+            r = pygame.Rect(spike.x - camera_x, spike.y, spike.width, spike.height)
+            if -TILE_SIZE <= r.x <= SCREEN_WIDTH: pygame.draw.rect(screen, (231, 76, 60), r)
+        if goal_rect:
+            r = pygame.Rect(goal_rect.x - camera_x, goal_rect.y, goal_rect.width, goal_rect.height)
+            pygame.draw.rect(screen, (46, 204, 113), r)
+        if current_state != STATE_GAME_OVER:
+            screen_player = pygame.Rect(player.x - camera_x, player.y, player.width, player.height)
+            pygame.draw.rect(screen, (241, 196, 15), screen_player)
+
+        # 상단 HUD 정보 표시
+        ui_stage = font_ui.render(f"Stage: {current_stage_idx + 1} / {len(stage_files)}", True, (220, 220, 220))
+        ui_deaths = font_ui.render(f"Deaths: {death_count}", True, (231, 76, 60))
+        screen.blit(ui_stage, (20, 20))
+        screen.blit(ui_deaths, (SCREEN_WIDTH - ui_deaths.get_width() - 20, 20))
+
+    # UI 오버레이: 각 상태에 따른 안내 텍스트 출력
+    if current_state == STATE_START:
+        t = font_title.render("SQUARE RUNNER", True, (241, 196, 15))
+        s = font_ui.render("Press SPACE to Start Game", True, (200, 200, 200))
+        screen.blit(t, (SCREEN_WIDTH // 2 - t.get_width() // 2, 140))
+        screen.blit(s, (SCREEN_WIDTH // 2 - s.get_width() // 2, 230))
+    elif current_state == STATE_CLEAR:
+        m = font_title.render(f"STAGE {current_stage_idx + 1} CLEAR!", True, (46, 204, 113))
+        screen.blit(m, (SCREEN_WIDTH // 2 - m.get_width() // 2, 140))
+    elif current_state == STATE_GAME_OVER:
+        m = font_title.render("GAME OVER", True, (231, 76, 60))
+        s = font_ui.render("Press R to Retry This Stage", True, (255, 255, 255))
+        screen.blit(m, (SCREEN_WIDTH // 2 - m.get_width() // 2, 140))
+        screen.blit(s, (SCREEN_WIDTH // 2 - s.get_width() // 2, 230))
+    elif current_state == STATE_ALL_CLEAR:
+        m = font_title.render("ALL STAGES CLEARED!", True, (241, 196, 15))
+        s = font_ui.render(f"Total Deaths: {death_count} | Press SPACE", True, (46, 204, 113))
+        screen.blit(m, (SCREEN_WIDTH // 2 - m.get_width() // 2, 140))
+        screen.blit(s, (SCREEN_WIDTH // 2 - s.get_width() // 2, 230))
+
+    pygame.display.flip()
+    clock.tick(60)
 
 pygame.quit()
 sys.exit()</code></pre>
@@ -1791,7 +1763,7 @@ sys.exit()</code></pre>
  </section>
 
  <!-- ========================================== -->
- <!-- SECTION: CHAPTER 07 (SHIELD & KNOCKBACK) -->
+ <!-- SECTION: CHAPTER 07 (WITH DETAILED MATH COMMENTS) -->
  <!-- ========================================== -->
  <section id="chapter-07" class="chapter-container">
  <div class="chapter-header">
@@ -1810,7 +1782,8 @@ sys.exit()</code></pre>
 
  <div class="code-container">
  <div class="code-header"><span class="code-title"><span>🐍</span> step7_shield_knockback.py</span><button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button></div>
- <pre><code class="language-python">import pygame
+ <pre><code class="language-python"># [7차시] 충격량(Impulse) 벡터 부여와 무적 시간(이산 감소 함수)을 이용한 방어막 시스템
+import pygame
 import sys
 import os
 import csv
@@ -1829,29 +1802,29 @@ goal_rect = None
 spawn_point = (100, 100)
 
 def load_map_from_csv(filepath):
- global platforms, hazards, shield_items, goal_rect, spawn_point
- platforms.clear()
- hazards.clear()
- shield_items.clear()
- goal_rect = None
- spawn_point = (100, 100)
+    global platforms, hazards, shield_items, goal_rect, spawn_point
+    platforms.clear()
+    hazards.clear()
+    shield_items.clear()
+    goal_rect = None
+    spawn_point = (100, 100)
 
- if not os.path.exists(filepath):
- platforms.append(pygame.Rect(0, 380, SCREEN_WIDTH * 2, 70))
- return
+    if not os.path.exists(filepath):
+        platforms.append(pygame.Rect(0, 380, SCREEN_WIDTH * 2, 70))
+        return
 
- with open(filepath, mode="r", encoding="utf-8-sig") as f:
- reader = csv.reader(f)
- for r, row in enumerate(reader):
- for c, raw_val in enumerate(row):
- val = raw_val.strip()
- x = c * TILE_SIZE
- y = r * TILE_SIZE
- if val == "1": platforms.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
- elif val == "2": hazards.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
- elif val.upper() == "S": shield_items.append(pygame.Rect(x + 10, y + 10, 20, 20))
- elif val.upper() == "P": spawn_point = (x, y)
- elif val.upper() == "G": goal_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE * 2)
+    with open(filepath, mode="r", encoding="utf-8-sig") as f:
+        reader = csv.reader(f)
+        for r, row in enumerate(reader):
+            for c, raw_val in enumerate(row):
+                val = raw_val.strip()
+                x = c * TILE_SIZE
+                y = r * TILE_SIZE
+                if val == "1": platforms.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
+                elif val == "2": hazards.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
+                elif val.upper() == "S": shield_items.append(pygame.Rect(x + 10, y + 10, 20, 20)) # S: 방어막 아이템
+                elif val.upper() == "P": spawn_point = (x, y)
+                elif val.upper() == "G": goal_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE * 2)
 
 load_map_from_csv("stage_shield.csv")
 
@@ -1861,103 +1834,120 @@ velocity_x = velocity_y = 0.0
 gravity = 0.8
 jump_power = -15.0
 is_grounded = False
-has_shield = False
-knockback_timer = 0
-invincible_timer = 0
+
+# 방어막 및 물리 넉백 상태 변수
+has_shield = False        # 방어막 소지 여부 (True이면 외곽선 강조 표시)
+knockback_timer = 0       # 넉백 중 사용자의 입력을 일시 제한하는 타이머
+invincible_timer = 0      # 피격 후 연속 충돌을 방지하는 무적 시간 (i-Frames)
 
 running = True
 while running:
- for event in pygame.event.get():
- if event.type == pygame.QUIT: running = False
- if event.type == pygame.KEYDOWN:
- if event.key == pygame.K_SPACE and is_grounded and knockback_timer <= 0:
- velocity_y = jump_power
- is_grounded = False
- if event.key == pygame.K_r:
- player.x, player.y = spawn_point
- velocity_x = velocity_y = 0.0
- has_shield = False
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT: running = False
+        if event.type == pygame.KEYDOWN:
+            # 넉백 중이 아닐 때만 점프 허용
+            if event.key == pygame.K_SPACE and is_grounded and knockback_timer <= 0:
+                velocity_y = jump_power
+                is_grounded = False
+            if event.key == pygame.K_r:
+                player.x, player.y = spawn_point
+                velocity_x = velocity_y = 0.0
+                has_shield = False
 
- if knockback_timer > 0:
- knockback_timer -= 1
- velocity_x *= 0.9
- else:
- keys = pygame.key.get_pressed()
- velocity_x = 0
- if keys[pygame.K_LEFT]: velocity_x = -speed
- if keys[pygame.K_RIGHT]: velocity_x = speed
+    # [넉백 물리 감쇠 모델]
+    # 넉백 타이머가 남아있는 동안은 외부 충격력에 의해 날아가며, 수평 속도가 마찰 계수 0.9에 의해 감쇠됨
+    if knockback_timer > 0:
+        knockback_timer -= 1
+        velocity_x *= 0.9  # 등비수열 감쇠: vx(t+1) = vx(t) * 0.9
+    else:
+        # 정상 상태에서는 사용자 키 입력에 따라 등속 이동
+        keys = pygame.key.get_pressed()
+        velocity_x = 0
+        if keys[pygame.K_LEFT]: velocity_x = -speed
+        if keys[pygame.K_RIGHT]: velocity_x = speed
 
- player.x += int(velocity_x)
- for block in platforms:
- if player.colliderect(block):
- if velocity_x > 0: player.right = block.left
- elif velocity_x < 0: player.left = block.right
+    # X축 이동 및 충돌
+    player.x += int(velocity_x)
+    for block in platforms:
+        if player.colliderect(block):
+            if velocity_x > 0: player.right = block.left
+            elif velocity_x < 0: player.left = block.right
 
- velocity_y += gravity
- player.y += int(velocity_y)
- is_grounded = False
+    # Y축 이동 및 중력
+    velocity_y += gravity
+    player.y += int(velocity_y)
+    is_grounded = False
 
- for block in platforms:
- if player.colliderect(block):
- if velocity_y > 0:
- player.bottom = block.top
- velocity_y = 0.0
- is_grounded = True
- elif velocity_y < 0:
- player.top = block.bottom
- velocity_y = 0.0
+    for block in platforms:
+        if player.colliderect(block):
+            if velocity_y > 0:
+                player.bottom = block.top
+                velocity_y = 0.0
+                is_grounded = True
+            elif velocity_y < 0:
+                player.top = block.bottom
+                velocity_y = 0.0
 
- for shield in shield_items[:]:
- if player.colliderect(shield):
- has_shield = True
- shield_items.remove(shield)
+    # 방어막 아이템(S) 획득 판정: 닿으면 소지 플래그 켜고 월드에서 아이템 제거
+    for shield in shield_items[:]:
+        if player.colliderect(shield):
+            has_shield = True
+            shield_items.remove(shield)
 
- if invincible_timer > 0: invincible_timer -= 1
+    # 무적 타이머 감소
+    if invincible_timer > 0: invincible_timer -= 1
 
- for spike in hazards:
- if player.colliderect(spike):
- if has_shield:
- has_shield = False
- invincible_timer = 30
- knockback_timer = 15
- velocity_x = -12.0
- velocity_y = -7.0
- elif invincible_timer <= 0:
- player.x, player.y = spawn_point
- velocity_x = velocity_y = 0.0
- has_shield = False
- break
+    # [가시 충돌 시의 분기 처리]
+    for spike in hazards:
+        if player.colliderect(spike):
+            if has_shield:
+                # 방어막이 있으면: 1회 소모하고 사망을 무효화한 뒤 뒤로 강하게 튕겨냄
+                has_shield = False
+                invincible_timer = 30  # 약 0.5초 동안 추가 피격 면제 (무적)
+                knockback_timer = 15   # 약 0.25초 동안 사용자 조작 제한
 
- if player.y > SCREEN_HEIGHT + 100:
- player.x, player.y = spawn_point
- velocity_x = velocity_y = 0.0
- has_shield = False
+                # [반동 충격량 벡터 부여]: 뒤로 튕기는 속도 vx=-12.0, 공중에 띄우는 속도 vy=-7.0
+                velocity_x = -12.0
+                velocity_y = -7.0
+            elif invincible_timer <= 0:
+                # 방어막도 없고 무적 시간도 끝나면 즉시 사망/리스폰
+                player.x, player.y = spawn_point
+                velocity_x = velocity_y = 0.0
+                has_shield = False
+            break
 
- camera_x = max(0, player.centerx - SCREEN_WIDTH // 2)
- screen.fill((20, 24, 34))
+    if player.y > SCREEN_HEIGHT + 100:
+        player.x, player.y = spawn_point
+        velocity_x = velocity_y = 0.0
+        has_shield = False
 
- for block in platforms:
- r = pygame.Rect(block.x - camera_x, block.y, block.width, block.height)
- if -TILE_SIZE <= r.x <= SCREEN_WIDTH: pygame.draw.rect(screen, (41, 128, 185), r)
- for spike in hazards:
- r = pygame.Rect(spike.x - camera_x, spike.y, spike.width, spike.height)
- if -TILE_SIZE <= r.x <= SCREEN_WIDTH: pygame.draw.rect(screen, (231, 76, 60), r)
- for shield in shield_items:
- r = pygame.Rect(shield.x - camera_x, shield.y, shield.width, shield.height)
- pygame.draw.rect(screen, (0, 240, 255), r)
- if goal_rect:
- r = pygame.Rect(goal_rect.x - camera_x, goal_rect.y, goal_rect.width, goal_rect.height)
- pygame.draw.rect(screen, (46, 204, 113), r)
+    # 렌더링
+    camera_x = max(0, player.centerx - SCREEN_WIDTH // 2)
+    screen.fill((20, 24, 34))
 
- screen_player = pygame.Rect(player.x - camera_x, player.y, player.width, player.height)
- pygame.draw.rect(screen, (241, 196, 15), screen_player)
- if has_shield: pygame.draw.rect(screen, (0, 240, 255), screen_player, 4)
+    for block in platforms:
+        r = pygame.Rect(block.x - camera_x, block.y, block.width, block.height)
+        if -TILE_SIZE <= r.x <= SCREEN_WIDTH: pygame.draw.rect(screen, (41, 128, 185), r)
+    for spike in hazards:
+        r = pygame.Rect(spike.x - camera_x, spike.y, spike.width, spike.height)
+        if -TILE_SIZE <= r.x <= SCREEN_WIDTH: pygame.draw.rect(screen, (231, 76, 60), r)
+    for shield in shield_items:
+        r = pygame.Rect(shield.x - camera_x, shield.y, shield.width, shield.height)
+        pygame.draw.rect(screen, (0, 240, 255), r) # 시안색 아이템 구슬
+    if goal_rect:
+        r = pygame.Rect(goal_rect.x - camera_x, goal_rect.y, goal_rect.width, goal_rect.height)
+        pygame.draw.rect(screen, (46, 204, 113), r)
 
- txt = font_ui.render(f"Shield: {'ACTIVE' if has_shield else 'OFF'} | Invincible: {invincible_timer}", True, (220, 220, 220))
- screen.blit(txt, (20, 20))
+    # 플레이어 렌더링: 방어막 활성화 시 겉에 두께 4px의 시안색 외곽선 사각형 덧그리기
+    screen_player = pygame.Rect(player.x - camera_x, player.y, player.width, player.height)
+    pygame.draw.rect(screen, (241, 196, 15), screen_player)
+    if has_shield: pygame.draw.rect(screen, (0, 240, 255), screen_player, 4)
 
- pygame.display.flip()
- clock.tick(60)
+    txt = font_ui.render(f"Shield: {'ACTIVE' if has_shield else 'OFF'} | Invincible: {invincible_timer}", True, (220, 220, 220))
+    screen.blit(txt, (20, 20))
+
+    pygame.display.flip()
+    clock.tick(60)
 
 pygame.quit()
 sys.exit()</code></pre>
@@ -1972,7 +1962,7 @@ sys.exit()</code></pre>
  </section>
 
  <!-- ========================================== -->
- <!-- SECTION: CHAPTER 08 (WARP & A* PATHFINDING) -->
+ <!-- SECTION: CHAPTER 08 (WITH DETAILED MATH COMMENTS) -->
  <!-- ========================================== -->
  <section id="chapter-08" class="chapter-container">
  <div class="chapter-header">
@@ -1991,11 +1981,12 @@ sys.exit()</code></pre>
 
  <div class="code-container">
  <div class="code-header"><span class="code-title"><span>🐍</span> step8_astar_warp_flight.py</span><button class="copy-btn" onclick="copyCode(this)"><span>📋</span> 코드 복사</button></div>
- <pre><code class="language-python">import pygame
+ <pre><code class="language-python"># [8차시] 그래프 이론과 휴리스틱 추정 함수(맨해튼 거리)를 이용한 A* 비행 경로 탐색
+import pygame
 import sys
 import os
 import csv
-import heapq
+import heapq  # 우선순위 큐 (최소 힙) 모듈
 
 pygame.init()
 SCREEN_WIDTH = 800
@@ -2010,40 +2001,40 @@ platforms, hazards, warp_items = [], [], []
 goal_rect = None
 spawn_point = (100, 100)
 grid_rows = grid_cols = 0
-collision_grid = []
+collision_grid = []  # A* 탐색용 2차원 불리언 격자 맵 (True: 장애물, False: 빈 공간)
 
 def load_map_from_csv(filepath):
- global platforms, hazards, warp_items, goal_rect, spawn_point, grid_rows, grid_cols, collision_grid
- platforms.clear()
- hazards.clear()
- warp_items.clear()
- goal_rect = None
- spawn_point = (100, 100)
+    global platforms, hazards, warp_items, goal_rect, spawn_point, grid_rows, grid_cols, collision_grid
+    platforms.clear()
+    hazards.clear()
+    warp_items.clear()
+    goal_rect = None
+    spawn_point = (100, 100)
 
- if not os.path.exists(filepath):
- platforms.append(pygame.Rect(0, 380, SCREEN_WIDTH * 2, 70))
- return
+    if not os.path.exists(filepath):
+        platforms.append(pygame.Rect(0, 380, SCREEN_WIDTH * 2, 70))
+        return
 
- with open(filepath, mode="r", encoding="utf-8-sig") as f:
- reader = list(csv.reader(f))
- grid_rows = len(reader)
- grid_cols = len(reader[0]) if grid_rows > 0 else 0
- collision_grid = [[False for _ in range(grid_cols)] for _ in range(grid_rows)]
+    with open(filepath, mode="r", encoding="utf-8-sig") as f:
+        reader = list(csv.reader(f))
+        grid_rows = len(reader)
+        grid_cols = len(reader[0]) if grid_rows > 0 else 0
+        collision_grid = [[False for _ in range(grid_cols)] for _ in range(grid_rows)]
 
- for r, row in enumerate(reader):
- for c, raw_val in enumerate(row):
- val = raw_val.strip()
- x, y = c * TILE_SIZE, r * TILE_SIZE
- if val == "1":
- platforms.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
- collision_grid[r][c] = True
- elif val == "2":
- hazards.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
- collision_grid[r][c] = True
- elif val.upper() == "W":
- warp_items.append(pygame.Rect(x + 10, y + 10, 20, 20))
- elif val.upper() == "P": spawn_point = (x, y)
- elif val.upper() == "G": goal_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE * 2)
+        for r, row in enumerate(reader):
+            for c, raw_val in enumerate(row):
+                val = raw_val.strip()
+                x, y = c * TILE_SIZE, r * TILE_SIZE
+                if val == "1":
+                    platforms.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
+                    collision_grid[r][c] = True  # 벽 블록 통과 불가
+                elif val == "2":
+                    hazards.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
+                    collision_grid[r][c] = True  # 가시 블록 통과 불가
+                elif val.upper() == "W":
+                    warp_items.append(pygame.Rect(x + 10, y + 10, 20, 20)) # W: 워프 아이템
+                elif val.upper() == "P": spawn_point = (x, y)
+                elif val.upper() == "G": goal_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE * 2)
 
 load_map_from_csv("stage_warp.csv")
 
@@ -2053,146 +2044,176 @@ velocity_x = velocity_y = 0.0
 gravity = 0.8
 jump_power = -15.0
 is_grounded = False
-has_warp_ability = False
-is_flying = False
-fly_path = []
-fly_speed = 10.0
+
+# 워프 능력 및 A* 비행 제어 변수
+has_warp_ability = False  # 워프 아이템 획득 시 참
+is_flying = False         # A* 경로를 따라 비행 중인지 여부
+fly_path = []             # 비행할 목표 픽셀 좌표 [(x, y), ...] 목록
+fly_speed = 10.0          # 비행 속력 (픽셀/프레임)
 
 def find_a_star_path(start_pos, target_pos):
- start_c, start_r = int(start_pos[0] // TILE_SIZE), int(start_pos[1] // TILE_SIZE)
- target_c, target_r = int(target_pos[0] // TILE_SIZE), int(target_pos[1] // TILE_SIZE)
+    """
+    [A* 알고리즘의 수학적 평가 함수]
+    f(n) = g(n) + h(n)
+    - g(n): 시작 노드에서 현재 노드 n까지 실제 이동한 거리
+    - h(n): 현재 노드 n에서 목적지까지의 추정 거리 (L1 노름 / 맨해튼 거리: |dr| + |dc|)
+    """
+    start_c, start_r = int(start_pos[0] // TILE_SIZE), int(start_pos[1] // TILE_SIZE)
+    target_c, target_r = int(target_pos[0] // TILE_SIZE), int(target_pos[1] // TILE_SIZE)
 
- if not (0 <= target_r < grid_rows and 0 <= target_c < grid_cols): return []
- if collision_grid[target_r][target_c]: return []
+    # 목적지가 맵 밖이거나 벽 내부이면 경로 탐색 불가능
+    if not (0 <= target_r < grid_rows and 0 <= target_c < grid_cols): return []
+    if collision_grid[target_r][target_c]: return []
 
- open_set = []
- heapq.heappush(open_set, (0, 0, (start_r, start_c)))
- came_from = {}
- g_score = {(start_r, start_c): 0}
+    open_set = []
+    # 힙 튜플: (총비용 f, 실제비용 g, (행 r, 열 c))
+    heapq.heappush(open_set, (0, 0, (start_r, start_c)))
+    came_from = {}
+    g_score = {(start_r, start_c): 0}
 
- while open_set:
- _, current_g, current = heapq.heappop(open_set)
- if current == (target_r, target_c):
- path = []
- curr = current
- while curr in came_from:
- path.append((curr[1] * TILE_SIZE, curr[0] * TILE_SIZE))
- curr = came_from[curr]
- path.reverse()
- return path
+    while open_set:
+        _, current_g, current = heapq.heappop(open_set)
 
- cr, cc = current
- for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
- nr, nc = cr + dr, cc + dc
- if 0 <= nr < grid_rows and 0 <= nc < grid_cols:
- if collision_grid[nr][nc]: continue
- tent_g = current_g + 1
- if (nr, nc) not in g_score or tent_g < g_score[(nr, nc)]:
- g_score[(nr, nc)] = tent_g
- f_score = tent_g + abs(nr - target_r) + abs(nc - target_c)
- heapq.heappush(open_set, (f_score, tent_g, (nr, nc)))
- came_from[(nr, nc)] = current
- return []
+        # 목적지에 도달한 경우 경로 역추적 (Backtracking)
+        if current == (target_r, target_c):
+            path = []
+            curr = current
+            while curr in came_from:
+                # 격자 좌표를 픽셀 중심 좌표로 변환하여 저장
+                path.append((curr[1] * TILE_SIZE, curr[0] * TILE_SIZE))
+                curr = came_from[curr]
+            path.reverse()  # 시작점 -> 끝점 순서로 뒤집음
+            return path
+
+        cr, cc = current
+        # 상, 하, 좌, 우 4방향 탐색 단위 벡터
+        for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            nr, nc = cr + dr, cc + dc
+            if 0 <= nr < grid_rows and 0 <= nc < grid_cols:
+                if collision_grid[nr][nc]: continue  # 장애물 격자는 건너뜀
+                tent_g = current_g + 1              # 등간격 격자이므로 1칸 이동 비용은 1
+                if (nr, nc) not in g_score or tent_g < g_score[(nr, nc)]:
+                    g_score[(nr, nc)] = tent_g
+                    # 맨해튼 거리 휴리스틱: h = |r1 - r2| + |c1 - c2|
+                    h_score = abs(nr - target_r) + abs(nc - target_c)
+                    f_score = tent_g + h_score
+                    heapq.heappush(open_set, (f_score, tent_g, (nr, nc)))
+                    came_from[(nr, nc)] = current
+    return []
 
 running = True
 while running:
- for event in pygame.event.get():
- if event.type == pygame.QUIT: running = False
- if event.type == pygame.KEYDOWN:
- if event.key == pygame.K_SPACE and is_grounded and not is_flying:
- velocity_y = jump_power
- is_grounded = False
- if event.key == pygame.K_r:
- player.x, player.y = spawn_point
- velocity_x = velocity_y = 0.0
- has_warp_ability = is_flying = False
- fly_path.clear()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT: running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and is_grounded and not is_flying:
+                velocity_y = jump_power
+                is_grounded = False
+            if event.key == pygame.K_r:
+                player.x, player.y = spawn_point
+                velocity_x = velocity_y = 0.0
+                has_warp_ability = is_flying = False
+                fly_path.clear()
 
- if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
- if has_warp_ability and not is_flying:
- cam_x = max(0, player.centerx - SCREEN_WIDTH // 2)
- mouse_w_x, mouse_w_y = event.pos[0] + cam_x, event.pos[1]
- path = find_a_star_path((player.x, player.y), (mouse_w_x, mouse_w_y))
- if path:
- fly_path = path
- is_flying = True
- has_warp_ability = False
+        # 마우스 클릭으로 워프 목적지 지정
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if has_warp_ability and not is_flying:
+                cam_x = max(0, player.centerx - SCREEN_WIDTH // 2)
+                # 화면 마우스 클릭 위치에 카메라 오프셋을 더해 실제 월드 픽셀 좌표로 역변환
+                mouse_w_x = event.pos[0] + cam_x
+                mouse_w_y = event.pos[1]
+                path = find_a_star_path((player.x, player.y), (mouse_w_x, mouse_w_y))
+                if path:
+                    fly_path = path
+                    is_flying = True            # 비행 모드 활성화 (중력 무시)
+                    has_warp_ability = False     # 워프 능력 1회 소모
 
- if is_flying:
- if fly_path:
- target_node = fly_path[0]
- dx, dy = target_node[0] - player.x, target_node[1] - player.y
- dist = (dx**2 + dy**2) ** 0.5
- if dist < fly_speed:
- player.x, player.y = target_node
- fly_path.pop(0)
- else:
- player.x += int((dx / dist) * fly_speed)
- player.y += int((dy / dist) * fly_speed)
- else:
- is_flying = False
- velocity_x = velocity_y = 0.0
- else:
- keys = pygame.key.get_pressed()
- velocity_x = 0
- if keys[pygame.K_LEFT]: velocity_x = -speed
- if keys[pygame.K_RIGHT]: velocity_x = speed
+    # [비행 모드 vs 일반 물리 모드 분기]
+    if is_flying:
+        # 비행 중에는 중력과 키 입력을 무시하고 A* 최단 경로의 노드를 순차 추적
+        if fly_path:
+            target_node = fly_path[0]
+            # 방향 벡터: d = (target - current)
+            dx = target_node[0] - player.x
+            dy = target_node[1] - player.y
+            dist = (dx**2 + dy**2) ** 0.5  # 피타고라스 정리에 의한 유클리드 거리
 
- player.x += int(velocity_x)
- for block in platforms:
- if player.colliderect(block):
- if velocity_x > 0: player.right = block.left
- elif velocity_x < 0: player.left = block.right
+            if dist < fly_speed:
+                # 목표 노드에 거의 도달했으면 정확히 안착시키고 다음 노드로 전진
+                player.x, player.y = target_node
+                fly_path.pop(0)
+            else:
+                # [벡터 정규화]: 크기가 1인 단위 방향 벡터 (dx/dist, dy/dist)에 비행 속력을 곱함
+                player.x += int((dx / dist) * fly_speed)
+                player.y += int((dy / dist) * fly_speed)
+        else:
+            # 모든 경로 노드를 통과했으면 비행 종료 -> 일반 중력 물리로 복귀
+            is_flying = False
+            velocity_x = velocity_y = 0.0
+    else:
+        # 일반 물리 상태
+        keys = pygame.key.get_pressed()
+        velocity_x = 0
+        if keys[pygame.K_LEFT]: velocity_x = -speed
+        if keys[pygame.K_RIGHT]: velocity_x = speed
 
- velocity_y += gravity
- player.y += int(velocity_y)
- is_grounded = False
+        player.x += int(velocity_x)
+        for block in platforms:
+            if player.colliderect(block):
+                if velocity_x > 0: player.right = block.left
+                elif velocity_x < 0: player.left = block.right
 
- for block in platforms:
- if player.colliderect(block):
- if velocity_y > 0:
- player.bottom = block.top
- velocity_y = 0.0
- is_grounded = True
- elif velocity_y < 0:
- player.top = block.bottom
- velocity_y = 0.0
+        velocity_y += gravity
+        player.y += int(velocity_y)
+        is_grounded = False
 
- for warp in warp_items[:]:
- if player.colliderect(warp):
- has_warp_ability = True
- warp_items.remove(warp)
+        for block in platforms:
+            if player.colliderect(block):
+                if velocity_y > 0:
+                    player.bottom = block.top
+                    velocity_y = 0.0
+                    is_grounded = True
+                elif velocity_y < 0:
+                    player.top = block.bottom
+                    velocity_y = 0.0
 
- camera_x = max(0, player.centerx - SCREEN_WIDTH // 2)
- screen.fill((20, 24, 34))
+        for warp in warp_items[:]:
+            if player.colliderect(warp):
+                has_warp_ability = True
+                warp_items.remove(warp)
 
- for block in platforms:
- r = pygame.Rect(block.x - camera_x, block.y, block.width, block.height)
- if -TILE_SIZE <= r.x <= SCREEN_WIDTH: pygame.draw.rect(screen, (41, 128, 185), r)
- for spike in hazards:
- r = pygame.Rect(spike.x - camera_x, spike.y, spike.width, spike.height)
- if -TILE_SIZE <= r.x <= SCREEN_WIDTH: pygame.draw.rect(screen, (231, 76, 60), r)
- for warp in warp_items:
- r = pygame.Rect(warp.x - camera_x, warp.y, warp.width, warp.height)
- pygame.draw.rect(screen, (230, 126, 34), r)
- if goal_rect:
- r = pygame.Rect(goal_rect.x - camera_x, goal_rect.y, goal_rect.width, goal_rect.height)
- pygame.draw.rect(screen, (46, 204, 113), r)
+    # 화면 렌더링
+    camera_x = max(0, player.centerx - SCREEN_WIDTH // 2)
+    screen.fill((20, 24, 34))
 
- if is_flying and len(fly_path) > 1:
- points = [(p[0] - camera_x + 20, p[1] + 20) for p in fly_path]
- pygame.draw.lines(screen, (255, 255, 0), False, points, 2)
+    for block in platforms:
+        r = pygame.Rect(block.x - camera_x, block.y, block.width, block.height)
+        if -TILE_SIZE <= r.x <= SCREEN_WIDTH: pygame.draw.rect(screen, (41, 128, 185), r)
+    for spike in hazards:
+        r = pygame.Rect(spike.x - camera_x, spike.y, spike.width, spike.height)
+        if -TILE_SIZE <= r.x <= SCREEN_WIDTH: pygame.draw.rect(screen, (231, 76, 60), r)
+    for warp in warp_items:
+        r = pygame.Rect(warp.x - camera_x, warp.y, warp.width, warp.height)
+        pygame.draw.rect(screen, (230, 126, 34), r) # 주황색 워프 아이템
+    if goal_rect:
+        r = pygame.Rect(goal_rect.x - camera_x, goal_rect.y, goal_rect.width, goal_rect.height)
+        pygame.draw.rect(screen, (46, 204, 113), r)
 
- screen_player = pygame.Rect(player.x - camera_x, player.y, player.width, player.height)
- pygame.draw.rect(screen, (241, 196, 15), screen_player)
- if has_warp_ability: pygame.draw.rect(screen, (230, 126, 34), screen_player, 3)
+    # 비행 중일 때 계산된 최단 궤적 선을 노란색으로 시각화 (디버그 궤적 표시)
+    if is_flying and len(fly_path) > 1:
+        points = [(p[0] - camera_x + 20, p[1] + 20) for p in fly_path]
+        pygame.draw.lines(screen, (255, 255, 0), False, points, 2)
 
- status = "Warp Ready: CLICK DESTINATION" if has_warp_ability else ("FLYING..." if is_flying else "No Warp")
- txt = font_ui.render(status, True, (240, 240, 240))
- screen.blit(txt, (20, 20))
+    screen_player = pygame.Rect(player.x - camera_x, player.y, player.width, player.height)
+    pygame.draw.rect(screen, (241, 196, 15), screen_player)
+    if has_warp_ability: pygame.draw.rect(screen, (230, 126, 34), screen_player, 3)
 
- pygame.display.flip()
- clock.tick(60)
+    status = "Warp Ready: CLICK DESTINATION" if has_warp_ability else ("FLYING..." if is_flying else "No Warp")
+    txt = font_ui.render(status, True, (240, 240, 240))
+    screen.blit(txt, (20, 20))
+
+    pygame.display.flip()
+    clock.tick(60)
 
 pygame.quit()
 sys.exit()</code></pre>
@@ -2217,14 +2238,14 @@ sys.exit()</code></pre>
  <div class="objectives-card" style="border-left-color: var(--accent-green); background: rgba(74, 222, 128, 0.08);">
  <h4 style="color: var(--accent-green);"><span>✅</span> 학습 성취도 체크리스트</h4>
  <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 12px;">
- <label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" class="mission-checkbox" checked><span>1차시: 모니터 좌표계와 중력 가속도 물리 엔진</span></label>
- <label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" class="mission-checkbox" checked><span>2차시: AABB 사각 충돌 및 히트박스 패딩 판정</span></label>
- <label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" class="mission-checkbox" checked><span>3차시: 스프레드시트 맵 디자인과 CSV 파서 및 횡스크롤 카메라</span></label>
- <label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" class="mission-checkbox" checked><span>4차시: 움직이는 발판, 점프대, 코요테 타임 조작감 튜닝</span></label>
- <label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" class="mission-checkbox" checked><span>5차시: 화면 흔들림, 사각 파티클 폭발, 8비트 사운드 신디사이저</span></label>
- <label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" class="mission-checkbox" checked><span>6차시: 다중 CSV 스테이지 전환 및 FSM 상태 머신</span></label>
- <label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" class="mission-checkbox" checked><span>7차시: 방어막 아이템(S)과 피격 넉백 물리 구현</span></label>
- <label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" class="mission-checkbox" checked><span>8차시: 워프 아이템(W)과 중력 무시 A* 비행 탐색 알고리즘</span></label>
+ <label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" class="mission-checkbox" checked><span>1차시: 모니터 좌표계와 중력 가속도 점화식 물리 모델</span></label>
+ <label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" class="mission-checkbox" checked><span>2차시: AABB 사각 부등식 충돌 및 패딩 축소 판정</span></label>
+ <label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" class="mission-checkbox" checked><span>3차시: 행렬 격자 매핑과 카메라 좌표 평행이동 변환</span></label>
+ <label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" class="mission-checkbox" checked><span>4차시: 상대 운동 동기화 및 이산 타이머(코요테 타임)</span></label>
+ <label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" class="mission-checkbox" checked><span>5차시: 삼각함수 파동 합성 사운드 및 극좌표 파티클 분산</span></label>
+ <label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" class="mission-checkbox" checked><span>6차시: 유한 상태 머신(FSM)과 다중 스테이지 전이 루프</span></label>
+ <label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" class="mission-checkbox" checked><span>7차시: 충격량 반발 벡터 부여와 무적 시간 감쇠</span></label>
+ <label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" class="mission-checkbox" checked><span>8차시: 맨해튼 거리 휴리스틱과 A* 그래프 최단 경로 탐색</span></label>
  </div>
  </div>
  <div class="chapter-nav-footer">
@@ -2448,7 +2469,6 @@ sys.exit()</code></pre>
  const rows = editorGridData.length;
  const cols = editorGridData[0].length;
 
- // Column Header Row
  const headerTr = document.createElement('tr');
  const cornerTd = document.createElement('td');
  cornerTd.className = 'editor-col-header';
@@ -2657,10 +2677,10 @@ sys.exit()</code></pre>
  const x = c * tileSize, y = r * tileSize;
  if (val === '1') { ctx.fillStyle = '#2980b9'; ctx.fillRect(x, y, tileSize - 1, tileSize - 1); }
  else if (val === '2') { ctx.fillStyle = '#e74c3c'; ctx.fillRect(x, y + tileSize / 2, tileSize - 1, tileSize / 2 - 1); }
- else if (val === 'P') { ctx.fillStyle = '#f1c40f'; ctx.fillRect(x, y, tileSize - 1, tileSize - 1); ctx.fillStyle = '#000'; ctx.font = 'bold 11px sans-serif'; ctx.fillText('P', x + 5, y + 14); }
- else if (val === 'G') { ctx.fillStyle = '#2ecc71'; ctx.fillRect(x, y, tileSize - 1, tileSize * 2 - 1); ctx.fillStyle = '#000'; ctx.font = 'bold 11px sans-serif'; ctx.fillText('G', x + 4, y + 16); }
- else if (val === 'S') { ctx.fillStyle = '#00f0ff'; ctx.fillRect(x + 2, y + 2, tileSize - 5, tileSize - 5); ctx.fillStyle = '#000'; ctx.font = 'bold 10px sans-serif'; ctx.fillText('S', x + 5, y + 14); }
- else if (val === 'W') { ctx.fillStyle = '#e67e22'; ctx.fillRect(x + 2, y + 2, tileSize - 5, tileSize - 5); ctx.fillStyle = '#000'; ctx.font = 'bold 10px sans-serif'; ctx.fillText('W', x + 4, y + 14); }
+ else if (val === 'P') { ctx.fillStyle = '#f1c40f'; ctx.fillRect(x, y, tileSize - 1, tileSize - 1); }
+ else if (val === 'G') { ctx.fillStyle = '#2ecc71'; ctx.fillRect(x, y, tileSize - 1, tileSize * 2 - 1); }
+ else if (val === 'S') { ctx.fillStyle = '#00f0ff'; ctx.fillRect(x + 2, y + 2, tileSize - 5, tileSize - 5); }
+ else if (val === 'W') { ctx.fillStyle = '#e67e22'; ctx.fillRect(x + 2, y + 2, tileSize - 5, tileSize - 5); }
  });
  });
 
