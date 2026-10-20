@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>수학탐구학교 2부: 아두이노 피지컬 컨트롤러 제작 & Pygame 연동 웹북</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Pretendard:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csv.min.js"></script>
+
+  <style>
+    :root {
+      --bg-primary: #0f172a; --bg-secondary: #1e293b; --bg-card: #1e293b; --bg-card-hover: #273549;
+      --bg-sidebar: #0b1120; --border-color: #334155; --text-main: #f8fafc; --text-muted: #94a3b8;
+      --text-sub: #cbd5e1; --accent-blue: #38bdf8; --accent-green: #4ade80; --accent-orange: #fb923c;
+      --accent-yellow: #facc15; --code-bg: #090d16; --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px;
+      --font-sans: 'Pretendard', sans-serif; --font-mono: 'Fira Code', monospace;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3); --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+    [data-theme="light"] {
+      --bg-primary: #f8fafc; --bg-secondary: #ffffff; --bg-card: #ffffff; --bg-card-hover: #f1f5f9;
+      --bg-sidebar: #f1f5f9; --border-color: #e2e8f0; --text-main: #0f172a; --text-muted: #64748b;
+      --text-sub: #334155; --accent-blue: #0284c7; --accent-green: #16a34a; --code-bg: #1e293b;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06); --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); background-color: var(--bg-primary); color: var(--text-main); line-height: 1.7; display: flex; height: 100vh; overflow: hidden; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+    ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+    #sidebar { width: 320px; min-width: 320px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; height: 100%; z-index: 100; transition: transform 0.3s ease; }
+    .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border-color); }
+    .brand-title { font-size: 1.15rem; font-weight: 800; color: var(--accent-blue); display: flex; align-items: center; gap: 8px; }
+    .nav-sections { flex: 1; overflow-y: auto; padding: 12px; }
+    .nav-group-title { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); padding: 12px 10px 6px; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-sm); color: var(--text-sub); text-decoration: none; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: 0.2s; }
+    .nav-item:hover { background: var(--bg-card-hover); color: var(--text-main); }
+    .nav-item.active { background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); font-weight: 700; border-left: 3px solid var(--accent-blue); }
+    #main-container { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+    .topbar { height: 60px; border-bottom: 1px solid var(--border-color); background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; }
+    .top-btn { padding: 6px 12px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main); cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
+    .top-btn:hover { background: var(--bg-card-hover); }
+    #content { flex: 1; overflow-y: auto; padding: 36px 48px 80px; scroll-behavior: smooth; }
+    .chapter-container { max-width: 960px; margin: 0 auto; display: none; }
+    .chapter-container.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .chapter-header { border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 24px; }
+    .chapter-title { font-size: 1.85rem; font-weight: 800; color: var(--text-main); }
+    .objectives-card { background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); padding: 16px 20px; border-radius: var(--radius-md); margin: 20px 0; }
+    .objectives-card h4 { color: var(--accent-blue); margin-bottom: 8px; }
+    h2 { font-size: 1.45rem; margin: 36px 0 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; }
+    p, li { color: var(--text-sub); font-size: 0.95rem; margin-bottom: 8px; }
+    .alert-box { padding: 14px 18px; border-radius: var(--radius-md); margin: 20px 0; border-left: 4px solid; background: rgba(56, 189, 248, 0.1); border-color: var(--accent-blue); color: var(--text-main); }
+    .alert-important { background: rgba(251, 146, 60, 0.1); border-color: var(--accent-orange); }
+    .alert-tip { background: rgba(74, 222, 128, 0.1); border-color: var(--accent-green); }
+    .alert-box h5 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; color: var(--text-main); }
+    .alert-box ol { margin-left: 20px; margin-bottom: 0; }
+    .alert-box li { margin-bottom: 6px; }
+    .math-block { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 20px; margin: 16px 0; text-align: center; font-size: 1.05rem; overflow-x: auto; }
+    .code-container { background: var(--code-bg); border: 1px solid var(--border-color); border-radius: var(--radius-md); margin: 20px 0; overflow: hidden; }
+    .code-header { background: var(--bg-secondary); padding: 8px 16px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+    .copy-btn { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); padding: 4px 10px; border-radius: 4px; cursor: pointer; transition: 0.2s; }
+    .copy-btn:hover { background: var(--accent-blue); color: #000; }
+    .code-container pre { margin: 0; padding: 16px; max-height: 500px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.6; }
+    .wiring-table { width: 100%; border-collapse: collapse; margin: 16px 0; background: var(--bg-card); border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-color); }
+    .wiring-table th, .wiring-table td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); text-align: left; font-size: 0.9rem; color: var(--text-sub); }
+    .wiring-table th { background: var(--bg-secondary); color: var(--text-main); font-weight: 700; }
+    .wiring-table .col-arrow { color: var(--text-muted); text-align: center; font-weight: bold; width: 40px; }
+    .mission-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); margin: 16px 0; overflow: hidden; transition: border-color 0.2s; }
+    .mission-card:hover { border-color: rgba(56, 189, 248, 0.4); }
+    .mission-header { padding: 14px 18px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+    .mission-title { font-size: 0.95rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+    .mission-checkbox { width: 18px; height: 18px; accent-color: var(--accent-green); cursor: pointer; }
+    .mission-body { padding: 16px 20px; font-size: 0.92rem; color: var(--text-sub); display: none; }
+    .simulator-box { background: var(--bg-card); border: 2px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; margin: 24px 0; box-shadow: var(--shadow-md); }
+    .sim-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+    .sim-title { font-size: 1rem; font-weight: 700; color: var(--accent-yellow); display: flex; align-items: center; gap: 8px; }
+    .sim-canvas { width: 100%; background: #121622; border-radius: var(--radius-md); border: 1px solid var(--border-color); display: block; }
+    .sim-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 14px; background: var(--bg-secondary); padding: 14px 16px; border-radius: var(--radius-md); }
+    .control-group { display: flex; flex-direction: column; gap: 4px; }
+    .control-label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: flex; justify-content: space-between; }
+    .control-slider { width: 100%; accent-color: var(--accent-blue); cursor: pointer; }
+    .sim-btn-group { display: flex; gap: 8px; margin: 16px 0; }
+    .sim-btn { padding: 8px 16px; background: var(--accent-blue); color: #000; border: none; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .sim-btn:hover { background: #1ea5e0; }
+    .chapter-nav-footer { display: flex; justify-content: space-between; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+    .nav-footer-btn { padding: 14px 20px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-main); cursor: pointer; display: flex; flex-direction: column; transition: 0.2s; }
+    .nav-footer-btn:hover { background: var(--bg-card-hover); border-color: var(--accent-blue); }
+    .nav-footer-btn.next { text-align: right; }
+    #toast { position: fixed; bottom: 24px; right: 24px; background: var(--accent-green); color: #000; padding: 10px 18px; border-radius: var(--radius-md); font-weight: 700; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 1000; }
+    #toast.show { opacity: 1; }
+    @media (max-width: 900px) { #sidebar { position: fixed; left: -320px; } #sidebar.open { transform: translateX(320px); } .menu-toggle { display: block; } }
+  </style>
+</head>
+<body>
+  <div id="toast">✅ 클립보드에 복사되었습니다!</div>
+
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-title"><span>🕹️</span> 수학탐구학교 2부</div>
+      <div class="brand-subtitle">Arduino 조이스틱 연동 웹북</div>
+    </div>
+    <nav class="nav-sections">
+      <div class="nav-group-title">하드웨어 제어 활동지</div>
+      <a class="nav-item active" onclick="switchChapter('chapter-01')">01. 환경 구축 및 오픈 프레임 조립</a>
+      <a class="nav-item" onclick="switchChapter('chapter-02')">02. 독립 푸시 버튼과 직관의 역논리</a>
+      <a class="nav-item" onclick="switchChapter('chapter-03')">03. 조이스틱 기울임과 비례 속도 모델</a>
+      <a class="nav-item" onclick="switchChapter('chapter-04')">04. Pygame 시리얼 브릿지 & 실수 연산</a>
+      <div class="nav-group-title">완전판 통합 & 평가</div>
+      <a class="nav-item" onclick="switchChapter('chapter-final')">🏆 완전판 소스 다운로드 및 연동</a>
+    </nav>
+  </aside>
+
+  <div id="main-container">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+        <div class="breadcrumb" id="currentBreadcrumb">[활동지 01] 아두이노 환경 구축 및 오픈 프레임 조립</div>
+      </div>
+      <div class="topbar-right">
+        <button class="top-btn" onclick="toggleTheme()">☀️ 라이트 모드</button>
+      </div>
+    </header>
+
+    <main id="content">
+
+      <!-- ========================================== -->
+      <!-- SECTION 1: ENV & BUILD -->
+      <!-- ========================================== -->
+      <section id="chapter-01" class="chapter-container active">
+        <div class="chapter-header">
+          <h1 class="chapter-title">[활동지 01] 아두이노 환경 구축 및 오픈 프레임 프로토타입 조립</h1>
+          <p>1부에서 소프트웨어로 구현했던 게임 캐릭터를 현실 세계의 <strong>아날로그 조이스틱과 독립 푸시 버튼</strong>으로 제어하기 위해, 하드웨어를 직접 결선하고 파이썬 시리얼 드라이버를 준비합니다.</p>
+        </div>
+
+        <div class="objectives-card">
+          <h4><span>🎯</span> 학습 목표</h4>
+          <ol>
+            <li>하드웨어 부품을 식별하고 브레드보드 없이 아두이노에 1:1 직결선 구조로 결속할 수 있다.</li>
+            <li>아두이노 IDE와 파이썬 통신 라이브러리(pyserial)를 설치하여 통신 환경을 구축한다.</li>
+            <li>문제 파악이 용이한 오픈 프레임 구조의 장점을 이해하고 튼튼하게 조립한다.</li>
+          </ol>
+        </div>
+
+        <h2>1. 하드웨어 준비물 체크리스트</h2>
+        <ul>
+          <li>아두이노 우노(UNO R3) 보드 및 USB 케이블 1개</li>
+          <li>2축 아날로그 조이스틱 모듈 1개 (좌우 이동 및 워프 조준용)</li>
+          <li>독립 택트 스위치(푸시 버튼) 1개 (점프 전용)</li>
+          <li>미니 브레드보드 및 점퍼 와이어 6줄</li>
+          <li>베이스 고정용 플레이트 및 나일론 케이블 타이</li>
+        </ul>
+
+        <h2>2. 오픈 프레임(Open-frame) 프로토타입 조립</h2>
+        <p>상자나 껍데기로 회로를 덮어버리지 않고 기판, 회로, 전선이 노출되도록 조립합니다. 아두이노의 통신 LED 깜빡임과 결선 경로를 눈으로 직접 확인하는 오픈 프레임 구조는 문제 해결과 유지보수에 매우 유리합니다.</p>
+
+        <div class="alert-box alert-tip">
+          <h5>💡 조립 가이드</h5>
+          <ul>
+            <li><strong>베이스 플레이트 고정:</strong> 베이스 플레이트 위에 보드를 배치하고, 케이블 타이로 꽉 조여 조이스틱을 강하게 조작해도 흔들리지 않게 고정합니다.</li>
+            <li><strong>꼬임 배선 (Twisted Pair):</strong> 여러 가닥의 점퍼선을 꽈배기처럼 살짝 꼬아주면 전선 흔들림에 의한 단선 사고를 방지하고 전자기 노이즈도 줄일 수 있습니다.</li>
+          </ul>
+        </div>
+
+        <h2>3. 아두이노 핀 매핑 다이어그램 (Pinout Diagram)</h2>
+        <p>복잡한 외장 풀업 저항을 납땜할 필요 없이, 아두이노 내부 풀업 저항을 사용하여 <strong>1:1 직결선 구조</strong>로 연결합니다.</p>
+
+        <table class="wiring-table">
+          <thead>
+            <tr>
+              <th width="30%">모듈</th>
+              <th width="30%">핀 이름</th>
+              <th class="col-arrow"></th>
+              <th width="35%">아두이노 우노(UNO)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="4" style="color:var(--accent-yellow); font-weight:700;">2축 조이스틱 모듈</td>
+              <td>1. GND (접지선)</td>
+              <td class="col-arrow">→</td>
+              <td><strong>GND</strong></td>
+            </tr>
+            <tr>
+              <td>2. +5V (전원선)</td>
+              <td class="col-arrow">→</td>
+              <td><strong>5V</strong></td>
+            </tr>
+            <tr>
+              <td>3. VRx (X축 가변저항)</td>
+              <td class="col-arrow">→</td>
+              <td style="color:var(--accent-blue); font-weight:700;">A0 (아날로그 입력 0번)</td>
+            </tr>
+            <tr>
+              <td>4. VRy (Y축 가변저항)</td>
+              <td class="col-arrow">→</td>
+              <td style="color:var(--accent-blue); font-weight:700;">A1 (아날로그 입력 1번)</td>
+            </tr>
+            <tr>
+              <td rowspan="2" style="color:var(--accent-green); font-weight:700;">독립 푸시 버튼 (점프)</td>
+              <td>다리 1 (신호선)</td>
+              <td class="col-arrow">→</td>
+              <td style="color:var(--accent-blue); font-weight:700;">Digital 2번 핀</td>
+            </tr>
+            <tr>
+              <td>다리 2 (접지선)</td>
+              <td class="col-arrow">→</td>
+              <td><strong>GND</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>4. 소프트웨어 환경 구축 및 통신 최적화</h2>
+        <div class="code-container">
+          <div class="code-header">
+            <span>⚡ [터미널] 파이썬 라이브러리 설치</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+          </div>
+          <pre><code class="language-bash">pip install pyserial</code></pre>
+        </div>
+
+        <div class="alert-box alert-info">
+          <h5>💡 조작감 튜닝: 1ms 입력 지연 최소화 세팅</h5>
+          <p>초기 속도인 <code>9600 bps</code>는 전송 지연이 발생하므로 통신 속도를 <strong><code>115200 bps</code></strong>로 승격합니다. 또한 아두이노 코드에 <code>delay(16)</code>을 부여하면, 게임 프레임($16.6\text{ ms}$)과 송신 주기가 1:1로 일치하는 최적의 동기화가 이루어집니다.</p>
+        </div>
+
+        <div class="alert-box alert-important">
+          <h5>⚠️ [중요 안내] COM 포트 단독 점유 규칙</h5>
+          <p>아두이노 IDE의 <strong>[시리얼 모니터]</strong> 창이 켜져 있으면 포트를 독점하므로, 이후 파이게임을 실행할 때 <code>PermissionError (Access Denied)</code> 오류가 발생합니다. 반드시 시리얼 모니터를 닫고 게임을 실행하세요.</p>
+        </div>
+
+        <div class="chapter-nav-footer">
+          <div></div>
+          <button class="nav-footer-btn next" onclick="switchChapter('chapter-02')">
+            <span style="font-size:0.75rem; color:var(--text-muted);">다음 단계</span>
+            <span style="font-weight:700; color:var(--accent-blue);">[활동지 02] 독립 푸시 버튼 & 논리 반전 👉</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION 2: BUTTON -->
+      <!-- ========================================== -->
+      <section id="chapter-02" class="chapter-container">
+        <div class="chapter-header">
+          <h1 class="chapter-title">[활동지 02] 독립 푸시 버튼과 직관의 역논리: 소프트웨어로 하드웨어 보정하기</h1>
+        </div>
+
+        <div class="objectives-card">
+          <h4><span>🎯</span> 학습 목표</h4>
+          <ol>
+            <li>플로팅(Floating) 현상을 관찰하고 내부 풀업 저항(<code>INPUT_PULLUP</code>)으로 문제를 해결한다.</li>
+            <li>버튼을 눌렀을 때 0, 뗐을 때 1이 출력되는 역논리(Negative Logic) 현상을 직접 관찰한다.</li>
+            <li>소프트웨어 논리 부정 연산자(<code>!</code>)를 통해 하드웨어 출력을 직관적 논리(누름=1, 뗌=0)로 보정한다.</li>
+          </ol>
+        </div>
+
+        <h2>1. 플로팅 현상과 내부 풀업 저항</h2>
+        <p>스위치 핀이 저항 없이 공중에 떠 있으면 노이즈로 인해 입력이 0과 1 사이를 요동치는 <strong>플로팅(Floating)</strong> 현상이 발생합니다. 외장 저항 없이 아두이노 칩 내부에 내장된 저항을 켜서 평상시 $5\text{V}$ 상태를 유지하게 만드는 명령어가 <code>INPUT_PULLUP</code>입니다.</p>
+
+        <div class="alert-box alert-tip">
+          <h5>💡 실습 진행 가이드 1: 플로팅 현상 관찰과 해결</h5>
+          <ol>
+            <li>아래 <strong>[코드 1]</strong>을 아두이노에 업로드(→)하고 우측 상단의 시리얼 모니터(돋보기)를 켭니다. 보레이트는 115200으로 맞춥니다.</li>
+            <li>버튼을 누르지 않았는데도 숫자가 0, 1, 0, 1로 제멋대로 요동치는 <strong>플로팅 현상</strong>을 눈으로 직접 관찰하세요!</li>
+            <li>이제 <strong>[코드 2]</strong>를 업로드합니다. 값이 요동치지 않고 안정적으로 고정되는 것을 확인합니다.</li>
+          </ol>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span>⚡ [아두이노 C++] 플로팅 현상 발생 코드 (저항 없음)</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+          </div>
+          <pre><code class="language-cpp">void setup() {
+  Serial.begin(115200); 
+  pinMode(2, INPUT); // 아무런 저항 설정 없이 입력만 받음
+}
+void loop() {
+  Serial.println(digitalRead(2)); // 값이 요동침!
+  delay(50);
+}</code></pre>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span>⚡ [아두이노 C++] 내부 풀업 저항 적용 코드</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+          </div>
+          <pre><code class="language-cpp">void setup() {
+  Serial.begin(115200); 
+  pinMode(2, INPUT_PULLUP); // 아두이노 칩 내부의 마법의 저항 켜기!
+}
+void loop() {
+  Serial.println(digitalRead(2)); // 값이 안정적으로 고정됨
+  delay(50);
+}</code></pre>
+        </div>
+
+        <h2>2. 역논리(Negative Logic)와 소프트웨어 보정</h2>
+        <p>위 [코드 2]를 실행해 보면, 버튼을 가만히 두었을 때는 <strong>1</strong>이 나오고, 버튼을 꾹 누르는 순간 전류가 접지로 빠져나가며 <strong>0</strong>이 출력됩니다. 우리가 일상적으로 생각하는 '누름 = 1'이라는 직관과 반대되는 현상입니다.</p>
+
+        <div class="alert-box alert-info">
+          <h5>💡 논리 부정 연산자 `!` (NOT)</h5>
+          <p>이러한 역논리 현상을 가장 쉽게 해결하는 방법은 프로그래밍의 <strong>논리 부정 연산자인 `!` (NOT)</strong>를 사용하는 것입니다. 값 앞에 <code>!</code>를 붙이면 0은 1로, 1은 0으로 완벽하게 뒤집어줍니다.</p>
+        </div>
+
+        <div class="math-block">
+          $$\text{btn\_jump} = !\text{digitalRead(PIN\_BTN)} \quad \iff \quad \text{btn\_jump} = 1 - \text{digitalRead(PIN\_BTN)}$$
+        </div>
+        <p style="text-align:center; color:var(--text-sub);">수학적으로 <code>!</code> 기호를 붙이는 것은 <code>1 - 현재값</code>을 계산하는 것과 완벽히 동일한 결과($1-1=0$, $1-0=1$)를 만들어냅니다.</p>
+
+        <div class="alert-box alert-tip">
+          <h5>💡 실습 진행 가이드 2: 소프트웨어 보정 적용</h5>
+          <ol>
+            <li>아래 <strong>[코드 3]</strong>을 아두이노에 업로드합니다.</li>
+            <li>시리얼 모니터를 켜고 버튼을 누를 때 <code>Corrected</code> 값이 우리가 원하는 대로 <strong>1 (점프)</strong>로 출력되는지 확인합니다.</li>
+          </ol>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span>⚡ [아두이노 C++] step1_button_test.ino</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+          </div>
+          <pre><code class="language-cpp">const int PIN_BTN = 2; // 디지털 2번 핀
+
+void setup() {
+  Serial.begin(115200); 
+  pinMode(PIN_BTN, INPUT_PULLUP); // 내부 풀업 저항 켜기
+}
+
+void loop() {
+  int raw_signal = digitalRead(PIN_BTN);
+  
+  // ! 연산자를 통한 논리 반전 (0을 1로, 1을 0으로)
+  int corrected_signal = !raw_signal; 
+
+  Serial.print("Raw: ");
+  Serial.print(raw_signal);
+  Serial.print("  |  Corrected: ");
+  Serial.println(corrected_signal);
+
+  delay(50);
+}</code></pre>
+        </div>
+
+        <div class="chapter-nav-footer">
+          <button class="nav-footer-btn" onclick="switchChapter('chapter-01')">
+            <span style="font-size:0.75rem; color:var(--text-muted);">이전 단계</span>
+            <span style="font-weight:700; color:var(--accent-blue);">👈 [활동지 01] 환경 구축 및 조립</span>
+          </button>
+          <button class="nav-footer-btn next" onclick="switchChapter('chapter-03')">
+            <span style="font-size:0.75rem; color:var(--text-muted);">다음 단계</span>
+            <span style="font-weight:700; color:var(--accent-blue);">[활동지 03] 비례 속도 모델 👉</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION 3: JOYSTICK MATH -->
+      <!-- ========================================== -->
+      <section id="chapter-03" class="chapter-container">
+        <div class="chapter-header">
+          <h1 class="chapter-title">[활동지 03] 2축 아날로그 조이스틱: 기울임에 따른 좌표 비례 모델링</h1>
+        </div>
+
+        <div class="objectives-card">
+          <h4><span>🎯</span> 학습 목표</h4>
+          <ol>
+            <li>아날로그 전압의 ADC 변환 원리를 이해하고 조이스틱의 원시 데이터(Raw)를 관찰한다.</li>
+            <li>기계적 떨림을 제거하기 위한 데드존($D$) 수학 공식을 세우고 적용한다.</li>
+            <li>조이스틱의 기울임 변위를 $-1.0 \le \text{tilt} \le +1.0$ 범위의 실수 비율로 선형 정규화(Normalization)한다.</li>
+          </ol>
+        </div>
+
+        <h2>1. ADC(아날로그-디지털 변환)와 데드존($D$)</h2>
+        <p>조이스틱은 기울인 각도에 따라 가변저항 전압이 변하며, 아두이노는 이 전압 신호를 10비트 해상도를 통해 아래 부등식 범위의 정수로 환산합니다.</p>
+        <div class="math-block">$$0 \le \text{raw} \le 1023, \quad \text{중립 중심값} \approx 512$$</div>
+
+        <div class="alert-box alert-tip">
+          <h5>💡 실습 진행 가이드 1: 원시 데이터와 오차 관찰</h5>
+          <ol>
+            <li>아래 <strong>[코드 1]</strong>을 업로드하고 시리얼 모니터를 켭니다.</li>
+            <li>조이스틱에서 손을 떼고 가만히 두어 보세요. 512에 고정되지 않고 508~516 사이에서 계속 숫자가 떨리는 것이 보이나요?</li>
+            <li>이 작은 오차 때문에 게임 캐릭터가 나도 모르게 스멀스멀 기어가는 현상이 생깁니다. 이를 막는 오차 허용 범위를 <strong>데드존 $D$</strong> (약 70)라고 합니다.</li>
+          </ol>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span>⚡ [아두이노 C++] 조이스틱 원시(Raw) 데이터 확인 코드</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+          </div>
+          <pre><code class="language-cpp">void setup() { Serial.begin(115200); }
+void loop() {
+  int raw_x = analogRead(A0);
+  Serial.print("Raw X: "); Serial.println(raw_x);
+  delay(50);
+}</code></pre>
+        </div>
+
+
+        <h2>2. 정규화 수식의 단계별 유도</h2>
+
+        <!-- Interactive Joystick Simulator -->
+        <div class="simulator-box">
+          <div class="sim-header">
+            <span class="sim-title"><span>🕹️</span> 조이스틱 기울임 & 비례 속도 시뮬레이터</span>
+            <span style="font-size:0.8rem; color:var(--text-muted);">조이스틱 노브를 마우스로 좌우로 드래그해 보세요</span>
+          </div>
+          <canvas id="joystickSimCanvas" class="sim-canvas" width="800" height="260"></canvas>
+
+          <div class="sim-controls">
+            <div class="control-group">
+              <div class="control-label">
+                <span>데드존 임계치 (D)</span>
+                <span id="sim_dz_val" style="color:var(--accent-blue);">70 ADC</span>
+              </div>
+              <input type="range" id="sim_dz_slider" min="20" max="150" step="5" value="70" class="control-slider" oninput="updateJoySimParams()">
+            </div>
+            <div class="control-group">
+              <div class="control-label">
+                <span>최대 이동 속도 (speed)</span>
+                <span id="sim_ms_val" style="color:var(--accent-blue);">5.6 px/frame</span>
+              </div>
+              <input type="range" id="sim_ms_slider" min="2.0" max="12.0" step="0.2" value="5.6" class="control-slider" oninput="updateJoySimParams()">
+            </div>
+            <div class="control-group" style="justify-content:center;">
+              <button class="sim-btn" onclick="resetJoySim()">🔄 조이스틱 중앙 원위치</button>
+            </div>
+          </div>
+
+          <div style="margin-top:12px; font-size:0.88rem; display:flex; gap:16px; flex-wrap:wrap; font-family:var(--font-mono);">
+            <span>raw (A0): <strong id="sim_raw_adc" style="color:var(--accent-yellow);">512</strong></span>
+            <span>정규화 tilt_x: <strong id="sim_tilt" style="color:var(--accent-green);">0.00</strong></span>
+            <span>최종 수평속도 (vx): <strong id="sim_vx" style="color:var(--accent-blue);">0.0 px</strong></span>
+          </div>
+        </div>
+
+
+        <p>조이스틱의 값을 우리가 게임 속도로 활용하기 편한 <strong>$-1.0 \sim +1.0$</strong> 비율로 바꾸는 과정을 <strong>정규화(Normalization)</strong>라고 합니다. 기본적인 수학 공식은 다음과 같습니다.</p>
+        <div class="math-block">
+          $$ \text{비율} = \frac{\text{현재값} - \text{시작점(최솟값)}}{\text{끝점(최댓값)} - \text{시작점(최솟값)}} $$
+        </div>
+
+        <h3>수식 유도 1: 양의 방향으로 밀 때 ($\text{raw} > 512 + D$)</h3>
+        <ul>
+          <li><strong>분자에서 왜 $512 + D$를 뺄까?</strong> 데드존 경계를 넘어선 순간부터 이동이 시작되어야 하므로 조작 시작점을 $0$으로 맞추기 위함입니다.</li>
+          <li><strong>분모는 왜 $511 - D$ 일까?</strong> 스틱을 끝까지 밀었을 때 최댓값은 $1023$입니다. 분자($1023 - (512+D)$)가 분모 전체 길이와 동일해야 정규화 비율이 완벽하게 $+1.0$에 도달합니다.</li>
+        </ul>
+        <div class="math-block">$$\text{tilt\_x} = \frac{\text{raw} - (512 + D)}{511 - D} \quad (0.0 \le \text{tilt\_x} \le 1.0)$$</div>
+
+        <h3>수식 유도 2: 음의 방향으로 밀 때 ($\text{raw} < 512 - D$)</h3>
+        <div class="math-block">$$\text{tilt\_x} = \frac{\text{raw} - (512 - D)}{512 - D} \quad (-1.0 \le \text{tilt\_x} \le 0.0)$$</div>
+
+        <div class="alert-box alert-tip">
+          <h5>💡 실습 진행 가이드 2: 수식 적용과 3채널 전송</h5>
+          <ol>
+            <li>이제 위의 수학 공식을 적용하여 X축, Y축, 점프 버튼의 상태를 한 번에 쏘는 <strong>[코드 2]</strong>를 업로드합니다.</li>
+            <li>시리얼 모니터를 열고 스틱을 돌려보세요. <code>0.85,-0.60,0</code> 처럼 3개의 값이 쉼표로 묶여 실시간으로 깔끔하게 올라오는 것을 확인합니다.</li>
+          </ol>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span>⚡ [아두이노 C++] step2_joystick_packet.ino</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+          </div>
+          <pre><code class="language-cpp">const int PIN_JOY_X = A0; 
+const int PIN_JOY_Y = A1; 
+const int PIN_BTN = 2;    
+
+const int CENTER = 512;
+const int D = 70; // 데드존 D
+
+void setup() {
+  Serial.begin(115200); 
+  pinMode(PIN_BTN, INPUT_PULLUP);
+}
+
+// 수학 공식을 함수로 묶어 깔끔하게 재사용!
+float get_tilt(int raw) {
+  if (raw > CENTER + D) return (float)(raw - (CENTER + D)) / (1023 - (CENTER + D));
+  if (raw < CENTER - D) return (float)(raw - (CENTER - D)) / (CENTER - D);
+  return 0.0;
+}
+
+void loop() {
+  float tilt_x = get_tilt(analogRead(PIN_JOY_X));
+  float tilt_y = get_tilt(analogRead(PIN_JOY_Y)); // Y축도 동일한 공식 적용
+
+  // 범위를 완벽하게 -1.0 ~ 1.0으로 가두기 (클램핑)
+  if (tilt_x > 1.0) tilt_x = 1.0; if (tilt_x < -1.0) tilt_x = -1.0;
+  if (tilt_y > 1.0) tilt_y = 1.0; if (tilt_y < -1.0) tilt_y = -1.0;
+
+  int btn_jump = !digitalRead(PIN_BTN); // 2차시에서 배운 논리 보정 적용
+
+  // 직렬화 전송: "tilt_x,tilt_y,btn_jump\n" (예: 0.65,-0.20,1)
+  Serial.print(tilt_x, 2); Serial.print(",");
+  Serial.print(tilt_y, 2); Serial.print(",");
+  Serial.println(btn_jump);
+
+  delay(16); // 게임 프레임(60FPS)과 맞춘 16ms 대기
+}</code></pre>
+        </div>
+
+        <div class="chapter-nav-footer">
+          <button class="nav-footer-btn" onclick="switchChapter('chapter-02')">
+            <span style="font-size:0.75rem; color:var(--text-muted);">이전 단계</span>
+            <span style="font-weight:700; color:var(--accent-blue);">👈 [활동지 02] 버튼 논리 반전</span>
+          </button>
+          <button class="nav-footer-btn next" onclick="switchChapter('chapter-04')">
+            <span style="font-size:0.75rem; color:var(--text-muted);">다음 단계</span>
+            <span style="font-weight:700; color:var(--accent-blue);">[활동지 04] 시리얼 브릿지 & 실수 연산 👉</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION 4: PYGAME SERIAL BRIDGE -->
+      <!-- ========================================== -->
+      <section id="chapter-04" class="chapter-container">
+        <div class="chapter-header">
+          <h1 class="chapter-title">[활동지 04] Pygame 시리얼 수신 브릿지와 연속 물리 모델 연동</h1>
+        </div>
+
+        <div class="objectives-card">
+          <h4><span>🎯</span> 학습 목표</h4>
+          <ol>
+            <li>데이터 수신 시 발생하는 입력 지연(Latency) 현상을 관찰하고 해결한다.</li>
+            <li>통신 큐 버퍼에 쌓인 과거 데이터를 비우고 최신 패킷 1줄만 채택하는 비동기 플러시(Queue Flush) 코드를 작성한다.</li>
+            <li>$1$ 미만의 속도 연산에서 정수 캐스팅이 유발하는 물리적 오차를 이해하고 실수(Float) 연산을 결합한다.</li>
+          </ol>
+        </div>
+
+        <h2>1. 입력 지연 방지를 위한 버퍼 플러시 (Queue Flush)</h2>
+        <p>아두이노가 초당 60회 전송할 때, 파이썬이 단순히 <code>readline()</code>을 1회만 호출하면 어떻게 될까요? 통신 큐(Queue)에 과거 데이터가 처리되지 못하고 쌓이면서 조작 반응이 0.5초씩 밀리게 됩니다.</p>
+
+        <div class="math-block">
+          $$\text{Buffer Flush}: \quad \text{while}(ser.in\_waiting > 0) \implies \text{latest\_packet} \leftarrow \text{readline}()$$
+        </div>
+
+        <div class="alert-box alert-tip">
+          <h5>💡 실습 진행 가이드 1: 인풋랙 해결하기</h5>
+          <ol>
+            <li>먼저 아두이노 IDE에 켜져 있는 <strong>시리얼 모니터 창을 닫아주세요.</strong> (매우 중요!)</li>
+            <li>VS Code에서 <strong>[코드 1]</strong>을 복사하여 실행합니다. 스틱을 젖히고 화면에 뜨는 값을 보세요. 손을 놓아도 화면의 숫자는 1초 뒤에나 0으로 내려옵니다. (심각한 지연 발생)</li>
+            <li>이제 <strong>[코드 2]</strong>를 실행합니다. <code>while ser.in_waiting > 0:</code> 루프가 버퍼를 순식간에 비워내어 <strong>1ms의 지연도 없이 즉각 반응</strong>하는 것을 확인합니다.</li>
+          </ol>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span>⚠️ [파이썬 Python] 단순 읽기 (지연 발생 코드)</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+          </div>
+          <pre><code class="language-python">import serial, time
+ser = serial.Serial('COM3', 115200, timeout=0.01) # 포트 번호 확인
+
+while True:
+    line = ser.readline().decode('utf-8').strip() # 1줄만 무작정 읽음
+    if line:
+        print("수신 데이터:", line)
+    time.sleep(0.05) # 게임의 복잡한 렌더링 시간 가정</code></pre>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span>⚡ [파이썬 Python] step4_serial_test.py (플러시 적용)</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 복사</button>
+          </div>
+          <pre><code class="language-python">import serial, time
+ser = serial.Serial('COM3', 115200, timeout=0.01)
+
+while True:
+    latest_line = None
+    
+    # 마법의 코드: 큐에 과거 데이터가 남아있으면 다 꺼내서 버리고 최신 1개만 잡는다!
+    while ser.in_waiting > 0:
+        line = ser.readline().decode('utf-8').strip()
+        if line:
+            latest_line = line
+            
+    if latest_line:
+        print("최신 수신 데이터:", latest_line)
+    
+    time.sleep(0.05)</code></pre>
+        </div>
+
+        <h2>2. 캐릭터 좌표의 절단 오차(Truncation Error) 차단</h2>
+        <div class="alert-box alert-important">
+          <h5>⚠️ 정수화 캐스팅의 수학적 오류</h5>
+          <p>조이스틱을 살짝 기울여 매 프레임 $0.4\text{ px}$의 속도($v_x = 0.4$)가 들어올 때, 이를 <code>int(velocity_x)</code>로 덧셈하면 소수점 아래가 버려져 <strong>0이 되어버리므로 캐릭터가 멈춥니다.</strong></p>
+          <strong>원칙: 속도, 가속도, 좌표는 순수 실수(Float)로 누적하고, 화면 렌더링 박스인 `Rect` 객체에만 최종 정수 픽셀을 전달합니다.</strong>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span>💡 [파이썬 Python] 올바른 연속 물리 누적 모델 뼈대</span>
+          </div>
+          <pre><code class="language-python">velocity_x = hw_tilt_x * MAX_SPEED
+
+# 실수(Float) 누적. (0.4 + 0.4 + 0.4 ...가 소실되지 않고 온전히 1.2로 계산됨)
+player_x += velocity_x  
+player_y += velocity_y
+
+# 화면 렌더링 픽셀 좌표에만 정수로 잘라서 전달
+player_rect.x = int(player_x) 
+player_rect.y = int(player_y)</code></pre>
+        </div>
+
+        <div class="chapter-nav-footer">
+          <button class="nav-footer-btn" onclick="switchChapter('chapter-03')">
+            <span style="font-size:0.75rem; color:var(--text-muted);">이전 단계</span>
+            <span style="font-weight:700; color:var(--accent-blue);">👈 [활동지 03] 조이스틱 수학 모델</span>
+          </button>
+          <button class="nav-footer-btn next" onclick="switchChapter('chapter-final')">
+            <span style="font-size:0.75rem; color:var(--text-muted);">다음 단계</span>
+            <span style="font-weight:700; color:var(--accent-blue);">🏆 완전판 소스 다운로드 및 연동 👉</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION FINAL: COMPLETE GAME -->
+      <!-- ========================================== -->
+      <section id="chapter-final" class="chapter-container">
+        <div class="chapter-header">
+          <h1 class="chapter-title">🏆 완전판 게임 소스코드 다운로드 및 최종 연동</h1>
+          <p>지금까지 배운 통신 기술을 활용하여, 수학적 원리가 집약된 <strong>100열 × 10행 초대형 스테이지</strong>와 특수 기믹 전체를 아두이노 컨트롤러로 직접 플레이해 봅니다.</p>
+        </div>
+
+        <div class="alert-box alert-info">
+          <h5>🎮 최종 조작 가이드 (조이스틱 Y축 워프 조준 기능 탑재)</h5>
+          <ul>
+            <li><strong>좌우 이동:</strong> 조이스틱 X축 기울임 (기울인 각도에 따라 걷기/달리기 속도 비례 조절)</li>
+            <li><strong>점프:</strong> 아두이노 2번 핀에 연결된 독립 푸시 버튼 클릭</li>
+            <li><strong>워프 조준 및 비행:</strong> 워프 아이템(<code>W</code>) 획득 후 조이스틱 X/Y축을 움직여 붉은 조준점(크로스헤어)을 목표 위치에 맞춘 뒤, <strong>점프 버튼을 클릭</strong>하여 비행 시작</li>
+          </ul>
+        </div>
+
+        <h2>1️⃣ 스테이지 맵 데이터: stage_100x10.csv</h2>
+        <p>파이썬 코드와 동일한 폴더에 저장되어 있어야 게임이 실행됩니다.</p>
+        <div class="sim-btn-group">
+          <button class="sim-btn" onclick="downloadStageCSV()">⬇️ CSV 파일 다운로드</button>
+        </div>
+        
+        <div class="code-container">
+          <div class="code-header">
+            <span>📄 [데이터 CSV] stage_100x10.csv 데이터 뷰어</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 전체 복사</button>
+          </div>
+          <pre><code class="language-csv" id="stageCsvCode">1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,H,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,F,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,B,B,B,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0
+0,P,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,C,0,C,0,0,0,0,J,0,1,0,0,0,M,0,0,0,0,0,0,0,T,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,E,0,0,0,0,0,0,0,0,0,W,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,1,0,0,0,G
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1</code></pre>
+        </div>
+
+        <h2>2️⃣ 아두이노 조이스틱 연동 게임 소스: main.py</h2>
+        <p>파이썬 소스코드 안의 <code>SERIAL_PORT = "COM3"</code> 부분을 본인 환경의 아두이노 포트로 수정합니다. 각 함수와 로직에 <strong>수학적 원리를 설명하는 상세한 주석</strong>이 포함되어 있습니다.</p>
+        
+        <div class="sim-btn-group">
+          <button class="sim-btn" onclick="downloadMainPy()">⬇️ main.py 소스코드 다운로드</button>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span>🐍 [파이썬 Python] main.py (상세 주석 버전)</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 전체 복사</button>
+          </div>
+          <pre><code class="language-python" id="mainPyCode">import pygame, sys, os, csv, math, random, heapq, array
+
+try: import serial
+except ImportError: serial = None
+
+# ==============================================================================
+# 0. 사운드 믹서 사전 설정 및 엔진 초기화
+# ==============================================================================
+pygame.mixer.pre_init(44100, -16, 1, 512)
+pygame.init()
+SCREEN_WIDTH, SCREEN_HEIGHT = 800, 450
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("수학탐구학교 2부: 아두이노 컨트롤러 연동 완전판")
+clock = pygame.time.Clock()
+
+font_ui, font_bold, font_large = pygame.font.SysFont(None, 24), pygame.font.SysFont(None, 28), pygame.font.SysFont(None, 42)
+TILE_SIZE, MAP_COLS, MAP_ROWS, STAGE_CSV = 40, 100, 10, "stage_100x10.csv"
+
+# ==============================================================================
+# 1. 아두이노 시리얼 브릿지 (3채널 데이터 수신 및 비동기 플러시)
+# ==============================================================================
+SERIAL_PORT = "COM3" # 본인 환경의 아두이노 포트로 변경하세요 (예: COM4, /dev/ttyUSB0)
+ser = None
+if serial:
+    try:
+        ser = serial.Serial(SERIAL_PORT, 115200, timeout=0.01)
+        print(f"🎮 아두이노 연결 완료: {SERIAL_PORT}")
+    except Exception as e:
+        print("⚠️ 아두이노 연결 실패: 키보드(방향키, Space) 모드로 작동합니다.")
+
+hw_tilt_x, hw_tilt_y, hw_jump_btn, prev_hw_jump = 0.0, 0.0, 0, 0
+
+# 워프 조준점(크로스헤어)의 초기 스크린 좌표
+cursor_x, cursor_y = SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2
+
+def poll_arduino_input():
+    global hw_tilt_x, hw_tilt_y, hw_jump_btn
+    if ser is None or not ser.is_open: return
+    latest_line = None
+    
+    # [수학적 원리] 버퍼 비우기 (Queue Flush)
+    # 데이터가 수신 큐에 남아있는 한 계속 읽어내어(while) 가장 마지막 줄만 latest_line에 남깁니다.
+    # 이를 통해 과거 입력이 쌓여 발생하는 0.5초의 지연(Latency) 현상을 0ms에 가깝게 제거합니다.
+    while ser.in_waiting > 0:
+        try:
+            line = ser.readline().decode('utf-8', errors='ignore').strip()
+            if line: latest_line = line
+        except: pass
+        
+    if latest_line:
+        parts = latest_line.split(',')
+        if len(parts) == 3:
+            try: hw_tilt_x, hw_tilt_y, hw_jump_btn = float(parts[0]), float(parts[1]), int(parts[2])
+            except ValueError: pass
+
+def generate_beep(freq_start, freq_end, duration_ms, wave_type="square"):
+    sample_rate = 44100
+    n_samples = int(sample_rate * (duration_ms / 1000.0))
+    buf = array.array('h')
+    for i in range(n_samples):
+        t = i / n_samples
+        freq = freq_start + (freq_end - freq_start) * t
+        phase = 2.0 * math.pi * freq * (i / sample_rate)
+        if wave_type == "square": val = 14000 if math.sin(phase) >= 0 else -14000
+        elif wave_type == "noise": val = random.randint(-14000, 14000)
+        else: val = int(14000 * math.sin(phase))
+        buf.append(int(val * (1.0 - t)))
+    return pygame.mixer.Sound(buf)
+
+snd_jump = generate_beep(200, 600, 100, "square")
+snd_bounce = generate_beep(300, 900, 150, "square")
+snd_item = generate_beep(500, 1000, 120, "triangle")
+snd_switch = generate_beep(400, 300, 80, "square")
+snd_death = generate_beep(400, 60, 250, "noise")
+snd_troll = generate_beep(600, 150, 350, "square")
+snd_reverse = generate_beep(250, 850, 400, "triangle")
+
+# ==============================================================================
+# 2. 게임 기믹 클래스 모음 (물리 및 삼각함수 적용)
+# ==============================================================================
+class Particle:
+    def __init__(self, x, y, color):
+        self.x, self.y, self.color = float(x), float(y), color
+        self.size = random.uniform(6.0, 11.0)
+        
+        # [수학적 원리] 극좌표계(r, θ)를 활용한 파티클 분사
+        # 무작위 각도(angle)와 속력(speed)을 생성한 뒤, 
+        # 삼각비(cos, sin)를 곱해 직교 좌표계의 x, y 속도 벡터(vx, vy)로 변환합니다.
+        angle = random.uniform(0, 2 * math.pi)
+        speed_val = random.uniform(2.5, 7.5)
+        self.vx = math.cos(angle) * speed_val
+        self.vy = math.sin(angle) * speed_val - 2.0
+        
+        self.gravity, self.life, self.decay = 0.35, 1.0, random.uniform(0.025, 0.045)
+
+    def update(self):
+        self.vy += self.gravity  # 중력 가속도 누적 (y방향 속도 증가)
+        self.x += self.vx        # 수평 위치 갱신
+        self.y += self.vy        # 수직 위치 갱신
+        self.life -= self.decay
+        self.size = max(0.0, self.size - 0.15)
+
+    def draw(self, surface, cam_x, ox, oy):
+        if self.life > 0 and self.size > 0:
+            rx, ry = int(self.x - cam_x + ox), int(self.y + oy)
+            pygame.draw.rect(surface, self.color, (rx, ry, int(self.size), int(self.size)))
+
+particles = []
+screen_shake = 0.0
+
+def trigger_explosion(x, y, color, count=25):
+    global screen_shake
+    screen_shake = 15.0 # 카메라 진동 오프셋 초기화
+    for _ in range(count): particles.append(Particle(x, y, color))
+
+class MovingPlatform:
+    def __init__(self, x, y, width, height, move_range_x, move_speed):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.start_x, self.end_x = float(x), float(x + move_range_x)
+        self.speed_x, self.x = float(move_speed), float(x)
+        
+    def update(self):
+        self.x += self.speed_x
+        # 이동 구간(start_x ~ end_x)을 벗어나면 속도 벡터의 부호를 반전시켜 왕복시킵니다.
+        if self.x >= self.end_x or self.x <= self.start_x:
+            self.speed_x *= -1.0
+            self.x += self.speed_x
+        self.rect.x = int(self.x)
+        return self.speed_x # 플레이어를 태우기 위해 자신의 속도 반환
+
+class MovingHazard:
+    def __init__(self, x, y):
+        self.center_x, self.y = float(x), float(y)
+        # 진폭(amplitude) 70, 각속도(omega) 0.04 설정
+        self.amplitude, self.omega, self.t = 70.0, 0.04, 0.0
+        self.rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE)
+        
+    def update(self):
+        self.t += self.omega
+        # [수학적 원리] 단진동(Simple Harmonic Motion) 모델링
+        # 삼각함수 sin(t)를 이용하여 중심축(center_x)을 기준으로 진폭(amplitude)만큼 부드럽게 왕복합니다.
+        self.rect.x = int(self.center_x + self.amplitude * math.sin(self.t))
+        
+    def draw(self, surface, cam_x, ox, oy):
+        r = pygame.Rect(self.rect.x - cam_x + ox, self.rect.y + oy, TILE_SIZE, TILE_SIZE)
+        pygame.draw.rect(surface, (231, 76, 60), r)
+        pygame.draw.rect(surface, (255, 255, 255), r, 2)
+
+class CrumblingPlatform:
+    def __init__(self, x, y):
+        self.rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE)
+        self.stepped, self.is_active = False, True
+        self.timer, self.respawn_timer = 40, 0
+        
+    def update(self):
+        if self.stepped and self.is_active:
+            self.timer -= 1
+            if self.timer <= 0:
+                self.is_active, self.respawn_timer = False, 150
+        if not self.is_active:
+            self.respawn_timer -= 1
+            if self.respawn_timer <= 0:
+                self.stepped, self.is_active, self.timer = False, True, 40
+                
+    def draw(self, surface, cam_x, ox, oy):
+        if self.is_active:
+            r = pygame.Rect(self.rect.x - cam_x + ox, self.rect.y + oy, TILE_SIZE, TILE_SIZE)
+            color = (180, 90, 40) if self.stepped and (self.timer // 4) % 2 == 0 else (210, 115, 45)
+            pygame.draw.rect(surface, color, r)
+
+class ToggleSwitchSystem:
+    def __init__(self): self.is_on = False
+    def toggle(self):
+        self.is_on = not self.is_on
+        snd_switch.play()
+
+class HiddenBlock:
+    def __init__(self, x, y):
+        self.rect, self.is_revealed = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE), False
+    def draw(self, surface, cam_x, ox, oy):
+        if self.is_revealed:
+            r = pygame.Rect(self.rect.x - cam_x + ox, self.rect.y + oy, TILE_SIZE, TILE_SIZE)
+            pygame.draw.rect(surface, (140, 160, 175), r)
+            pygame.draw.rect(surface, (255, 255, 255), r, 2)
+
+class FleeingPlatform:
+    def __init__(self, x, y):
+        self.origin_x, self.x, self.y = float(x), float(x), float(y)
+        self.max_retreat, self.is_stepped = 75.0, False
+        self.rect = pygame.Rect(x, y, TILE_SIZE * 2, TILE_SIZE)
+        
+    def update(self, px, py, is_standing):
+        self.is_stepped = is_standing
+        if self.is_stepped: return # 플레이어가 타고 있을 땐 정지
+        
+        # [수학적 원리] 피타고라스 정리를 이용한 두 점 사이의 유클리드 거리 측정
+        dx, dy = self.rect.centerx - px, self.rect.centery - py
+        dist = math.hypot(dx, dy) 
+        
+        # 거리가 110px 미만으로 가까워지면 도망갑니다.
+        if 0.001 < dist < 110.0:
+            self.x += (1.0 if dx > 0 else -1.0) * 2.4
+            self.x = max(self.origin_x - self.max_retreat, min(self.origin_x + self.max_retreat, self.x))
+        else:
+            self.x += (self.origin_x - self.x) * 0.04 # 천천히 원위치로 복귀
+        self.rect.x = int(self.x)
+        
+    def draw(self, surface, cam_x, ox, oy):
+        r = pygame.Rect(self.rect.x - cam_x + ox, self.rect.y + oy, self.rect.width, self.rect.height)
+        color = (165, 105, 189) if self.is_stepped else (155, 89, 182)
+        border_color = (46, 204, 113) if self.is_stepped else (255, 255, 255)
+        pygame.draw.rect(surface, color, r)
+        pygame.draw.rect(surface, border_color, r, 2)
+
+# ==============================================================================
+# 3. CSV 맵 데이터 초기화 및 로더 (월드 좌표계 인스턴스화)
+# ==============================================================================
+platforms, hazards, springs, shield_items, warp_items = [], [], [], [], []
+moving_hazards, crumbling_platforms, toggle_blocks, hidden_blocks = [], [], [], []
+fleeing_platforms, moving_platforms = [], []
+switch_rect, real_goal, fake_goal = None, None, None
+spawn_point = (80.0, 200.0)
+
+toggle_system = ToggleSwitchSystem()
+collision_grid = [[False for _ in range(MAP_COLS)] for _ in range(MAP_ROWS)]
+
+def load_stage_data():
+    global platforms, hazards, springs, shield_items, warp_items
+    global moving_hazards, crumbling_platforms, toggle_blocks, hidden_blocks
+    global fleeing_platforms, moving_platforms, switch_rect, real_goal, fake_goal, spawn_point
+    global collision_grid
+
+    platforms.clear(); hazards.clear(); springs.clear(); shield_items.clear(); warp_items.clear()
+    moving_hazards.clear(); crumbling_platforms.clear(); toggle_blocks.clear(); hidden_blocks.clear()
+    fleeing_platforms.clear(); moving_platforms.clear()
+    switch_rect, real_goal, fake_goal = None, None, None
+    toggle_system.is_on = False
+    collision_grid = [[False for _ in range(MAP_COLS)] for _ in range(MAP_ROWS)]
+
+    if not os.path.exists(STAGE_CSV): return
+
+    with open(STAGE_CSV, "r", encoding="utf-8-sig") as f:
+        for r, row in enumerate(csv.reader(f)):
+            for c, val in enumerate(row):
+                val = val.strip().upper()
+                x, y = c * TILE_SIZE, r * TILE_SIZE
+                
+                # 행렬의 인덱스(r, c)를 월드 좌표계(x, y)로 매핑
+                if val == "1":
+                    platforms.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
+                    collision_grid[r][c] = True # A* 탐색용 충돌 그리드 기록
+                elif val == "2":
+                    hazards.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
+                    collision_grid[r][c] = True
+                elif val == "J": springs.append(pygame.Rect(x + 5, y + 25, 30, 15))
+                elif val == "S": shield_items.append(pygame.Rect(x + 10, y + 10, 20, 20))
+                elif val == "W": warp_items.append(pygame.Rect(x + 10, y + 10, 20, 20))
+                elif val == "M": moving_hazards.append(MovingHazard(x, y))
+                elif val == "C": crumbling_platforms.append(CrumblingPlatform(x, y))
+                elif val == "T": switch_rect = pygame.Rect(x + 8, y + 24, 24, 16)
+                elif val == "B": toggle_blocks.append(pygame.Rect(x, y, TILE_SIZE, TILE_SIZE))
+                elif val == "H": hidden_blocks.append(HiddenBlock(x, y))
+                elif val == "E": fleeing_platforms.append(FleeingPlatform(x, y))
+                elif val == "F": fake_goal = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE * 2)
+                elif val == "G": real_goal = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE * 2)
+                elif val == "P": spawn_point = (float(x), float(y))
+
+    moving_platforms.append(MovingPlatform(79 * TILE_SIZE, 6 * TILE_SIZE, 80, 20, 220, 2.5))
+
+def find_a_star_path(start_pos, target_pos):
+    """
+    [수학적 원리] A* (A-Star) 최단 경로 탐색 알고리즘
+    f(n) = g(n) + h(n) 공식을 사용하여 목적지까지의 가장 짧은 경로를 찾습니다.
+    g(n): 시작점에서 현재까지 이동한 칸 수
+    h(n): 현재 위치에서 목적지까지의 맨해튼 거리 (가로 칸 수 차이 + 세로 칸 수 차이)
+    """
+    sc, sr = int(start_pos[0] // TILE_SIZE), int(start_pos[1] // TILE_SIZE)
+    tc, tr = int(target_pos[0] // TILE_SIZE), int(target_pos[1] // TILE_SIZE)
+    
+    # 맵 바깥이거나 도착지가 막힌 벽이면 탐색 포기
+    if not (0 <= tr < MAP_ROWS and 0 <= tc < MAP_COLS) or collision_grid[tr][tc]: return []
+
+    open_set, came_from, g_score = [], {}, {(sr, sc): 0}
+    heapq.heappush(open_set, (0, 0, (sr, sc)))
+
+    while open_set:
+        _, cur_g, current = heapq.heappop(open_set)
+        if current == (tr, tc):
+            path, curr = [], current
+            while curr in came_from:
+                # 타일 모서리가 아닌 중심점(+20픽셀)을 지나는 궤적으로 보정
+                path.append((curr[1] * TILE_SIZE + 20, curr[0] * TILE_SIZE + 20))
+                curr = came_from[curr]
+            path.reverse()
+            return path
+
+        cr, cc = current
+        # 상하좌우 4방향 탐색
+        for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            nr, nc = cr + dr, cc + dc
+            if 0 <= nr < MAP_ROWS and 0 <= nc < MAP_COLS and not collision_grid[nr][nc]:
+                tentative_g = cur_g + 1
+                if (nr, nc) not in g_score or tentative_g < g_score[(nr, nc)]:
+                    g_score[(nr, nc)] = tentative_g
+                    f = tentative_g + abs(nr - tr) + abs(nc - tc) # 맨해튼 거리 휴리스틱 추가
+                    heapq.heappush(open_set, (f, tentative_g, (nr, nc)))
+                    came_from[(nr, nc)] = current
+    return []
+
+# ==============================================================================
+# 4. 물리 변수 및 상태 머신 전역 초기화
+# ==============================================================================
+player_x, player_y = 0.0, 0.0
+velocity_x, velocity_y = 0.0, 0.0
+gravity, jump_power, speed, spring_power = 0.78, -14.6, 5.6, -21.5
+
+is_grounded, has_shield, has_warp_ability, is_flying = False, False, False, False
+fly_path, fly_speed = [], 11.0
+coyote_timer, COYOTE_MAX, invincible_timer, knockback_timer = 0, 6, 0, 0
+troll_timer, reverse_announcement_timer = 0, 0
+is_reversed, is_game_cleared, death_count = False, False, 0
+
+player_rect = pygame.Rect(0, 0, TILE_SIZE, TILE_SIZE)
+
+def get_padded_rect(rect, pad):
+    # 피격 판정을 덜 억울하게 만드는 너그러운 패딩(Hitbox Padding)
+    return pygame.Rect(rect.x + pad, rect.y + pad, rect.width - 2 * pad, rect.height - 2 * pad)
+
+def reset_stage(full_restart=True):
+    global player_x, player_y, velocity_x, velocity_y, is_grounded
+    global has_shield, has_warp_ability, is_flying, fly_path
+    global coyote_timer, invincible_timer, knockback_timer, troll_timer
+    global is_reversed, is_game_cleared, screen_shake, reverse_announcement_timer, cursor_x, cursor_y
+
+    was_reversed = is_reversed and not full_restart
+    load_stage_data()
+
+    if not was_reversed:
+        is_reversed = False
+        player_x, player_y = spawn_point[0], spawn_point[1]
+    else:
+        is_reversed = True
+        player_x, player_y = float(real_goal.x), float(real_goal.y)
+        reverse_announcement_timer = 90
+        # 역주행 모드 전용 워프 아이템 스폰 좌표
+        warp_items.append(pygame.Rect(74 * TILE_SIZE + 10, 7 * TILE_SIZE + 10, 20, 20))
+
+    velocity_x, velocity_y = 0.0, 0.0
+    is_grounded, has_shield, has_warp_ability, is_flying = False, False, False, False
+    fly_path.clear()
+    coyote_timer, invincible_timer, knockback_timer, troll_timer, screen_shake = 0, 0, 0, 0, 0.0
+    is_game_cleared = False
+    cursor_x, cursor_y = SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2
+
+reset_stage(full_restart=True)
+world_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+# ==============================================================================
+# 5. 메인 게임 루프 (60 FPS)
+# ==============================================================================
+running = True
+while running:
+    # 1. 아두이노 비례 컨트롤러 폴링
+    poll_arduino_input()
+
+    # 2. 독립 푸시 버튼 점프 하강 엣지 트리거 (누르는 순간 1회만 인식)
+    jump_triggered = False
+    if hw_jump_btn == 1 and prev_hw_jump == 0:
+        jump_triggered = True
+    prev_hw_jump = hw_jump_btn
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT: running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_r: reset_stage(full_restart=True)
+            if event.key == pygame.K_SPACE: jump_triggered = True
+
+    # --------------------------------------------------------------------------
+    # 3. 워프 아이템 조준 및 발사 로직 (조이스틱 Y축 도입)
+    # --------------------------------------------------------------------------
+    if has_warp_ability and not is_flying:
+        # 조이스틱 입력을 화면 크로스헤어 좌표에 반영
+        cursor_x += hw_tilt_x * 12.0
+        cursor_y -= hw_tilt_y * 12.0
+        
+        # 부등식 제어: 화면을 벗어나지 않게 가두기
+        cursor_x = max(0, min(SCREEN_WIDTH, cursor_x))
+        cursor_y = max(0, min(SCREEN_HEIGHT, cursor_y))
+
+        # 점프 버튼으로 워프 확정 및 실행
+        if jump_triggered:
+            map_w = MAP_COLS * TILE_SIZE
+            cam_x = max(0, min(map_w - SCREEN_WIDTH, player_rect.centerx - SCREEN_WIDTH // 2))
+            
+            # [수학적 보정] 렌더링 역전 시, 마우스의 화면 Y좌표를 물리적 월드 Y좌표로 재매핑
+            target_world_x = cursor_x + cam_x
+            target_world_y = (SCREEN_HEIGHT - cursor_y) if is_reversed else cursor_y
+            
+            path = find_a_star_path((player_x, player_y), (target_world_x, target_world_y))
+            if path:
+                fly_path = path
+                is_flying = True
+                has_warp_ability = False
+                snd_bounce.play()
+            
+            jump_triggered = False # 일반 점프가 동시 발동하지 않도록 트리거 차단
+
+    # 4. 코요테 타임을 적용한 일반 점프 처리 (워프/비행 중에는 무시)
+    if jump_triggered and not has_warp_ability and not is_flying and not is_game_cleared:
+        if coyote_timer > 0 and knockback_timer <= 0:
+            velocity_y = jump_power
+            coyote_timer = 0
+            is_grounded = False
+            snd_jump.play()
+
+    # 5. 동적 오브젝트(적, 무너지는 발판) 업데이트
+    if not is_game_cleared:
+        for mh in moving_hazards:
+            mh.update()
+        for cp in crumbling_platforms:
+            cp.update()
+
+        feet_rect = pygame.Rect(player_rect.x, player_rect.y, player_rect.width, player_rect.height + 2)
+        for fp in fleeing_platforms:
+            is_standing = False
+            # X축이 겹치고(수평 일치), 발끝과 블록 윗면 오차가 1.0 픽셀 미만일 때만 탑승으로 인정
+            horiz_overlap = (player_rect.right > fp.rect.left + 2) and (player_rect.left < fp.rect.right - 2)
+            if horiz_overlap and velocity_y >= 0 and abs((player_y + TILE_SIZE) - fp.rect.top) < 1.0:
+                is_standing = True
+            fp.update(player_rect.centerx, player_rect.centery, is_standing)
+
+        plat_carrier_dx = 0.0
+        for mp in moving_platforms:
+            dx = mp.update()
+            if feet_rect.colliderect(mp.rect) and velocity_y >= 0:
+                plat_carrier_dx = dx
+
+    # --------------------------------------------------------------------------
+    # 6. 메인 플레이어 물리 갱신
+    # --------------------------------------------------------------------------
+    if not is_game_cleared:
+        if is_flying:
+            # A* 경로 노드를 향해 중력 무시 등속 비행
+            if fly_path:
+                target_node = fly_path[0]
+                tdx = target_node[0] - player_x
+                tdy = target_node[1] - player_y
+                dist = math.hypot(tdx, tdy) # 피타고라스 거리 계산
+                
+                if dist < fly_speed:
+                    player_x = float(target_node[0])
+                    player_y = float(target_node[1])
+                    fly_path.pop(0) # 노드 도달 시 다음 노드로 갱신
+                else:
+                    # 방향 벡터를 정규화(Normalization) 후 비행 속도 곱셈
+                    player_x += (tdx / dist) * fly_speed
+                    player_y += (tdy / dist) * fly_speed
+                player_rect.x = int(player_x)
+                player_rect.y = int(player_y)
+            else:
+                is_flying = False
+                velocity_x = 0.0
+                velocity_y = 0.0
+
+        elif has_warp_ability:
+            velocity_x = 0.0
+            velocity_y = 0.0
+            player_rect.x = int(player_x)
+            player_rect.y = int(player_y)
+
+        else:
+            if knockback_timer > 0:
+                knockback_timer -= 1
+                velocity_x *= 0.88 # 넉백 속도의 자연스러운 마찰 감쇠
+            else:
+                keys = pygame.key.get_pressed()
+                if abs(hw_tilt_x) > 0.01:
+                    velocity_x = hw_tilt_x * speed # 아두이노 비례 연속 속도
+                elif keys[pygame.K_LEFT]:
+                    velocity_x = -speed
+                elif keys[pygame.K_RIGHT]:
+                    velocity_x = speed
+                else:
+                    velocity_x = 0.0
+
+            # [수학적 원리] 절단 오차(Truncation Error) 차단
+            # 속도와 위치는 순수 실수(Float)로 누적 계산하여 소수점 아래 오차 소멸을 막습니다.
+            player_x += velocity_x + plat_carrier_dx
+            player_rect.x = int(player_x)
+
+            solids = list(platforms)
+            if toggle_system.is_on: solids.extend(toggle_blocks)
+            solids.extend([cp.rect for cp in crumbling_platforms if cp.is_active])
+            solids.extend([hb.rect for hb in hidden_blocks if hb.is_revealed])
+            solids.extend([fp.rect for fp in fleeing_platforms])
+            solids.extend([mp.rect for mp in moving_platforms])
+
+            # X축 벽 충돌 판정 및 보정
+            for block in solids:
+                if player_rect.colliderect(block):
+                    if (velocity_x + plat_carrier_dx) > 0:
+                        player_rect.right = block.left
+                    elif (velocity_x + plat_carrier_dx) < 0:
+                        player_rect.left = block.right
+                    player_x = float(player_rect.x)
+
+            # Y축 중력 누적
+            velocity_y += gravity
+            player_y += velocity_y
+            player_rect.y = int(player_y)
+            is_grounded = False
+
+            for hb in hidden_blocks:
+                if not hb.is_revealed and velocity_y < 0 and player_rect.colliderect(hb.rect):
+                    hb.is_revealed = True
+                    player_rect.top = hb.rect.bottom
+                    player_y = float(player_rect.y)
+                    velocity_y = 0.0
+                    snd_bounce.play()
+
+            # Y축 바닥 착지 및 천장 충돌 판정
+            for block in solids:
+                if player_rect.colliderect(block):
+                    if velocity_y > 0:
+                        player_rect.bottom = block.top
+                        player_y = float(player_rect.y)
+                        velocity_y = 0.0
+                        is_grounded = True
+                        for cp in crumbling_platforms:
+                            if block == cp.rect and cp.is_active: cp.stepped = True
+                    elif velocity_y < 0:
+                        player_rect.top = block.bottom
+                        player_y = float(player_rect.y)
+                        velocity_y = 0.0
+
+            for spring in springs:
+                if player_rect.colliderect(spring) and velocity_y > 0:
+                    player_rect.bottom = spring.top
+                    player_y = float(player_rect.y)
+                    velocity_y = spring_power
+                    is_grounded = False
+                    snd_bounce.play()
+
+            if switch_rect and player_rect.colliderect(switch_rect):
+                if velocity_y > 0 and player_rect.bottom - velocity_y <= switch_rect.top + 12:
+                    toggle_system.toggle()
+                    player_rect.bottom = switch_rect.top
+                    player_y = float(player_rect.y)
+                    velocity_y = -6.0
+
+            if is_grounded:
+                coyote_timer = COYOTE_MAX
+            else:
+                coyote_timer = max(0, coyote_timer - 1)
+
+            # ------------------------------------------------------------------
+            # 7. 아이템 및 기믹 상호작용
+            # ------------------------------------------------------------------
+            for shield in shield_items[:]:
+                if player_rect.colliderect(shield):
+                    has_shield = True
+                    shield_items.remove(shield)
+                    snd_item.play()
+
+            for warp in warp_items[:]:
+                if player_rect.colliderect(warp):
+                    has_warp_ability = True
+                    warp_items.remove(warp)
+                    velocity_x = 0.0
+                    velocity_y = 0.0
+                    
+                    # 획득 순간, 화면상 플레이어의 현재 렌더링 위치로 크로스헤어 스냅
+                    cam_x = max(0, min(MAP_COLS * TILE_SIZE - SCREEN_WIDTH, player_rect.centerx - SCREEN_WIDTH // 2))
+                    cursor_x = player_rect.centerx - cam_x
+                    cursor_y = (SCREEN_HEIGHT - player_rect.centery) if is_reversed else player_rect.centery
+                    snd_item.play()
+
+            if fake_goal and player_rect.colliderect(fake_goal):
+                troll_timer = 120
+                knockback_timer = 20
+                velocity_x = -15.0
+                velocity_y = -10.0
+                snd_troll.play()
+
+            if not is_reversed:
+                if real_goal and player_rect.colliderect(real_goal):
+                    is_reversed = True
+                    reverse_announcement_timer = 150
+                    velocity_x = 0.0
+                    velocity_y = 0.0
+                    snd_reverse.play()
+                    trigger_explosion(player_rect.centerx, player_rect.centery, (155, 89, 182), 40)
+                    warp_items.append(pygame.Rect(74 * TILE_SIZE + 10, 7 * TILE_SIZE + 10, 20, 20))
+            else:
+                return_rect = pygame.Rect(int(spawn_point[0]), int(spawn_point[1]), TILE_SIZE, TILE_SIZE * 2)
+                if player_rect.colliderect(return_rect):
+                    is_game_cleared = True
+                    snd_item.play()
+
+        if invincible_timer > 0:
+            invincible_timer -= 1
+
+        all_hazards = list(hazards) + [mh.rect for mh in moving_hazards]
+        player_hitbox = get_padded_rect(player_rect, 4)
+
+        # 가시 등 위험물 충돌 처리 (방어막 로직)
+        for hz in all_hazards:
+            if player_hitbox.colliderect(get_padded_rect(hz, 5)):
+                if has_shield:
+                    has_shield = False
+                    invincible_timer = 35
+                    knockback_timer = 16
+                    
+                    # [수학적 방향 판단] 가시의 중심을 기준으로 충돌 위치에 따른 반대 반향 넉백
+                    velocity_x = -13.0 if player_rect.centerx < hz.centerx else 13.0
+                    velocity_y = -7.5
+                    
+                    snd_bounce.play()
+                    trigger_explosion(player_rect.centerx, player_rect.centery, (0, 240, 255), 15)
+                elif invincible_timer <= 0:
+                    death_count += 1
+                    snd_death.play()
+                    trigger_explosion(player_rect.centerx, player_rect.centery, (241, 196, 15), 30)
+                    reset_stage(full_restart=False)
+                    break
+
+        if player_y > MAP_ROWS * TILE_SIZE + 50:
+            death_count += 1
+            snd_death.play()
+            reset_stage(full_restart=False)
+
+    for p in particles[:]:
+        p.update()
+        if p.life <= 0 or p.size <= 0:
+            particles.remove(p)
+
+    map_pixel_width = MAP_COLS * TILE_SIZE
+    camera_x = max(0, min(map_pixel_width - SCREEN_WIDTH, player_rect.centerx - SCREEN_WIDTH // 2))
+
+    # 화면 진동 이펙트
+    ox = oy = 0
+    if screen_shake > 0:
+        ox = random.uniform(-screen_shake, screen_shake)
+        oy = random.uniform(-screen_shake, screen_shake)
+        screen_shake = max(0.0, screen_shake * 0.9 - 0.2)
+
+    # --------------------------------------------------------------------------
+    # 8. 월드 렌더링
+    # --------------------------------------------------------------------------
+    world_surface.fill((16, 20, 28))
+
+    for b in platforms:
+        rx = b.x - camera_x + ox
+        if -TILE_SIZE <= rx <= SCREEN_WIDTH:
+            pygame.draw.rect(world_surface, (41, 128, 185), (rx, b.y + oy, b.width, b.height))
+
+    for tb in toggle_blocks:
+        rx = tb.x - camera_x + ox
+        if -TILE_SIZE <= rx <= SCREEN_WIDTH:
+            if toggle_system.is_on:
+                pygame.draw.rect(world_surface, (52, 152, 219), (rx, tb.y + oy, tb.width, tb.height))
+                pygame.draw.rect(world_surface, (255, 255, 255), (rx, tb.y + oy, tb.width, tb.height), 2)
+            else:
+                pygame.draw.rect(world_surface, (50, 60, 80), (rx, tb.y + oy, tb.width, tb.height), 1)
+
+    if switch_rect:
+        rx = switch_rect.x - camera_x + ox
+        c_color = (46, 204, 113) if toggle_system.is_on else (142, 68, 173)
+        pygame.draw.rect(world_surface, c_color, (rx, switch_rect.y + oy, switch_rect.width, switch_rect.height))
+        pygame.draw.rect(world_surface, (255, 255, 255), (rx, switch_rect.y + oy, switch_rect.width, switch_rect.height), 2)
+
+    for sp in springs:
+        rx = sp.x - camera_x + ox
+        pygame.draw.rect(world_surface, (155, 89, 182), (rx, sp.y + oy, sp.width, sp.height))
+
+    for mh in moving_hazards: mh.draw(world_surface, camera_x, ox, oy)
+    for cp in crumbling_platforms: cp.draw(world_surface, camera_x, ox, oy)
+    for hb in hidden_blocks: hb.draw(world_surface, camera_x, ox, oy)
+    for fp in fleeing_platforms: fp.draw(world_surface, camera_x, ox, oy)
+    
+    for mp in moving_platforms:
+        rx = mp.rect.x - camera_x + ox
+        pygame.draw.rect(world_surface, (26, 188, 156), (rx, mp.rect.y + oy, mp.rect.width, mp.rect.height))
+
+    for hz in hazards:
+        rx = hz.x - camera_x + ox
+        if -TILE_SIZE <= rx <= SCREEN_WIDTH:
+            pygame.draw.rect(world_surface, (231, 76, 60), (rx, hz.y + oy, hz.width, hz.height))
+
+    for s_item in shield_items:
+        rx = s_item.x - camera_x + ox
+        pygame.draw.rect(world_surface, (0, 240, 255), (rx, s_item.y + oy, s_item.width, s_item.height))
+    for w_item in warp_items:
+        rx = w_item.x - camera_x + ox
+        pygame.draw.rect(world_surface, (230, 126, 34), (rx, w_item.y + oy, w_item.width, w_item.height))
+
+    if fake_goal:
+        rx = fake_goal.x - camera_x + ox
+        pygame.draw.rect(world_surface, (46, 204, 113), (rx, fake_goal.y + oy, fake_goal.width, fake_goal.height))
+        pygame.draw.rect(world_surface, (241, 196, 15), (rx, fake_goal.y + oy, fake_goal.width, fake_goal.height), 2)
+
+    if not is_reversed:
+        if real_goal:
+            rx = real_goal.x - camera_x + ox
+            pygame.draw.rect(world_surface, (46, 204, 113), (rx, real_goal.y + oy, real_goal.width, real_goal.height))
+    else:
+        rx = spawn_point[0] - camera_x + ox
+        pygame.draw.rect(world_surface, (155, 89, 182), (rx, spawn_point[1] + oy, TILE_SIZE, TILE_SIZE * 2))
+        pygame.draw.rect(world_surface, (255, 255, 255), (rx, spawn_point[1] + oy, TILE_SIZE, TILE_SIZE * 2), 2)
+
+    if is_flying and len(fly_path) > 1:
+        pts = [(p[0] - camera_x + ox + 16, p[1] + oy + 16) for p in fly_path]
+        pygame.draw.lines(world_surface, (255, 255, 0), False, pts, 2)
+
+    for p in particles: p.draw(world_surface, camera_x, ox, oy)
+
+    rx = player_rect.x - camera_x + ox
+    ry = player_rect.y + oy
+    pygame.draw.rect(world_surface, (241, 196, 15), (rx, ry, TILE_SIZE, TILE_SIZE))
+    
+    if has_shield:
+        pygame.draw.rect(world_surface, (0, 240, 255), (rx, ry, TILE_SIZE, TILE_SIZE), 4)
+    elif has_warp_ability:
+        pygame.draw.rect(world_surface, (230, 126, 34), (rx, ry, TILE_SIZE, TILE_SIZE), 3)
+
+    # 역주행 상태일 때 화면 전체를 상하 반전시키는 수학적 렌더 변환
+    if is_reversed:
+        flipped_world = pygame.transform.flip(world_surface, False, True)
+        screen.blit(flipped_world, (0, 0))
+    else:
+        screen.blit(world_surface, (0, 0))
+
+    # ==========================================================================
+    # 9. 조준점(크로스헤어) 및 상태 HUD 렌더링 (화면 픽셀계에 고정)
+    # ==========================================================================
+    if has_warp_ability:
+        cx, cy = int(cursor_x), int(cursor_y)
+        pygame.draw.line(screen, (255, 50, 50), (cx - 15, cy), (cx + 15, cy), 3)
+        pygame.draw.line(screen, (255, 50, 50), (cx, cy - 15), (cx, cy + 15), 3)
+        pygame.draw.circle(screen, (255, 50, 50), (cx, cy), 10, 2)
+        
+        prompt = font_bold.render("조이스틱으로 조준 후 [점프 버튼]을 눌러 워프하세요!", True, (255, 240, 0))
+        p_bg = pygame.Rect(SCREEN_WIDTH // 2 - prompt.get_width() // 2 - 14, 60, prompt.get_width() + 28, prompt.get_height() + 12)
+        pygame.draw.rect(screen, (10, 14, 24), p_bg)
+        pygame.draw.rect(screen, (230, 126, 34), p_bg, 2)
+        screen.blit(prompt, (SCREEN_WIDTH // 2 - prompt.get_width() // 2, 66))
+
+    if troll_timer > 0:
+        t_msg = font_large.render("FAKE GOAL! TRAP ACTIVATED!", True, (255, 60, 60))
+        screen.blit(t_msg, (SCREEN_WIDTH // 2 - t_msg.get_width() // 2, 110))
+
+    if reverse_announcement_timer > 0:
+        r_msg = font_large.render("GRAVITY INVERTED! ESCAPE BACK TO START!", True, (190, 100, 255))
+        screen.blit(r_msg, (SCREEN_WIDTH // 2 - r_msg.get_width() // 2, 110))
+
+    if is_game_cleared:
+        c_msg = font_large.render("ALL MISSIONS CLEARED! YOU ESCAPED!", True, (46, 204, 113))
+        screen.blit(c_msg, (SCREEN_WIDTH // 2 - c_msg.get_width() // 2, SCREEN_HEIGHT // 2 - 20))
+
+    mode_str = "REVERSED (RETURN!)" if is_reversed else "FORWARD (TO GOAL)"
+    hud_progress = f"Pos: {int(player_x // TILE_SIZE)}m | Tilt: {hw_tilt_x:+.2f} | Deaths: {death_count} | {mode_str}"
+    t_hud1 = font_ui.render(hud_progress, True, (220, 220, 220))
+    screen.blit(t_hud1, (20, 15))
+
+    pygame.display.flip()
+    clock.tick(60)
+
+if ser and ser.is_open:
+    ser.close()
+pygame.quit()
+sys.exit()
+</code></pre>
+        </div>
+
+        <div class="objectives-card" style="border-left-color: var(--accent-green); background: rgba(74, 222, 128, 0.08); margin-top:28px;">
+          <h4 style="color: var(--accent-green);"><span>✅</span> 2부 피지컬 컴퓨팅 완주 체크리스트</h4>
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 12px;">
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+              <input type="checkbox" class="mission-checkbox">
+              <span>1차시: 오픈 프레임 프로토타입 조립 및 최적의 통신 지연 동기화 완수</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+              <input type="checkbox" class="mission-checkbox">
+              <span>2차시: 내부 풀업 저항(INPUT_PULLUP)의 원리와 `!digitalRead()` 논리 반전 성공</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+              <input type="checkbox" class="mission-checkbox">
+              <span>3차시: ADC 데드존 필터링과 조이스틱 기울임에 비례한 연속 실수(-1.0 ~ +1.0) 송신 성공</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+              <input type="checkbox" class="mission-checkbox">
+              <span>4차시: in_waiting 버퍼 비우기로 입력 지연을 해결하고, 절단 오차 없이 실수 연산 모델 구현</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+              <input type="checkbox" class="mission-checkbox">
+              <span>최종: 키보드나 마우스를 전혀 사용하지 않고 오직 아두이노 조이스틱으로 100열 초대형 스테이지 완주!</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="chapter-nav-footer">
+          <button class="nav-footer-btn" onclick="switchChapter('chapter-04')">
+            <span style="font-size:0.75rem; color:var(--text-muted);">이전 단계</span>
+            <span style="font-weight:700; color:var(--accent-blue);">👈 [활동지 04] 시리얼 브릿지 & 실수 연산</span>
+          </button>
+          <button class="nav-footer-btn next" onclick="document.getElementById('content').scrollTo({top: 0, behavior: 'smooth'})">
+            <span style="font-size:0.75rem; color:var(--text-muted);">맨 위로</span>
+            <span style="font-weight:700; color:var(--accent-blue);">🔝 최상단으로 이동</span>
+          </button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    function downloadFile(filename, content, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast(`📁 ${filename} 다운로드가 시작되었습니다!`);
+    }
+
+    function downloadStageCSV() {
+      const csvContent = document.getElementById('stageCsvCode').textContent;
+      downloadFile('stage_100x10.csv', csvContent, 'text/csv;charset=utf-8;');
+    }
+
+    function downloadMainPy() {
+      const pyContent = document.getElementById('mainPyCode').textContent;
+      downloadFile('main.py', pyContent, 'text/x-python;charset=utf-8;');
+    }
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast("✅ 클립보드에 복사되었습니다!");
+        }).catch(() => fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast("✅ 클립보드에 복사되었습니다!");
+    }
+
+    function copyCode(btn) {
+      const pre = btn.closest('.code-container').querySelector('pre code');
+      const text = pre.textContent;
+      copyToClipboard(text);
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<span>✔️</span> 복사완료!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.innerHTML = orig;
+        btn.classList.remove('copied');
+      }, 2000);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    const chapterTitles = {
+      'chapter-01': '[활동지 01] 환경 구축 및 오픈 프레임 조립',
+      'chapter-02': '[활동지 02] 독립 푸시 버튼과 직관의 역논리',
+      'chapter-03': '[활동지 03] 조이스틱 기울임과 비례 속도 모델',
+      'chapter-04': '[활동지 04] Pygame 시리얼 브릿지 & 실수 연산',
+      'chapter-final': '🏆 완전판 소스 다운로드 및 최종 연동'
+    };
+
+    function switchChapter(id) {
+      document.querySelectorAll('.chapter-container').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById(id);
+      if (target) target.classList.add('active');
+
+      document.querySelectorAll('.nav-item').forEach(el => {
+        if (el.getAttribute('onclick') && el.getAttribute('onclick').includes(id)) {
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
+        }
+      });
+
+      document.getElementById('currentBreadcrumb').innerText = chapterTitles[id] || '';
+      document.getElementById('content').scrollTop = 0;
+
+      if (id === 'chapter-03') initJoystickSim();
+
+      if (window.innerWidth < 900) {
+        document.getElementById('sidebar').classList.remove('open');
+      }
+    }
+
+    function toggleTheme() {
+      const isDark = document.body.getAttribute('data-theme') !== 'light';
+      if (isDark) {
+        document.body.setAttribute('data-theme', 'light');
+      } else {
+        document.body.removeAttribute('data-theme');
+      }
+    }
+
+    document.getElementById('content').addEventListener('scroll', function() {
+      const el = this;
+      const p = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+      document.getElementById('readingProgress').style.width = Math.min(100, Math.max(0, p)) + '%';
+    });
+
+    // ==========================================
+    // INTERACTIVE JOYSTICK SIMULATOR
+    // ==========================================
+    let joySimDeadzone = 70;
+    let joySimMaxSpeed = 5.6;
+    let joyBase = { x: 180, y: 130, radius: 80 };
+    let joyKnob = { x: 180, y: 130, radius: 32 };
+    let isDraggingJoy = false;
+    let simPlayer = { x: 450, y: 170, vx: 0 };
+    let joySimAnim = null;
+
+    function initJoystickSim() {
+      const cvs = document.getElementById('joystickSimCanvas');
+      if (!cvs) return;
+
+      cvs.onmousedown = (e) => {
+        const rect = cvs.getBoundingClientRect();
+        const mx = (e.clientX - rect.left) * (cvs.width / rect.width);
+        const my = (e.clientY - rect.top) * (cvs.height / rect.height);
+        const dist = Math.hypot(mx - joyKnob.x, my - joyKnob.y);
+        if (dist <= joyKnob.radius + 15) {
+          isDraggingJoy = true;
+        }
+      };
+
+      window.onmousemove = (e) => {
+        if (!isDraggingJoy) return;
+        const rect = cvs.getBoundingClientRect();
+        const mx = (e.clientX - rect.left) * (cvs.width / rect.width);
+        const dx = mx - joyBase.x;
+        joyKnob.x = Math.max(joyBase.x - joyBase.radius, Math.min(joyBase.x + joyBase.radius, joyBase.x + dx));
+      };
+
+      window.onmouseup = () => {
+        if (isDraggingJoy) {
+          isDraggingJoy = false;
+          joyKnob.x = joyBase.x;
+        }
+      };
+
+      if (!joySimAnim) joySimLoop();
+    }
+
+    function resetJoySim() {
+      joyKnob.x = joyBase.x;
+    }
+
+    function updateJoySimParams() {
+      joySimDeadzone = parseInt(document.getElementById('sim_dz_slider').value);
+      joySimMaxSpeed = parseFloat(document.getElementById('sim_ms_slider').value);
+      document.getElementById('sim_dz_val').innerText = joySimDeadzone + ' ADC';
+      document.getElementById('sim_ms_val').innerText = joySimMaxSpeed.toFixed(1) + ' px/frame';
+    }
+
+    function joySimLoop() {
+      const cvs = document.getElementById('joystickSimCanvas');
+      if (cvs && cvs.offsetParent !== null) {
+        const ctx = cvs.getContext('2d');
+
+        const normDx = (joyKnob.x - joyBase.x) / joyBase.radius;
+        const rawAdc = Math.round(512 + normDx * 511);
+        
+        let tilt = 0.0;
+        const offsetFromCenter = rawAdc - 512;
+        if (Math.abs(offsetFromCenter) > joySimDeadzone) {
+          if (offsetFromCenter > 0) {
+            tilt = (offsetFromCenter - joySimDeadzone) / (511 - joySimDeadzone);
+          } else {
+            tilt = (offsetFromCenter + joySimDeadzone) / (512 - joySimDeadzone);
+          }
+        }
+        tilt = Math.max(-1.0, Math.min(1.0, tilt));
+        const vx = tilt * joySimMaxSpeed;
+
+        simPlayer.x += vx;
+        if (simPlayer.x < 360) simPlayer.x = 750;
+        if (simPlayer.x > 750) simPlayer.x = 360;
+
+        document.getElementById('sim_raw_adc').innerText = rawAdc;
+        document.getElementById('sim_tilt').innerText = (tilt >= 0 ? '+' : '') + tilt.toFixed(2);
+        document.getElementById('sim_vx').innerText = (vx >= 0 ? '+' : '') + vx.toFixed(1) + ' px';
+
+        ctx.fillStyle = '#10141f';
+        ctx.fillRect(0, 0, cvs.width, cvs.height);
+
+        ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+        ctx.beginPath(); ctx.moveTo(330, 10); ctx.lineTo(330, cvs.height - 10); ctx.stroke();
+
+        ctx.fillStyle = '#1e293b';
+        ctx.beginPath(); ctx.arc(joyBase.x, joyBase.y, joyBase.radius, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#334155'; ctx.lineWidth = 3; ctx.stroke();
+
+        const dzPixel = (joySimDeadzone / 512) * joyBase.radius;
+        ctx.fillStyle = 'rgba(239, 68, 68, 0.15)';
+        ctx.beginPath(); ctx.arc(joyBase.x, joyBase.y, dzPixel, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]); ctx.stroke(); ctx.setLineDash([]);
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '11px sans-serif';
+        ctx.fillText('D (DEADZONE)', joyBase.x - 38, joyBase.y - dzPixel - 4);
+
+        ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 6;
+        ctx.beginPath(); ctx.moveTo(joyBase.x, joyBase.y); ctx.lineTo(joyKnob.x, joyKnob.y); ctx.stroke();
+
+        const knobGrad = ctx.createRadialGradient(joyKnob.x - 6, joyKnob.y - 6, 4, joyKnob.x, joyKnob.y, joyKnob.radius);
+        knobGrad.addColorStop(0, '#38bdf8');
+        knobGrad.addColorStop(1, '#0284c7');
+        ctx.fillStyle = knobGrad;
+        ctx.beginPath(); ctx.arc(joyKnob.x, joyKnob.y, joyKnob.radius, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+
+        ctx.fillStyle = '#000'; ctx.font = 'bold 11px sans-serif';
+        ctx.fillText('DRAG', joyKnob.x - 16, joyKnob.y + 4);
+
+        ctx.fillStyle = '#cbd5e1'; ctx.font = 'bold 12px Pretendard';
+        ctx.fillText('🕹️ 비례 속도 연동 샌드박스 (Game Canvas)', 360, 30);
+
+        ctx.strokeStyle = '#2ecc71'; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(350, 210); ctx.lineTo(770, 210); ctx.stroke();
+
+        ctx.fillStyle = Math.abs(vx) > 0.1 ? '#f1c40f' : '#64748b';
+        ctx.fillRect(simPlayer.x - 20, 170, 40, 40);
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+        ctx.strokeRect(simPlayer.x - 20, 170, 40, 40);
+
+        if (Math.abs(vx) > 0.2) {
+          ctx.strokeStyle = '#fb923c'; ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(simPlayer.x, 150);
+          ctx.lineTo(simPlayer.x + vx * 6, 150);
+          ctx.stroke();
+        }
+      }
+      joySimAnim = requestAnimationFrame(joySimLoop);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false }
+          ]
+        });
+      }
+      initJoystickSim();
+    });
+  </script>
+</body>
+</html>
