@@ -25,13 +25,11 @@
       --text-sub: #cbd5e1; --accent-blue: #38bdf8; --accent-green: #4ade80; --accent-orange: #fb923c;
       --accent-yellow: #facc15; --code-bg: #090d16; --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px;
       --font-sans: 'Pretendard', sans-serif; --font-mono: 'Fira Code', monospace;
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3); --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
     }
     [data-theme="light"] {
       --bg-primary: #f8fafc; --bg-secondary: #ffffff; --bg-card: #ffffff; --bg-card-hover: #f1f5f9;
       --bg-sidebar: #f1f5f9; --border-color: #e2e8f0; --text-main: #0f172a; --text-muted: #64748b;
       --text-sub: #334155; --accent-blue: #0284c7; --accent-green: #16a34a; --code-bg: #1e293b;
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06); --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--font-sans); background-color: var(--bg-primary); color: var(--text-main); line-height: 1.7; display: flex; height: 100vh; overflow: hidden; }
@@ -162,9 +160,7 @@
         </ul>
 
         <h2>2. 오픈 프레임(Open-frame) 프로토타입 조립</h2>
-        <p>상자나 껍데기로 회로를 덮어버리지 않고 기판, 회로, 전선이 노출되도록 조립합니다. 아두이노의 통신 LED 깜빡임과 결선 경로를 눈으로 직접 확인하는 오픈 프레임 구조는 문제 해결과 유지보수에 매우 유리합니다.</p>
-
-        <div class="alert-box alert-tip">
+        <div class="alert-box alert-info">
           <h5>💡 조립 가이드</h5>
           <ul>
             <li><strong>베이스 플레이트 고정:</strong> 베이스 플레이트 위에 보드를 배치하고, 케이블 타이로 꽉 조여 조이스틱을 강하게 조작해도 흔들리지 않게 고정합니다.</li>
@@ -173,8 +169,6 @@
         </div>
 
         <h2>3. 아두이노 핀 매핑 다이어그램 (Pinout Diagram)</h2>
-        <p>복잡한 외장 풀업 저항을 납땜할 필요 없이, 아두이노 내부 풀업 저항을 사용하여 <strong>1:1 직결선 구조</strong>로 연결합니다.</p>
-
         <table class="wiring-table">
           <thead>
             <tr>
@@ -231,7 +225,7 @@
 
         <div class="alert-box alert-info">
           <h5>💡 조작감 튜닝: 1ms 입력 지연 최소화 세팅</h5>
-          <p>초기 속도인 <code>9600 bps</code>는 전송 지연이 발생하므로 통신 속도를 <strong><code>115200 bps</code></strong>로 승격합니다. 또한 아두이노 코드에 <code>delay(16)</code>을 부여하면, 게임 프레임($16.6\text{ ms}$)과 송신 주기가 1:1로 일치하는 최적의 동기화가 이루어집니다.</p>
+          <p>아두이노의 초기 통신 속도인 <code>9600 bps</code>는 데이터 전송에 프레임의 대부분을 소모하여 조작 반응이 둔탁해집니다. 통신 속도를 <strong><code>115200 bps</code></strong>로 승격하면 전송 지연 시간을 <strong>1ms 미만</strong>으로 최적화할 수 있습니다.</p>
         </div>
 
         <div class="alert-box alert-important">
@@ -410,9 +404,6 @@ void loop() {
 }</code></pre>
         </div>
 
-
-        <h2>2. 정규화 수식의 단계별 유도</h2>
-
         <!-- Interactive Joystick Simulator -->
         <div class="simulator-box">
           <div class="sim-header">
@@ -420,7 +411,7 @@ void loop() {
             <span style="font-size:0.8rem; color:var(--text-muted);">조이스틱 노브를 마우스로 좌우로 드래그해 보세요</span>
           </div>
           <canvas id="joystickSimCanvas" class="sim-canvas" width="800" height="260"></canvas>
-
+          
           <div class="sim-controls">
             <div class="control-group">
               <div class="control-label">
@@ -448,7 +439,7 @@ void loop() {
           </div>
         </div>
 
-
+        <h2>2. 정규화 수식의 단계별 유도</h2>
         <p>조이스틱의 값을 우리가 게임 속도로 활용하기 편한 <strong>$-1.0 \sim +1.0$</strong> 비율로 바꾸는 과정을 <strong>정규화(Normalization)</strong>라고 합니다. 기본적인 수학 공식은 다음과 같습니다.</p>
         <div class="math-block">
           $$ \text{비율} = \frac{\text{현재값} - \text{시작점(최솟값)}}{\text{끝점(최댓값)} - \text{시작점(최솟값)}} $$
@@ -468,7 +459,7 @@ void loop() {
           <h5>💡 실습 진행 가이드 2: 수식 적용과 3채널 전송</h5>
           <ol>
             <li>이제 위의 수학 공식을 적용하여 X축, Y축, 점프 버튼의 상태를 한 번에 쏘는 <strong>[코드 2]</strong>를 업로드합니다.</li>
-            <li>시리얼 모니터를 열고 스틱을 돌려보세요. <code>0.85,-0.60,0</code> 처럼 3개의 값이 쉼표로 묶여 실시간으로 깔끔하게 올라오는 것을 확인합니다.</li>
+            <li>시리얼 모니터를 열고 스틱을 돌려보세요. <code>0.85,-0.60,1</code> 처럼 3개의 값이 쉼표로 묶여 실시간으로 깔끔하게 올라오는 것을 확인합니다.</li>
           </ol>
         </div>
 
