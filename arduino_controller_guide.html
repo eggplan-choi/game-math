@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>수학탐구학교 2부: 아두이노 피지컬 컨트롤러 제작 & Pygame 연동 웹북</title>
   
+  <!-- Fonts & Math/Syntax Highlighting -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Pretendard:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -173,9 +174,9 @@
           <thead>
             <tr>
               <th width="30%">모듈</th>
-              <th width="30%">핀 이름</th>
+              <th width="30%">모듈의 핀 이름</th>
               <th class="col-arrow"></th>
-              <th width="35%">아두이노 우노(UNO)</th>
+              <th width="35%">아두이노 우노(UNO) 연결 위치</th>
             </tr>
           </thead>
           <tbody>
@@ -260,7 +261,7 @@
         </div>
 
         <h2>1. 플로팅 현상과 내부 풀업 저항</h2>
-        <p>스위치 핀이 저항 없이 공중에 떠 있으면 노이즈로 인해 입력이 0과 1 사이를 요동치는 <strong>플로팅(Floating)</strong> 현상이 발생합니다. 외장 저항 없이 아두이노 칩 내부에 내장된 저항을 켜서 평상시 $5\text{V}$ 상태를 유지하게 만드는 명령어가 <code>INPUT_PULLUP</code>입니다.</p>
+        <p>스위치 핀이 저항 없이 공중에 떠 있으면 노이즈로 인해 입력이 0과 1 사이를 요동치는 <strong>플로팅(Floating)</strong> 현상이 발생합니다. 외장 저항 없이 아두이노 칩 내부에 내장된 저항을 켜서 평상시 $5\text{V}$ (안정된 1) 상태를 유지하게 만드는 명령어가 <code>INPUT_PULLUP</code>입니다.</p>
 
         <div class="alert-box alert-tip">
           <h5>💡 실습 진행 가이드 1: 플로팅 현상 관찰과 해결</h5>
@@ -459,7 +460,7 @@ void loop() {
           <h5>💡 실습 진행 가이드 2: 수식 적용과 3채널 전송</h5>
           <ol>
             <li>이제 위의 수학 공식을 적용하여 X축, Y축, 점프 버튼의 상태를 한 번에 쏘는 <strong>[코드 2]</strong>를 업로드합니다.</li>
-            <li>시리얼 모니터를 열고 스틱을 돌려보세요. <code>0.85,-0.60,1</code> 처럼 3개의 값이 쉼표로 묶여 실시간으로 깔끔하게 올라오는 것을 확인합니다.</li>
+            <li>시리얼 모니터를 열고 스틱을 돌려보세요. <code>0.85,-0.60,0</code> 처럼 3개의 값이 쉼표로 묶여 실시간으로 깔끔하게 올라오는 것을 확인합니다.</li>
           </ol>
         </div>
 
@@ -1449,6 +1450,60 @@ pygame.quit()
 sys.exit()
 </code></pre>
         </div>
+        
+        <h2>3️⃣ 아두이노 컨트롤러 최종 펌웨어: controller.ino</h2>
+        <p>파이썬 게임과 1:1로 완벽하게 통신하기 위해 아두이노에 업로드해야 하는 최종 코드입니다. 조이스틱 X축, Y축, 그리고 점프 버튼 신호를 초당 60회(16ms) 전송합니다.</p>
+        <div class="sim-btn-group">
+          <button class="sim-btn" onclick="downloadControllerIno()">⬇️ controller.ino 다운로드</button>
+        </div>
+        
+        <div class="code-container">
+          <div class="code-header">
+            <span>⚡ [아두이노 C++] controller.ino (최종 펌웨어)</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 전체 복사</button>
+          </div>
+          <pre><code class="language-cpp" id="controllerInoCode">const int PIN_JOY_X = A0; // 조이스틱 X축 가변저항
+const int PIN_JOY_Y = A1; // 조이스틱 Y축 가변저항 (워프 조준용)
+const int PIN_BTN = 2;    // 독립 푸시 버튼 (점프용)
+
+const int CENTER = 512;
+const int D = 70; // 기계적 떨림을 막는 데드존(Deadzone) 임계치
+
+void setup() {
+  Serial.begin(115200); // 파이썬과 동일한 115200 보레이트 고속 통신
+  pinMode(PIN_BTN, INPUT_PULLUP); // 내부 풀업 저항 활성화
+}
+
+// 수학적 정규화 공식을 함수로 만들어 재사용
+float get_tilt(int raw) {
+  if (raw > CENTER + D) return (float)(raw - (CENTER + D)) / (1023 - (CENTER + D));
+  if (raw < CENTER - D) return (float)(raw - (CENTER - D)) / (CENTER - D);
+  return 0.0;
+}
+
+void loop() {
+  float tilt_x = get_tilt(analogRead(PIN_JOY_X));
+  float tilt_y = get_tilt(analogRead(PIN_JOY_Y));
+
+  // 범위를 -1.0 ~ +1.0 으로 완벽하게 가두기 (클램핑)
+  if (tilt_x > 1.0) tilt_x = 1.0; 
+  if (tilt_x < -1.0) tilt_x = -1.0;
+  if (tilt_y > 1.0) tilt_y = 1.0; 
+  if (tilt_y < -1.0) tilt_y = -1.0;
+
+  // 역논리 현상을 논리 부정 연산자(!)로 직관적 보정
+  int btn_jump = !digitalRead(PIN_BTN);
+
+  // 3채널 직렬화 데이터 전송: "tilt_x,tilt_y,btn_jump\n" (예: 0.65,-0.20,1)
+  Serial.print(tilt_x, 2); 
+  Serial.print(",");
+  Serial.print(tilt_y, 2); 
+  Serial.print(",");
+  Serial.println(btn_jump);
+
+  delay(16); // 게임 프레임(60FPS)과 맞춘 16ms 대기 (초당 약 60회 전송)
+}</code></pre>
+        </div>
 
         <div class="objectives-card" style="border-left-color: var(--accent-green); background: rgba(74, 222, 128, 0.08); margin-top:28px;">
           <h4 style="color: var(--accent-green);"><span>✅</span> 2부 피지컬 컴퓨팅 완주 체크리스트</h4>
@@ -1471,7 +1526,7 @@ sys.exit()
             </label>
             <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
               <input type="checkbox" class="mission-checkbox">
-              <span>최종: 키보드나 마우스를 전혀 사용하지 않고 오직 아두이노 조이스틱으로 100열 초대형 스테이지 완주!</span>
+              <span>최종: 키보드나 마우스를 전혀 사용하지 않고 오직 아두이노 컨트롤러로 100열 초대형 스테이지 완주!</span>
             </label>
           </div>
         </div>
@@ -1512,6 +1567,11 @@ sys.exit()
     function downloadMainPy() {
       const pyContent = document.getElementById('mainPyCode').textContent;
       downloadFile('main.py', pyContent, 'text/x-python;charset=utf-8;');
+    }
+    
+    function downloadControllerIno() {
+      const inoContent = document.getElementById('controllerInoCode').textContent;
+      downloadFile('controller.ino', inoContent, 'text/plain;charset=utf-8;');
     }
 
     function copyToClipboard(text) {
